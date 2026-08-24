@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Coast FIRE - GAB$ Coach Financiera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#1BBAD8',
+                            orange: '#F49C14',
+                            dark: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        .gradient-bg {
+            background: linear-gradient(135deg, #1BBAD8 0%, #158b9f 100%);
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans flex flex-col min-h-screen">
+    
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm border-b-4 border-brand-orange sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <img src="assets/logo.png" alt="GAB$ Coach Financiera Logo" class="h-16 object-contain cursor-pointer" onclick="switchMainTab('retiro')">
+            <nav class="flex flex-wrap justify-center gap-2 md:gap-6">
+                <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1">Aportaciones Retiro</button>
+                <button id="navBtn-coast" onclick="switchMainTab('coast')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Coast FIRE</button>
+                <button id="navBtn-semaforo" onclick="switchMainTab('semaforo')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Semáforo Financiero</button>
+                <button id="navBtn-sobremi" onclick="switchMainTab('sobremi')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Sobre mí</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 md:py-12 w-full">
+        
+        <!-- SECTION: Aportaciones para el retiro (HOME) -->
+        <section id="section-retiro" class="block">
+            <div class="text-center py-20">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora de Aportaciones para el Retiro</h1>
+                <p class="text-lg text-gray-600">¡Próximamente!</p>
+            </div>
+        </section>
+
+        <!-- SECTION: COAST FIRE -->
+        <section id="section-coast" class="hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora <span class="text-brand-cyan">Coast FIRE</span></h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubre si ya no necesitas invertir más para tu retiro y deja que el interés compuesto haga el trabajo por ti.</p>
+            </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-gray-200 p-1 rounded-xl inline-flex">
+                <button id="btnTabCalc" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors bg-white shadow text-brand-dark" onclick="switchTab('calc')">COAST FIRE</button>
+                <button id="btnTabInfo" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors text-gray-500 hover:text-brand-dark" onclick="switchTab('info')">¿Cómo funciona?</button>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: Calculator -->
+        <div id="contentCalc" class="transition-opacity duration-300">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- Form Section -->
+                <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-2xl shadow-lg border-t-4 border-brand-cyan h-fit">
+                <form id="calculatorForm" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="currentAge" class="block text-sm font-bold text-gray-700 mb-1">
+                                Tu edad actual
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="currentAge" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="30" min="15" max="99">
+                                <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">años</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="retirementAge" class="block text-sm font-bold text-gray-700 mb-1">
+                                Edad de retiro
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="retirementAge" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="65" min="30" max="100">
+                                <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">años</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="monthlyIncome" class="block text-sm font-bold text-gray-700 mb-1">
+                            ¿Cuánto te gustaría recibir al mes en tu retiro? (En dinero de hoy)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="monthlyIncome" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="40000" min="0">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="currentSavings" class="block text-sm font-bold text-gray-700 mb-1">
+                            ¿Cuánto tienes invertido/ahorrado hoy en día?
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="currentSavings" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="500000" min="0">
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings Toggle -->
+                    <details class="group bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <summary class="cursor-pointer font-bold text-gray-600 select-none flex items-center justify-between">
+                            Configuración Avanzada
+                            <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <label for="returnRate" class="block text-sm font-bold text-gray-700 mb-1">
+                                    Rendimiento Real Anual Estimado (Después de inflación)
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="returnRate" step="0.1" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors font-semibold" value="6" min="0" max="20">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="lg:col-span-7 space-y-6 w-full max-w-full overflow-hidden">
+                <!-- Result Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-center text-center md:text-left">
+                        <h3 id="fireLabel" class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Tu Número FIRE</h3>
+                        <p class="text-3xl lg:text-4xl font-extrabold text-brand-dark" id="fireNumber">$0</p>
+                        <p class="text-xs text-gray-400 mt-2">Basado en la regla del 4% (Gasto anual × 25)</p>
+                    </div>
+                    
+                    <div class="gradient-bg text-white p-6 rounded-2xl shadow-lg flex flex-col justify-center relative overflow-hidden text-center md:text-left">
+                        <h3 class="text-sm font-bold text-cyan-100 uppercase tracking-wider mb-2 z-10">Tu Número Coast FIRE</h3>
+                        <p class="text-4xl lg:text-5xl font-extrabold z-10" id="coastFireNumber">$0</p>
+                        <p id="coastFireLabel" class="text-sm text-cyan-50 mt-2 font-medium z-10">Lo que necesitas tener hoy para retirarte sin aportar más.</p>
+                    </div>
+                </div>
+
+                <!-- Status / Verdict -->
+                <div id="verdictBox" class="p-6 md:p-8 rounded-2xl shadow-lg border-2 text-center transition-colors">
+                    <h2 id="verdictTitle" class="text-2xl md:text-3xl font-extrabold mb-3"></h2>
+                    <p id="verdictMessage" class="text-lg text-gray-700"></p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mt-6">
+                        <div class="flex justify-between text-sm font-bold text-gray-600 mb-2">
+                            <span>Progreso hacia Coast FIRE</span>
+                            <span id="progressPercentage">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                            <div id="progressBar" class="h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div> <!-- End of grid -->
+
+            <!-- Action Plan Table (Starting from $0) - Full Width -->
+            <div class="bg-white p-4 md:p-8 rounded-2xl shadow-lg border border-gray-100 w-full overflow-hidden">
+                    <h3 class="text-xl font-bold text-brand-dark mb-2">Plan de Acción (Si empezaras de cero)</h3>
+                    <p class="text-sm text-gray-600 mb-4 md:mb-6">
+                        Suponiendo que hoy tienes <strong>$0</strong> ahorrados y logras un rendimiento real del 
+                        <strong class="text-brand-cyan"><span id="tableReturnRateLabel">6</span>% anual</strong>, 
+                        ¿cuánto tendrías que invertir al mes para alcanzar Coast FIRE en diferentes periodos de tiempo?
+                    </p>
+                    
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse table-auto">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs md:text-sm uppercase tracking-wider border-b-2 border-gray-200">
+                                    <th class="p-2 md:p-4 rounded-tl-lg font-bold whitespace-nowrap">Tiempo</th>
+                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Edad</th>
+                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Meta</th>
+                                    <th class="p-2 md:p-4 rounded-tr-lg font-bold text-brand-cyan text-right whitespace-nowrap">Mensualidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectionTableBody" class="divide-y divide-gray-100 text-sm md:text-base">
+                                <!-- JS generates rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: Methodology -->
+        <div id="contentInfo" class="hidden max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-lg border-t-4 border-brand-orange transition-opacity duration-300">
+            <h2 class="text-3xl font-extrabold text-brand-dark mb-8 text-center">¿Qué es esto del FIRE? Explicado súper fácil 🐔🥚✨</h2>
+            
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-brand-cyan mb-3">1. ¿Qué es FIRE? 🔥</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Imagina que tienes una <strong>gallina mágica que pone huevos de oro</strong>. Si juntas suficientes gallinas, los huevos que ponen todos los días te alcanzarán para comprar tu comida, pagar tu casa y divertirte para siempre, <strong>¡sin que tengas que volver a trabajar!</strong>
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Ese es tu <strong>Número FIRE</strong> <em>(Independencia Financiera, Retiro Temprano)</em>. Es la cantidad exacta de dinero invertido (gallinas) que necesitas juntar para ser totalmente libre económicamente.
+                    </p>
+                </div>
+
+                <div class="bg-orange-50 p-6 rounded-xl border border-orange-100">
+                    <h3 class="text-2xl font-bold text-brand-orange mb-3">2. ¿Y qué es Coast FIRE? 🏖️</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Juntar todas esas gallinas toma mucho tiempo y esfuerzo. Pero hay un truco de magia llamado <strong>interés compuesto</strong>. Este truco hace que si dejas unas cuantas gallinas solas, con el tiempo tendrán pollitos, y esos pollitos tendrán más pollitos.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        <strong>Coast FIRE</strong> significa saber cuántas gallinas necesitas juntar <strong>HOY</strong> para poder olvidarte de ellas. Una vez que llegas a ese número, ya no necesitas invertir más dinero de tu sueldo. Puedes relajarte, gastar el dinero que ganas hoy en cosas que disfrutes, y dejar que la magia multiplique tus gallinas hasta tu edad de retiro. ¡Es ir "de bajadita" (coasting) hacia tu libertad!
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">3. ¿De dónde sale la famosa "Regla del 4%"? 📊</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        En la calculadora verás que el Número FIRE se calcula dividiendo tus gastos anuales entre <strong>0.04</strong> (que matemáticamente es exactamente lo mismo que multiplicarlos por 25).
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Esta regla nació en 1994 por el asesor financiero William Bengen, y luego fue confirmada por el famoso <strong>"Estudio Trinity"</strong> en 1998, realizado por profesores de la Universidad Trinity en Texas. Ellos analizaron décadas de datos históricos de la bolsa de valores y la inflación, y descubrieron algo increíble:
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Si tienes un portafolio de inversiones diversificado (por ejemplo, acciones y bonos), puedes retirar el <strong>4% de tu dinero en el primer año de tu retiro</strong> (y ajustar esa cantidad por la inflación en los años siguientes), y existe una altísima probabilidad de que <strong>tu dinero nunca se acabe en un periodo de 30 años</strong>. Lo que retiras, se compensa con lo que tus inversiones siguen creciendo por su cuenta.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Si te gustan los números y quieres ponerte más técnica, puedes <a href="https://www.aaii.com/files/pdf/6794_retirement-savings-choosing-a-withdrawal-rate-that-is-sustainable.pdf" target="_blank" rel="noopener noreferrer" class="text-brand-cyan font-bold underline hover:text-brand-dark transition-colors">leer el PDF del estudio original de Trinity aquí</a>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Semáforo Financiero -->
+        <section id="section-semaforo" class="hidden">
+            <div class="text-center py-20">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Semáforo Financiero</h1>
+                <p class="text-lg text-gray-600">¡Próximamente!</p>
+            </div>
+        </section>
+
+        <!-- SECTION: Sobre mí -->
+        <section id="section-sobremi" class="hidden">
+            <div class="text-center py-20">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Sobre Mí</h1>
+                <p class="text-lg text-gray-600">¡Próximamente!</p>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white py-8 mt-auto border-t-4 border-brand-cyan">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-brand-cyan font-bold text-xl mb-4">GAB$ Coach Financiera</p>
+            <p class="text-gray-400 font-medium text-sm">© 2026 GAB$ Coach Financiera. Todos los derechos reservados.</p>
+            <p class="text-xs text-gray-500 mt-2 max-w-2xl mx-auto">Esta calculadora es una herramienta educativa y de estimación. No constituye asesoría financiera profesional.</p>
+        </div>
+    </footer>
+
+    <!-- Mascot (Giby) -->
+    <div class="fixed bottom-0 right-4 lg:right-10 z-0 pointer-events-none opacity-90 transition-transform duration-500 hover:scale-105">
+        <img src="assets/giby.png" alt="Giby" class="w-24 md:w-32 lg:w-40 drop-shadow-xl">
+    </div>
+
+    <script>
+        // Main Navigation Logic
+        function switchMainTab(tab) {
+            const sections = ['retiro', 'coast', 'semaforo', 'sobremi'];
+            
+            sections.forEach(sec => {
+                const sectionEl = document.getElementById(`section-${sec}`);
+                const navBtn = document.getElementById(`navBtn-${sec}`);
+                
+                if (sec === tab) {
+                    sectionEl.classList.remove('hidden');
+                    sectionEl.classList.add('block');
+                    navBtn.className = 'font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1';
+                } else {
+                    sectionEl.classList.add('hidden');
+                    sectionEl.classList.remove('block');
+                    navBtn.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent';
+                }
+            });
+        }
+
+        // Tab Switching Logic (Coast FIRE Sub-tabs)
+        function switchTab(tab) {
+            const btnCalc = document.getElementById('btnTabCalc');
+            const btnInfo = document.getElementById('btnTabInfo');
+            const contentCalc = document.getElementById('contentCalc');
+            const contentInfo = document.getElementById('contentInfo');
+
+            const activeClass = ['bg-white', 'shadow', 'text-brand-dark'];
+            const inactiveClass = ['text-gray-500', 'hover:text-brand-dark'];
+
+            if (tab === 'calc') {
+                contentCalc.classList.remove('hidden');
+                contentInfo.classList.add('hidden');
+                
+                btnCalc.classList.add(...activeClass);
+                btnCalc.classList.remove(...inactiveClass);
+                
+                btnInfo.classList.remove(...activeClass);
+                btnInfo.classList.add(...inactiveClass);
+            } else {
+                contentCalc.classList.add('hidden');
+                contentInfo.classList.remove('hidden');
+                
+                btnInfo.classList.add(...activeClass);
+                btnInfo.classList.remove(...inactiveClass);
+                
+                btnCalc.classList.remove(...activeClass);
+                btnCalc.classList.add(...inactiveClass);
+            }
+        }
+
+        // Calculator Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = ['monthlyIncome', 'currentSavings', 'currentAge', 'retirementAge', 'returnRate'];
+            
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateCoastFire);
+            });
+
+            // Initial calculation
+            calculateCoastFire();
+        });
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateCoastFire() {
+            const monthlyIncome = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const currentSavings = parseFloat(document.getElementById('currentSavings').value) || 0;
+            const currentAge = parseInt(document.getElementById('currentAge').value) || 0;
+            const retirementAge = parseInt(document.getElementById('retirementAge').value) || 65;
+            const returnRate = parseFloat(document.getElementById('returnRate').value) / 100 || 0;
+            
+            const withdrawalRate = 0.04; // Regla del 4%
+
+            // Avoid negative years
+            const yearsToRetire = Math.max(0, retirementAge - currentAge);
+
+            // 1. FIRE Number (Total needed at retirement)
+            const annualIncome = monthlyIncome * 12;
+            const fireNumber = annualIncome / withdrawalRate;
+
+            // 2. Coast FIRE Number (Total needed today)
+            const coastFireNumber = fireNumber / Math.pow(1 + returnRate, yearsToRetire);
+
+            // Update UI Labels dynamically
+            document.getElementById('fireLabel').innerText = `Tu Número FIRE (a los ${retirementAge})`;
+            document.getElementById('coastFireLabel').innerText = `Lo que necesitas tener hoy para retirarte a los ${retirementAge} sin aportar más.`;
+            document.getElementById('tableReturnRateLabel').innerText = (returnRate * 100).toFixed(1);
+
+            // Update UI Numbers
+            document.getElementById('fireNumber').innerText = formatCurrency(fireNumber);
+            document.getElementById('coastFireNumber').innerText = formatCurrency(coastFireNumber);
+
+            // Determine if they are Coast FIRE
+            const verdictBox = document.getElementById('verdictBox');
+            const verdictTitle = document.getElementById('verdictTitle');
+            const verdictMessage = document.getElementById('verdictMessage');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = document.getElementById('progressPercentage');
+
+            let percentage = (currentSavings / coastFireNumber) * 100;
+            if (percentage > 100) percentage = 100;
+            if (isNaN(percentage) || !isFinite(percentage)) percentage = 0;
+
+            progressPercentage.innerText = `${percentage.toFixed(1)}%`;
+            progressBar.style.width = `${percentage}%`;
+
+            if (currentSavings >= coastFireNumber && currentSavings > 0) {
+                // Success
+                verdictBox.className = 'p-6 md:p-8 rounded-2xl shadow-lg border-2 border-brand-orange bg-orange-50 transition-colors text-center';
+                verdictTitle.innerText = '¡Felicidades, eres Coast FIRE! 🎉';
+                verdictTitle.className = 'text-2xl md:text-3xl font-extrabold mb-3 text-brand-orange';
+                verdictMessage.innerHTML = `Con tu ahorro actual, si dejas que el interés compuesto haga su magia al <strong>${(returnRate*100).toFixed(1)}% anual</strong>, llegarás a tu meta a los <strong>${retirementAge} años</strong> sin necesidad de invertir ni un peso más. ¡El resto es opcional!`;
+                progressBar.className = 'h-4 rounded-full transition-all duration-1000 ease-out bg-brand-orange';
+            } else {
+                // Needs more
+                const remaining = coastFireNumber - currentSavings;
+                verdictBox.className = 'p-6 md:p-8 rounded-2xl shadow-lg border-2 border-brand-cyan bg-cyan-50 transition-colors text-center';
+                verdictTitle.innerText = '¡Vas por buen camino! 🚀';
+                verdictTitle.className = 'text-2xl md:text-3xl font-extrabold mb-3 text-brand-cyan';
+                verdictMessage.innerHTML = `Aún te faltan <strong>${formatCurrency(remaining)}</strong> para alcanzar tu número Coast FIRE. ¡Sigue invirtiendo mes a mes y deja que el interés compuesto crezca para poder retirarte a los ${retirementAge}!`;
+                progressBar.className = 'h-4 rounded-full transition-all duration-1000 ease-out bg-brand-cyan';
+            }
+
+            // 3. Generate Projection Table
+            const projectionTableBody = document.getElementById('projectionTableBody');
+            projectionTableBody.innerHTML = '';
+            
+            // Define time horizons to show (1, 3, 5, 10, 15, and the actual years to retire)
+            const horizons = [1, 3, 5, 10, 15, yearsToRetire].filter(y => y > 0 && y <= yearsToRetire);
+            const uniqueHorizons = [...new Set(horizons)].sort((a,b) => a - b);
+
+            // Monthly interest rate equivalent to the annual return
+            // i = (1 + r)^(1/12) - 1
+            const i = Math.pow(1 + returnRate, 1/12) - 1;
+
+            uniqueHorizons.forEach(years => {
+                const targetAge = currentAge + years;
+                const remainingYearsToRetireAfterTarget = retirementAge - targetAge;
+                
+                // Meta Coast FIRE at that future age
+                const targetCoast = fireNumber / Math.pow(1 + returnRate, remainingYearsToRetireAfterTarget);
+                
+                const nMonths = years * 12;
+                
+                // PMT formula: FV * (i / ((1+i)^n - 1))
+                let monthlyPmt = 0;
+                if (returnRate === 0) {
+                    monthlyPmt = targetCoast / nMonths;
+                } else {
+                    monthlyPmt = targetCoast * (i / (Math.pow(1 + i, nMonths) - 1));
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 transition-colors';
+                
+                const labelTiempo = years === yearsToRetire ? `Hasta el retiro (${years} años)` : `En ${years} ${years === 1 ? 'año' : 'años'}`;
+                
+                tr.innerHTML = `
+                    <td class="p-2 md:p-4 font-medium text-gray-800 break-words">${labelTiempo}</td>
+                    <td class="p-2 md:p-4 text-gray-600 break-words">${targetAge} años</td>
+                    <td class="p-2 md:p-4 font-semibold text-gray-700 break-words">${formatCurrency(targetCoast)}</td>
+                    <td class="p-2 md:p-4 font-bold text-brand-cyan text-right break-words">${formatCurrency(monthlyPmt)}/m</td>
+                `;
+                projectionTableBody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
