@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Coast FIRE - GAB$ Coach Financiera</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,13 +13,28 @@
                 extend: {
                     colors: {
                         brand: {
-                            cyan: '#1BBAD8',
-                            orange: '#F49C14',
-                            dark: '#1e293b'
+                            // Paleta Completa
+                            'text-primary': '#000000',
+                            'bg-primary': '#FFFFFF',
+                            'text-secondary': '#129E9C',
+                            'bg-dark': '#05373A',
+                            'accent-primary': '#FA9C0F',
+                            'bg-tertiary': '#E6F7F9',
+                            'primary': '#00C2D9',
+                            'accent-secondary': '#FCEAC8',
+                            'accent-error': '#F08C82',
+                            'text-inactive': '#7E7E7E',
+                            'bg-secondary': '#EFEFEF',
+                            
+                            // Compatibilidad con componentes actuales
+                            cyan: '#00C2D9',      // Apunta a Color Primario
+                            orange: '#FA9C0F',    // Apunta a Acento Primario
+                            dark: '#05373A'       // Apunta a Fondo Dark Theme
                         }
                     },
                     fontFamily: {
                         sans: ['Nunito', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
                     }
                 }
             }
@@ -59,17 +76,229 @@
         
         <!-- SECTION: Aportaciones para el retiro (HOME) -->
         <section id="section-retiro" class="block">
-            <div class="text-center py-20">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora de Aportaciones para el Retiro</h1>
-                <p class="text-lg text-gray-600">¡Próximamente!</p>
+            <div class="text-center mb-8 relative max-w-4xl mx-auto py-4">
+                <img src="assets/giby-coin.png" alt="" class="absolute hidden md:block left-4 top-0 w-16 opacity-20 transform -rotate-12 pointer-events-none">
+                <img src="assets/giby-bill.png" alt="" class="absolute hidden md:block right-0 bottom-0 w-24 opacity-20 transform rotate-6 pointer-events-none">
+                <div class="relative z-10">
+                    <p class="text-xs font-bold text-brand-cyan uppercase tracking-widest mb-2 border border-brand-cyan rounded-full px-4 py-1 inline-block">3 Datos • 30 Segundos • Tu Número</p>
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora de Aportaciones</h1>
+                    <p class="text-lg text-gray-600 font-medium">Más de 500 personas ya descubrieron su número.</p>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation for Retiro -->
+            <div class="flex justify-center mb-8 relative z-10">
+                <div class="bg-gray-200 p-1 rounded-xl inline-flex">
+                    <button id="btnRetTabCalc" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors bg-white shadow text-brand-dark" onclick="switchRetTab('calc')">Calculadora</button>
+                    <button id="btnRetTabFaq" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors text-gray-500 hover:text-brand-dark" onclick="switchRetTab('faq')">Preguntas Frecuentes</button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: Calculator -->
+            <div id="retTab-calc" class="block">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- Form Section -->
+                <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-2xl shadow-lg border-t-4 border-brand-cyan h-fit">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center font-bold">1</div>
+                        <h2 class="text-xl font-bold text-brand-dark">Tus <span class="text-brand-cyan italic font-bold">datos</span></h2>
+                    </div>
+                    
+                    <form id="retiroForm" class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="retCurrentAge" class="block text-sm font-bold text-gray-700 mb-1">
+                                    Tu edad actual
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="retCurrentAge" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="30" min="15" max="99">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">años</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="retRetirementAge" class="block text-sm font-bold text-gray-700 mb-1">
+                                    Edad de retiro
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="retRetirementAge" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="65" min="30" max="100">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">años</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="retMonthlyIncome" class="block text-sm font-bold text-gray-700 mb-1">
+                                ¿Cuánto te gustaría recibir al mes en tu retiro? (Poder adquisitivo de hoy)
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                                <input type="number" id="retMonthlyIncome" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="30000" min="0">
+                            </div>
+                            <p class="text-xs text-gray-500 italic mt-2">En pesos de hoy — no pienses en la inflación, de eso me encargo yo.</p>
+                        </div>
+
+                        <div>
+                            <label for="retCurrentSavings" class="block text-sm font-bold text-gray-700 mb-1">
+                                ¿Cuánto tienes invertido/ahorrado hoy en día?
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                                <input type="number" id="retCurrentSavings" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-opacity-50 transition-colors text-lg font-semibold" value="0" min="0">
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings Toggle -->
+                        <details class="group bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <summary class="cursor-pointer font-bold text-gray-600 select-none flex items-center justify-between text-sm">
+                                Configuración Avanzada
+                                <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="mt-4">
+                                <label for="retReturnRate" class="block text-sm font-bold text-gray-700 mb-1">
+                                    Rendimiento Real Anual Estimado (Después de inflación)
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="retReturnRate" class="w-full pr-8 pl-4 py-2 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors font-semibold" value="6" min="0" max="20" step="0.1">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">%</span>
+                                </div>
+                            </div>
+                        </details>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="lg:col-span-7 gradient-bg p-6 md:p-10 rounded-2xl shadow-xl flex flex-col justify-center text-center relative overflow-hidden">
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-8">Aquí está tu <span class="text-brand-accent-secondary italic">número</span></h2>
+                    
+                    <div class="bg-white/10 rounded-2xl p-6 md:p-8 border border-white/20 mb-6 backdrop-blur-sm">
+                        <p class="text-xs font-bold text-brand-accent-secondary uppercase tracking-widest mb-4">Tu aportación mensual</p>
+                        <div class="text-5xl md:text-7xl font-bold text-brand-accent-secondary mb-4 drop-shadow-lg flex justify-center items-baseline gap-2">
+                            <span id="retResultPmt">$0</span> <span class="text-2xl md:text-3xl font-sans font-normal opacity-80 text-white">/ mes</span>
+                        </div>
+                        <p class="text-sm md:text-base text-white opacity-90 max-w-lg mx-auto">
+                            Es lo que necesitarías invertir cada mes, empezando hoy, para llegar a tu meta global de <strong id="retResultTarget" class="text-brand-accent-secondary text-xl">$0</strong>.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6 border border-white/10 border-dashed text-left">
+                        <p class="text-white opacity-90 text-sm md:text-base">
+                            Este número es sin contar tu <a href="https://www.gob.mx/consar/articulos/indicador-de-rendimiento-neto?idiom=es" target="_blank" class="text-brand-accent-secondary underline hover:text-white transition-colors font-bold">Afore</a> ni tus ahorros — si los tienes, tu meta puede ser más fácil de alcanzar. Si no sabes dónde está tu afore puedes buscarlo en su <a href="https://www.aforeweb.com.mx/localiza-tu-afore" target="_blank" class="text-brand-accent-secondary underline hover:text-white transition-colors font-bold">sitio web</a> o en la app <a href="https://play.google.com/store/apps/details?id=mx.com.procesar.aforemovil&hl=es_MX" target="_blank" class="text-brand-accent-secondary underline hover:text-white transition-colors font-bold">aforemovil</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Chart Section -->
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-xl border-t-4 border-brand-accent-secondary">
+                <div class="mb-6 text-center md:text-left">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-2">¿La aportación sugerida se sale de tu presupuesto?</h3>
+                    <p class="text-gray-600 text-sm md:text-base max-w-3xl">No te preocupes. Descubre qué mensualidad para tu retiro podrías alcanzar aportando diferentes porcentajes de tu ingreso actual. <strong>Lo importante es empezar con lo que puedas y posteriormente ir incrementándolo.</strong></p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="retCurrentIncomeChart" class="block text-sm font-bold text-gray-700 mb-1">
+                            Tu ingreso mensual actual
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="retCurrentIncomeChart" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors text-lg font-semibold" value="20000" min="0">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="retUserPmtChart" class="block text-sm font-bold text-gray-700 mb-1">
+                            ¿Y si empiezas con lo que sí tienes? <span class="font-normal text-gray-500">· escribe cuánto puedes aportar hoy</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="retUserPmtChart" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-accent-primary focus:outline-none focus:ring-2 focus:ring-brand-accent-primary transition-colors text-lg font-semibold" value="0" min="0">
+                        </div>
+                        <p id="retUserPmtGap" class="text-xs text-brand-dark font-bold mt-2 min-h-[1.5rem]"></p>
+                    </div>
+                </div>
+                
+                <div class="relative w-full h-96">
+                    <canvas id="retiroChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- TAB CONTENT: FAQ -->
+            <div id="retTab-faq" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                    <!-- FAQ 1 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"Ese número está muy alto, yo no puedo aportar eso."</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">No te asustes, es normal que la meta global suene inmensa al principio. La magia del interés compuesto hace que el tiempo trabaje a tu favor. Lo más importante no es empezar con la cantidad perfecta, sino empezar <strong>hoy</strong> con lo que puedas e ir incrementándolo con el tiempo.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Agenda una sesión gratuita ➔</a>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"Ya tengo Afore, ¿para qué necesito algo más?"</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">El Afore es una excelente base, pero con los esquemas actuales (Ley 97), lo que logres juntar ahí representará en promedio solo el 30% del sueldo que ganas hoy. Si quieres mantener tu estilo de vida en el futuro sin preocupaciones, es vital complementar tu estrategia.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Analicemos tu caso sin costo ➔</a>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"Ya empecé tarde, ya no vale la pena."</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">El mejor momento para empezar fue hace 10 años; el segundo mejor momento es hoy. Nunca es tarde para tomar el control. Incluso si empiezas después de los 40, puedes usar estrategias más eficientes y aprovechar beneficios fiscales que aceleren tus resultados.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Te muestro cómo en una llamada ➔</a>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"Es muy difícil, debo saber mucho de inversiones."</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">¡Para nada! No necesitas ser un lobo de Wall Street para tener un retiro digno. Hay herramientas reguladas diseñadas para funcionar en piloto automático, aprovechando el mercado sin que tú tengas que estar comprando y vendiendo todo el día.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Resuelve tus dudas en una sesión ➔</a>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"¿Por qué mediante un PPR?"</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">Un Plan Personal de Retiro (PPR) es de las pocas herramientas donde el gobierno "te premia" por usarla. Puedes deducir tus aportaciones de impuestos y recibir una devolución de dinero del SAT cada año, lo cual actúa como un rendimiento adicional enorme desde el día uno.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Calcula tu devolución gratis ➔</a>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="bg-white rounded-2xl p-6 shadow border-t-4 border-brand-cyan hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-bold text-brand-dark mb-3">"Aún no entiendo nada de esto."</h3>
+                        <p class="text-gray-700 mb-4 text-sm md:text-base">¡Y está perfecto! Nadie nos enseñó educación financiera en la escuela. Precisamente para eso estoy yo. Mi trabajo como coach es traducir todo este "idioma financiero" a palabras claras y crear un mapa que sea fácil de seguir para ti, paso a paso.</p>
+                        <a href="#" target="_blank" class="inline-block text-brand-orange font-bold hover:underline">Hablemos en una sesión gratuita ➔</a>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center gradient-bg p-8 rounded-2xl shadow-lg max-w-3xl mx-auto text-white">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-white">¿Lista para tomar el control de tu futuro?</h2>
+                    <p class="mb-6 opacity-90 text-lg">No dejes que las dudas te paralicen. Agenda una sesión de asesoría gratuita y diseñemos un plan de retiro que se ajuste a tu realidad.</p>
+                    
+                    <div class="flex flex-col items-center gap-4 mt-8">
+                        <!-- Botón Agendar Cita -->
+                        <a href="#" target="_blank" class="w-full sm:w-auto min-w-[320px] inline-block bg-white text-brand-dark font-bold text-lg px-8 py-4 rounded-full shadow hover:shadow-lg transition-all transform hover:-translate-y-1 tracking-wide uppercase">Agendar Mi Cita Personalizada</a>
+                        
+                        <!-- Botón WhatsApp -->
+                        <a href="https://api.whatsapp.com/send?phone=5549226166" target="_blank" class="w-full sm:w-auto min-w-[320px] inline-flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold text-lg px-8 py-4 rounded-full shadow hover:shadow-lg transition-all transform hover:-translate-y-1 tracking-wide uppercase">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.8 5.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.81 11.81 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/>
+                            </svg>
+                            ¿Dudas? Habla con un asesor
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- SECTION: COAST FIRE -->
         <section id="section-coast" class="hidden">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora <span class="text-brand-cyan">Coast FIRE</span></h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubre si ya no necesitas invertir más para tu retiro y deja que el interés compuesto haga el trabajo por ti.</p>
+            <div class="text-center mb-8 relative max-w-4xl mx-auto py-4">
+                <img src="assets/giby-bill.png" alt="" class="absolute hidden md:block left-0 top-2 w-20 opacity-20 transform -rotate-6 pointer-events-none">
+                <img src="assets/giby-coin.png" alt="" class="absolute hidden md:block right-4 bottom-0 w-16 opacity-20 transform rotate-12 pointer-events-none">
+                <div class="relative z-10">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora <span class="text-brand-cyan">Coast FIRE</span></h1>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubre si ya no necesitas invertir más para tu retiro y deja que el interés compuesto haga el trabajo por ti.</p>
+                </div>
             </div>
 
         <!-- Tabs Navigation -->
@@ -110,7 +339,7 @@
 
                     <div>
                         <label for="monthlyIncome" class="block text-sm font-bold text-gray-700 mb-1">
-                            ¿Cuánto te gustaría recibir al mes en tu retiro? (En dinero de hoy)
+                            ¿Cuánto te gustaría recibir al mes en tu retiro? (Poder adquisitivo de hoy)
                         </label>
                         <div class="relative">
                             <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
@@ -185,23 +414,32 @@
             </div>
             </div> <!-- End of grid -->
 
-            <!-- Action Plan Table (Starting from $0) - Full Width -->
+            <!-- Action Plan Table (Based on Income) - Full Width -->
             <div class="bg-white p-4 md:p-8 rounded-2xl shadow-lg border border-gray-100 w-full overflow-hidden">
-                    <h3 class="text-xl font-bold text-brand-dark mb-2">Plan de Acción (Si empezaras de cero)</h3>
-                    <p class="text-sm text-gray-600 mb-4 md:mb-6">
-                        Suponiendo que hoy tienes <strong>$0</strong> ahorrados y logras un rendimiento real del 
-                        <strong class="text-brand-cyan"><span id="tableReturnRateLabel">6</span>% anual</strong>, 
-                        ¿cuánto tendrías que invertir al mes para alcanzar Coast FIRE en diferentes periodos de tiempo?
+                    <h3 class="text-xl font-bold text-brand-dark mb-2">Tu Plan de Acción Real</h3>
+                    <p class="text-sm text-gray-600 mb-6">
+                        Descubre en cuánto tiempo alcanzarías tu meta dependiendo de qué porcentaje de tus ingresos decidas invertir mes a mes (considerando un rendimiento real del <strong class="text-brand-cyan"><span id="tableReturnRateLabel">6</span>% anual</strong>). <br>
+                        <em>*Este cálculo ya considera los ahorros que pusiste que tenías hoy en día en la parte de arriba.*</em>
                     </p>
+
+                    <div class="mb-6 bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200 flex flex-col md:flex-row items-center gap-4">
+                        <label for="currentIncome" class="text-sm font-bold text-gray-700 whitespace-nowrap">
+                            Tus ingresos mensuales (hoy):
+                        </label>
+                        <div class="relative w-full md:w-64">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="currentIncome" class="w-full pl-8 pr-4 py-2 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors font-semibold text-lg" value="30000" min="1">
+                        </div>
+                    </div>
                     
                     <div class="overflow-x-auto w-full">
                         <table class="w-full text-left border-collapse table-auto">
                             <thead>
                                 <tr class="bg-gray-50 text-gray-500 text-xs md:text-sm uppercase tracking-wider border-b-2 border-gray-200">
-                                    <th class="p-2 md:p-4 rounded-tl-lg font-bold whitespace-nowrap">Tiempo</th>
-                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Edad</th>
-                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Meta</th>
-                                    <th class="p-2 md:p-4 rounded-tr-lg font-bold text-brand-cyan text-right whitespace-nowrap">Mensualidad</th>
+                                    <th class="p-2 md:p-4 rounded-tl-lg font-bold whitespace-nowrap">% Ahorro</th>
+                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Aportación</th>
+                                    <th class="p-2 md:p-4 font-bold whitespace-nowrap">Tiempo estimado</th>
+                                    <th class="p-2 md:p-4 rounded-tr-lg font-bold text-brand-cyan text-right whitespace-nowrap">Edad de logro</th>
                                 </tr>
                             </thead>
                             <tbody id="projectionTableBody" class="divide-y divide-gray-100 text-sm md:text-base">
@@ -272,6 +510,7 @@
             </div>
         </section>
         
+        
     </main>
 
     <!-- Footer -->
@@ -309,6 +548,42 @@
             });
         }
 
+
+        // Tab Switching Logic (Retiro Sub-tabs)
+        function switchRetTab(tab) {
+            const btnCalc = document.getElementById('btnRetTabCalc');
+            const btnFaq = document.getElementById('btnRetTabFaq');
+            const contentCalc = document.getElementById('retTab-calc');
+            const contentFaq = document.getElementById('retTab-faq');
+
+            const activeClass = ['bg-white', 'shadow', 'text-brand-dark'];
+            const inactiveClass = ['text-gray-500', 'hover:text-brand-dark'];
+
+            if (tab === 'calc') {
+                contentCalc.classList.remove('hidden');
+                contentCalc.classList.add('block');
+                contentFaq.classList.add('hidden');
+                contentFaq.classList.remove('block');
+                
+                btnCalc.classList.add(...activeClass);
+                btnCalc.classList.remove(...inactiveClass);
+                
+                btnFaq.classList.remove(...activeClass);
+                btnFaq.classList.add(...inactiveClass);
+            } else {
+                contentCalc.classList.add('hidden');
+                contentCalc.classList.remove('block');
+                contentFaq.classList.remove('hidden');
+                contentFaq.classList.add('block');
+                
+                btnFaq.classList.add(...activeClass);
+                btnFaq.classList.remove(...inactiveClass);
+                
+                btnCalc.classList.remove(...activeClass);
+                btnCalc.classList.add(...inactiveClass);
+            }
+        }
+
         // Tab Switching Logic (Coast FIRE Sub-tabs)
         function switchTab(tab) {
             const btnCalc = document.getElementById('btnTabCalc');
@@ -342,7 +617,7 @@
 
         // Calculator Logic
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = ['monthlyIncome', 'currentSavings', 'currentAge', 'retirementAge', 'returnRate'];
+            const inputs = ['monthlyIncome', 'currentSavings', 'currentAge', 'retirementAge', 'returnRate', 'currentIncome'];
             
             inputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', calculateCoastFire);
@@ -350,6 +625,15 @@
 
             // Initial calculation
             calculateCoastFire();
+
+            // Retiro Calculator Logic
+            const retInputs = ['retCurrentAge', 'retRetirementAge', 'retMonthlyIncome', 'retCurrentSavings', 'retReturnRate', 'retCurrentIncomeChart', 'retUserPmtChart'];
+            retInputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateRetiro);
+            });
+            
+            calculateRetiro();
         });
 
         function formatCurrency(value) {
@@ -358,6 +642,230 @@
                 currency: 'MXN',
                 maximumFractionDigits: 0
             }).format(value);
+        }
+
+        let retiroChartInstance = null;
+
+        function updateRetiroChart(targetPmt, desiredIncome) {
+            const currentIncome = parseFloat(document.getElementById('retCurrentIncomeChart').value) || 20000;
+            const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
+            const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
+            const currentSavings = parseFloat(document.getElementById('retCurrentSavings').value) || 0;
+            const returnRate = parseFloat(document.getElementById('retReturnRate').value) / 100 || 0;
+            
+            const yearsToRetire = Math.max(0, retirementAge - currentAge);
+            const nMonths = yearsToRetire * 12;
+            const i = Math.pow(1 + returnRate, 1/12) - 1;
+
+            const userPmt = parseFloat(document.getElementById('retUserPmtChart').value) || 0;
+            const gapEl = document.getElementById('retUserPmtGap');
+
+            if (userPmt > 0) {
+                gapEl.classList.remove('hidden');
+                const gap = targetPmt - userPmt;
+                if (gap > 0) {
+                    gapEl.innerHTML = `Te faltarían <span class="text-brand-accent-primary">${formatCurrency(gap)}</span> mensuales para alcanzar tu meta ideal.`;
+                } else {
+                    gapEl.innerHTML = `<span class="text-brand-cyan">¡Súper! Esta aportación cubre tu meta ideal.</span>`;
+                }
+            } else {
+                gapEl.innerHTML = '';
+            }
+
+            const calcFutureIncome = (pmtActual) => {
+                let FV = 0;
+                if (nMonths > 0) {
+                    if (returnRate === 0) {
+                        FV = currentSavings + pmtActual * nMonths;
+                    } else {
+                        FV = currentSavings * Math.pow(1 + i, nMonths) + pmtActual * ((Math.pow(1 + i, nMonths) - 1) / i);
+                    }
+                } else {
+                    FV = currentSavings;
+                }
+                return FV * (0.04 / 12);
+            };
+
+            let bars = [];
+            const percentages = [5, 10, 15, 20, 25, 30, 40, 50];
+            percentages.forEach(p => {
+                const pmtActual = (p / 100) * currentIncome;
+                bars.push({
+                    percentage: p,
+                    label: `${p}% (${formatCurrency(pmtActual)})`,
+                    value: calcFutureIncome(pmtActual),
+                    bgColor: '#00C2D9', // Primary cyan
+                    fontColor: '#ffffff'
+                });
+            });
+
+            // Target (Meta)
+            let targetPercentage = (targetPmt / currentIncome) * 100;
+            if (targetPercentage > 0) {
+                bars.push({
+                    percentage: targetPercentage,
+                    label: `META: ${targetPercentage.toFixed(1)}% (${formatCurrency(targetPmt)})`,
+                    value: desiredIncome,
+                    bgColor: '#FA9C0F', // Accent primary
+                    fontColor: '#ffffff'
+                });
+            }
+
+            // User custom (Hoy)
+            if (userPmt > 0) {
+                let userPercentage = (userPmt / currentIncome) * 100;
+                bars.push({
+                    percentage: userPercentage,
+                    label: `HOY: ${userPercentage.toFixed(1)}% (${formatCurrency(userPmt)})`,
+                    value: calcFutureIncome(userPmt),
+                    bgColor: '#FCEAC8', // Accent secondary (beige)
+                    fontColor: '#05373A' // Dark text for contrast against beige
+                });
+            }
+
+            bars.sort((a, b) => a.percentage - b.percentage);
+
+            let labels = bars.map(b => b.label);
+            let dataPoints = bars.map(b => b.value);
+            let backgroundColors = bars.map(b => b.bgColor);
+            let fontColors = bars.map(b => b.fontColor);
+
+            const ctx = document.getElementById('retiroChart').getContext('2d');
+            
+            if (retiroChartInstance) {
+                retiroChartInstance.destroy();
+            }
+
+            retiroChartInstance = new Chart(ctx, {
+                type: 'bar',
+                plugins: [window.ChartDataLabels],
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Mensualidad estimada en retiro ($)',
+                        data: dataPoints,
+                        backgroundColor: backgroundColors,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function() {
+                                    return ''; // Remove redundant title
+                                },
+                                label: function(context) {
+                                    const inflationRate = 0.045; // Assumed average inflation in Mexico
+                                    const fvNominal = context.raw * Math.pow(1 + inflationRate, yearsToRetire);
+                                    return [
+                                        'Pesos de hoy: ' + formatCurrency(context.raw) + ' / mes',
+                                        'Pesos del futuro: ' + formatCurrency(fvNominal) + ' / mes'
+                                    ];
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: function(context) {
+                                return fontColors[context.dataIndex];
+                            },
+                            anchor: 'start',
+                            align: 'end',
+                            offset: 10,
+                            font: {
+                                weight: 'bold',
+                                size: 14,
+                                family: "'Nunito', sans-serif"
+                            },
+                            formatter: function(value, context) {
+                                return context.chart.data.labels[context.dataIndex];
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Mensualidad en retiro (Poder adquisitivo de hoy)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString('es-MX');
+                                }
+                            }
+                        },
+                        y: {
+                            display: true,
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: '% de tus ingresos',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateRetiro() {
+            const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
+            const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
+            const monthlyIncome = parseFloat(document.getElementById('retMonthlyIncome').value) || 0;
+            const currentSavings = parseFloat(document.getElementById('retCurrentSavings').value) || 0;
+            const returnRate = parseFloat(document.getElementById('retReturnRate').value) / 100 || 0;
+            
+            const withdrawalRate = 0.04;
+            const yearsToRetire = Math.max(0, retirementAge - currentAge);
+            const nMonths = yearsToRetire * 12;
+            
+            // Meta global (Total FIRE Target)
+            const annualIncome = monthlyIncome * 12;
+            const fireTarget = annualIncome / withdrawalRate;
+            
+            // Monthly return rate
+            const i = Math.pow(1 + returnRate, 1/12) - 1;
+            
+            // Calculate PMT using FV Annuity Formula
+            let pmt = 0;
+            if (yearsToRetire > 0) {
+                if (returnRate === 0) {
+                    pmt = (fireTarget - currentSavings) / nMonths;
+                } else {
+                    const futureValueOfCurrentSavings = currentSavings * Math.pow(1 + i, nMonths);
+                    const remainingTarget = fireTarget - futureValueOfCurrentSavings;
+                    
+                    if (remainingTarget <= 0) {
+                        pmt = 0;
+                    } else {
+                        pmt = remainingTarget * (i / (Math.pow(1 + i, nMonths) - 1));
+                    }
+                }
+            } else {
+                pmt = (fireTarget - currentSavings) > 0 ? (fireTarget - currentSavings) : 0;
+            }
+            
+            if (pmt < 0) pmt = 0;
+
+            document.getElementById('retResultTarget').innerText = formatCurrency(fireTarget);
+            document.getElementById('retResultPmt').innerText = formatCurrency(pmt);
+            
+            updateRetiroChart(pmt, monthlyIncome);
         }
 
         function calculateCoastFire() {
@@ -419,48 +927,66 @@
                 progressBar.className = 'h-4 rounded-full transition-all duration-1000 ease-out bg-brand-cyan';
             }
 
-            // 3. Generate Projection Table
+            // 3. Generate Projection Table (Based on savings percentage)
             const projectionTableBody = document.getElementById('projectionTableBody');
             projectionTableBody.innerHTML = '';
             
-            // Define time horizons to show (1, 3, 5, 10, 15, and the actual years to retire)
-            const horizons = [1, 3, 5, 10, 15, yearsToRetire].filter(y => y > 0 && y <= yearsToRetire);
-            const uniqueHorizons = [...new Set(horizons)].sort((a,b) => a - b);
-
+            const currentIncome = parseFloat(document.getElementById('currentIncome').value) || 0;
+            const savingsPercentages = [0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70];
+            
             // Monthly interest rate equivalent to the annual return
-            // i = (1 + r)^(1/12) - 1
             const i = Math.pow(1 + returnRate, 1/12) - 1;
+            const gap = coastFireNumber - currentSavings;
 
-            uniqueHorizons.forEach(years => {
-                const targetAge = currentAge + years;
-                const remainingYearsToRetireAfterTarget = retirementAge - targetAge;
-                
-                // Meta Coast FIRE at that future age
-                const targetCoast = fireNumber / Math.pow(1 + returnRate, remainingYearsToRetireAfterTarget);
-                
-                const nMonths = years * 12;
-                
-                // PMT formula: FV * (i / ((1+i)^n - 1))
-                let monthlyPmt = 0;
-                if (returnRate === 0) {
-                    monthlyPmt = targetCoast / nMonths;
-                } else {
-                    monthlyPmt = targetCoast * (i / (Math.pow(1 + i, nMonths) - 1));
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition-colors';
-                
-                const labelTiempo = years === yearsToRetire ? `Hasta el retiro (${years} años)` : `En ${years} ${years === 1 ? 'año' : 'años'}`;
-                
-                tr.innerHTML = `
-                    <td class="p-2 md:p-4 font-medium text-gray-800 break-words">${labelTiempo}</td>
-                    <td class="p-2 md:p-4 text-gray-600 break-words">${targetAge} años</td>
-                    <td class="p-2 md:p-4 font-semibold text-gray-700 break-words">${formatCurrency(targetCoast)}</td>
-                    <td class="p-2 md:p-4 font-bold text-brand-cyan text-right break-words">${formatCurrency(monthlyPmt)}/m</td>
-                `;
-                projectionTableBody.appendChild(tr);
-            });
+            if (currentSavings >= coastFireNumber && currentSavings > 0) {
+                projectionTableBody.innerHTML = `<tr><td colspan="4" class="p-4 md:p-6 text-center text-brand-orange font-bold text-lg">¡Ya eres Coast FIRE! No necesitas aportar más.</td></tr>`;
+            } else {
+                savingsPercentages.forEach(pct => {
+                    const pmt = currentIncome * pct;
+                    const minPmtRequired = gap * i;
+                    
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-50 transition-colors';
+                    
+                    if (pmt <= minPmtRequired || pmt === 0) {
+                        tr.innerHTML = `
+                            <td class="p-2 md:p-4 font-medium text-gray-800">${(pct*100).toFixed(0)}%</td>
+                            <td class="p-2 md:p-4 text-gray-600">${formatCurrency(pmt)}/m</td>
+                            <td class="p-2 md:p-4 font-semibold text-red-400 text-sm">Aportación insuficiente (la meta crece más rápido, enfócate en incrementar ingresos)</td>
+                            <td class="p-2 md:p-4 font-bold text-gray-400 text-right">-</td>
+                        `;
+                    } else {
+                        // Calculate months needed
+                        // n = ln( PMT / (PMT - Gap * i) ) / ln(1+i)
+                        const months = Math.log(pmt / (pmt - minPmtRequired)) / Math.log(1 + i);
+                        const totalYears = months / 12;
+                        
+                        const yearsToRetireCheck = retirementAge - currentAge;
+                        let timeString = '';
+                        let ageString = '';
+                        
+                        if (totalYears > yearsToRetireCheck) {
+                            timeString = `<span class="text-orange-500">Más de ${yearsToRetireCheck} años (Post-retiro)</span>`;
+                            ageString = `<span class="text-orange-500">+${retirementAge} años</span>`;
+                        } else {
+                            const y = Math.floor(totalYears);
+                            const m = Math.round((totalYears - y) * 12);
+                            timeString = `${y > 0 ? y + ' años ' : ''}${m > 0 ? m + ' meses' : (y === 0 ? '< 1 mes' : '')}`;
+                            
+                            const finalAge = currentAge + totalYears;
+                            ageString = `${finalAge.toFixed(1)} años`;
+                        }
+                        
+                        tr.innerHTML = `
+                            <td class="p-2 md:p-4 font-medium text-gray-800">${(pct*100).toFixed(0)}%</td>
+                            <td class="p-2 md:p-4 text-gray-600">${formatCurrency(pmt)}/m</td>
+                            <td class="p-2 md:p-4 font-semibold text-gray-700">${timeString}</td>
+                            <td class="p-2 md:p-4 font-bold text-brand-cyan text-right">${ageString}</td>
+                        `;
+                    }
+                    projectionTableBody.appendChild(tr);
+                });
+            }
         }
     </script>
 </body>
