@@ -230,6 +230,24 @@
                     <h3 class="text-2xl font-bold text-brand-dark mb-2">El poder del interés compuesto</h3>
                     <p class="text-gray-600 text-sm md:text-base max-w-3xl">Observa cómo crecen tus aportaciones acumuladas a lo largo de los años hasta llegar a tu edad de retiro, gracias al rendimiento estimado.</p>
                 </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="compoundPmtInput" class="block text-sm font-bold text-gray-700 mb-1">
+                            Aportación mensual para proyectar
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" id="compoundPmtInput" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors text-lg font-semibold" value="0" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Monto total acumulado a los <span id="compoundRetAgeLabel">65</span></span>
+                        <div class="text-2xl md:text-3xl font-extrabold text-brand-cyan" id="compoundTotalResult">$0</div>
+                    </div>
+                </div>
+
                 <div class="relative w-full h-96">
                     <canvas id="compoundInterestChart"></canvas>
                 </div>
@@ -638,6 +656,9 @@
                 if (el) el.addEventListener('input', calculateRetiro);
             });
             
+            const compoundInput = document.getElementById('compoundPmtInput');
+            if (compoundInput) compoundInput.addEventListener('input', () => updateCompoundInterestChart(null));
+
             calculateRetiro();
         });
 
@@ -830,18 +851,28 @@
 
         let compoundInterestChartInstance = null;
 
-        function updateCompoundInterestChart(pmt) {
+        function updateCompoundInterestChart(calculatedPmt = null) {
             const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
             const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
             const currentSavings = parseFloat(document.getElementById('retCurrentSavings').value) || 0;
             const returnRate = parseFloat(document.getElementById('retReturnRate').value) / 100 || 0;
+            const pmtInputEl = document.getElementById('compoundPmtInput');
+            
+            if (calculatedPmt !== null) {
+                pmtInputEl.value = Math.round(calculatedPmt);
+            }
+            
+            const pmt = parseFloat(pmtInputEl.value) || 0;
             
             const i = Math.pow(1 + returnRate, 1/12) - 1;
             const yearsToRetire = Math.max(0, retirementAge - currentAge);
             
+            document.getElementById('compoundRetAgeLabel').innerText = retirementAge;
+            
             let labels = [];
             let dataAportado = [];
             let dataIntereses = [];
+            let totalAcumulado = 0;
 
             for (let y = 0; y <= yearsToRetire; y++) {
                 let nMonths = y * 12;
@@ -863,7 +894,13 @@
                 
                 dataAportado.push(aportado);
                 dataIntereses.push(intereses);
+                
+                if (y === yearsToRetire) {
+                    totalAcumulado = acumulado;
+                }
             }
+            
+            document.getElementById('compoundTotalResult').innerText = formatCurrency(totalAcumulado);
 
             const ctx = document.getElementById('compoundInterestChart').getContext('2d');
             
