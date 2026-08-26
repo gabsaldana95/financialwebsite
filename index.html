@@ -248,6 +248,17 @@
                     </div>
                 </div>
 
+                <div class="flex items-center gap-3 mb-8 bg-cyan-50 p-4 rounded-xl border border-cyan-100">
+                    <label for="toggleSatReturn" class="flex items-center cursor-pointer relative">
+                        <input type="checkbox" id="toggleSatReturn" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-orange"></div>
+                    </label>
+                    <div>
+                        <p class="text-sm font-bold text-brand-dark">Reinvertir devoluciones del SAT</p>
+                        <p class="text-xs text-gray-600 mt-1">Suma a tu aportación la devolución de deducir el 10% de tus ingresos anuales.</p>
+                    </div>
+                </div>
+
                 <div class="relative w-full h-96">
                     <canvas id="compoundInterestChart"></canvas>
                 </div>
@@ -658,6 +669,9 @@
             
             const compoundInput = document.getElementById('compoundPmtInput');
             if (compoundInput) compoundInput.addEventListener('input', () => updateCompoundInterestChart(null));
+            
+            const satToggle = document.getElementById('toggleSatReturn');
+            if (satToggle) satToggle.addEventListener('change', () => updateCompoundInterestChart(null));
 
             calculateRetiro();
         });
@@ -862,7 +876,18 @@
                 pmtInputEl.value = Math.round(calculatedPmt);
             }
             
-            const pmt = parseFloat(pmtInputEl.value) || 0;
+            let pmt = parseFloat(pmtInputEl.value) || 0;
+            let displayPmt = pmt; // The user's actual base contribution
+            
+            const isSatReturnEnabled = document.getElementById('toggleSatReturn')?.checked || false;
+            if (isSatReturnEnabled) {
+                const currentIncome = parseFloat(document.getElementById('retCurrentIncomeChart').value) || 20000;
+                const annualIncome = currentIncome * 12;
+                const annualContribution = pmt * 12;
+                const deductibleAmount = Math.min(annualContribution, annualIncome * 0.10);
+                const taxReturn = deductibleAmount * 0.30; // Estimando un ISR del 30%
+                pmt += (taxReturn / 12);
+            }
             
             const i = Math.pow(1 + returnRate, 1/12) - 1;
             const yearsToRetire = Math.max(0, retirementAge - currentAge);
