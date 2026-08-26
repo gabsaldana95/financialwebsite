@@ -223,6 +223,17 @@
                     <canvas id="retiroChart"></canvas>
                 </div>
             </div>
+
+            <!-- Compound Interest Chart Section -->
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-xl border-t-4 border-brand-cyan mt-8">
+                <div class="mb-6 text-center md:text-left">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-2">El poder del interés compuesto</h3>
+                    <p class="text-gray-600 text-sm md:text-base max-w-3xl">Observa cómo crecen tus aportaciones acumuladas a lo largo de los años hasta llegar a tu edad de retiro, gracias al rendimiento estimado.</p>
+                </div>
+                <div class="relative w-full h-96">
+                    <canvas id="compoundInterestChart"></canvas>
+                </div>
+            </div>
             </div>
             
             <!-- TAB CONTENT: FAQ -->
@@ -817,6 +828,105 @@
             });
         }
 
+        let compoundInterestChartInstance = null;
+
+        function updateCompoundInterestChart(pmt) {
+            const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
+            const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
+            const currentSavings = parseFloat(document.getElementById('retCurrentSavings').value) || 0;
+            const returnRate = parseFloat(document.getElementById('retReturnRate').value) / 100 || 0;
+            
+            const i = Math.pow(1 + returnRate, 1/12) - 1;
+            const yearsToRetire = Math.max(0, retirementAge - currentAge);
+            
+            let labels = [];
+            let dataAportado = [];
+            let dataIntereses = [];
+
+            for (let y = 0; y <= yearsToRetire; y++) {
+                let nMonths = y * 12;
+                let age = currentAge + y;
+                labels.push(age + ' años');
+                
+                let aportado = currentSavings + (pmt * nMonths);
+                
+                let acumulado = 0;
+                if (nMonths === 0) {
+                    acumulado = currentSavings;
+                } else if (returnRate === 0) {
+                    acumulado = aportado;
+                } else {
+                    acumulado = currentSavings * Math.pow(1 + i, nMonths) + pmt * ((Math.pow(1 + i, nMonths) - 1) / i);
+                }
+                
+                let intereses = Math.max(0, acumulado - aportado);
+                
+                dataAportado.push(aportado);
+                dataIntereses.push(intereses);
+            }
+
+            const ctx = document.getElementById('compoundInterestChart').getContext('2d');
+            
+            if (compoundInterestChartInstance) {
+                compoundInterestChartInstance.destroy();
+            }
+
+            compoundInterestChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Aportaciones Acumuladas ($)',
+                            data: dataAportado,
+                            backgroundColor: '#00C2D9',
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: 'Rendimientos ($)',
+                            data: dataIntereses,
+                            backgroundColor: '#FA9C0F',
+                            stack: 'Stack 0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label.replace(' ($)', '') + ': ' + formatCurrency(context.raw);
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Edad'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString('es-MX');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         function calculateRetiro() {
             const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
             const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
@@ -860,6 +970,7 @@
             document.getElementById('retResultPmt').innerText = formatCurrency(pmt);
             
             updateRetiroChart(pmt, monthlyIncome);
+            updateCompoundInterestChart(pmt);
         }
 
         function calculateCoastFire() {
