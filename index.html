@@ -878,6 +878,7 @@
             
             let pmt = parseFloat(pmtInputEl.value) || 0;
             let displayPmt = pmt; // The user's actual base contribution
+            let taxReturnMonthly = 0;
             
             const isSatReturnEnabled = document.getElementById('toggleSatReturn')?.checked || false;
             if (isSatReturnEnabled) {
@@ -886,7 +887,8 @@
                 const annualContribution = pmt * 12;
                 const deductibleAmount = Math.min(annualContribution, annualIncome * 0.10);
                 const taxReturn = deductibleAmount * 0.30; // Estimando un ISR del 30%
-                pmt += (taxReturn / 12);
+                taxReturnMonthly = taxReturn / 12;
+                pmt += taxReturnMonthly;
             }
             
             const i = Math.pow(1 + returnRate, 1/12) - 1;
@@ -896,6 +898,7 @@
             
             let labels = [];
             let dataAportado = [];
+            let dataSat = [];
             let dataIntereses = [];
             let totalAcumulado = 0;
 
@@ -904,20 +907,23 @@
                 let age = currentAge + y;
                 labels.push(age + ' años');
                 
-                let aportado = currentSavings + (pmt * nMonths);
+                let aportadoBase = currentSavings + (displayPmt * nMonths);
+                let aportadoSat = (taxReturnMonthly * nMonths);
+                let totalAportado = aportadoBase + aportadoSat;
                 
                 let acumulado = 0;
                 if (nMonths === 0) {
                     acumulado = currentSavings;
                 } else if (returnRate === 0) {
-                    acumulado = aportado;
+                    acumulado = totalAportado;
                 } else {
                     acumulado = currentSavings * Math.pow(1 + i, nMonths) + pmt * ((Math.pow(1 + i, nMonths) - 1) / i);
                 }
                 
-                let intereses = Math.max(0, acumulado - aportado);
+                let intereses = Math.max(0, acumulado - totalAportado);
                 
-                dataAportado.push(aportado);
+                dataAportado.push(aportadoBase);
+                dataSat.push(aportadoSat);
                 dataIntereses.push(intereses);
                 
                 if (y === yearsToRetire) {
@@ -942,6 +948,12 @@
                             label: 'Aportaciones Acumuladas ($)',
                             data: dataAportado,
                             backgroundColor: '#00C2D9',
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: 'Devoluciones SAT ($)',
+                            data: dataSat,
+                            backgroundColor: '#10B981', // Verde distintivo
                             stack: 'Stack 0'
                         },
                         {
