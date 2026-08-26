@@ -65,7 +65,6 @@
             <nav class="flex flex-wrap justify-center gap-2 md:gap-6">
                 <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1">Aportaciones Retiro</button>
                 <button id="navBtn-coast" onclick="switchMainTab('coast')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Coast FIRE</button>
-                <button id="navBtn-semaforo" onclick="switchMainTab('semaforo')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Semáforo Financiero</button>
                 <button id="navBtn-sobremi" onclick="switchMainTab('sobremi')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Sobre mí</button>
             </nav>
         </div>
@@ -536,19 +535,181 @@
             </div>
         </section>
 
-        <!-- SECTION: Semáforo Financiero -->
-        <section id="section-semaforo" class="hidden">
-            <div class="text-center py-20">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Semáforo Financiero</h1>
-                <p class="text-lg text-gray-600">¡Próximamente!</p>
-            </div>
-        </section>
-
         <!-- SECTION: Sobre mí -->
         <section id="section-sobremi" class="hidden">
-            <div class="text-center py-20">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Sobre Mí</h1>
-                <p class="text-lg text-gray-600">¡Próximamente!</p>
+            <!-- Hero -->
+            <div class="max-w-6xl mx-auto px-4 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark leading-tight mb-6">
+                        Diseña la vida que <span class="text-brand-accent-primary">quieres</span> con los recursos que <span class="text-brand-cyan">tienes</span>
+                    </h1>
+                    <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                        Te ayudo a tomar mejores decisiones financieras e invertir tu dinero inteligentemente para que puedas alcanzar tus metas y vivir la vida que sueñas.
+                    </p>
+                    <div class="flex items-center gap-2">
+                        <div class="flex text-brand-accent-primary">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <span class="text-sm font-bold text-gray-500 uppercase tracking-widest">+100 CLIENTES SATISFECHOS</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="assets/hero-happy.jpg" alt="Persona feliz" class="w-full h-auto rounded-3xl shadow-2xl object-cover object-center border-4 border-brand-cyan">
+                </div>
+            </div>
+
+            <!-- Mission -->
+            <div class="bg-[#E6F7F9] py-16 md:py-24">
+                <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1">
+                        <img src="assets/finance-desk.jpg" alt="Finanzas sanas" class="w-full rounded-3xl shadow-xl border-4 border-white">
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-6 leading-tight">
+                            La asesoría que se adapta a <span class="text-brand-accent-primary">ti</span>, y no al revés.
+                        </h2>
+                        <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                            Mi objetivo es que logres diseñar la vida que quieres <strong>con los recursos que tienes</strong>. Quiero demostrar que tener unas finanzas sanas está al alcance de cualquiera, con los conocimientos y el acompañamiento adecuado.
+                        </p>
+                        <p class="text-lg text-brand-cyan font-bold">
+                            Aprenderás a usar tu vehículo financiero.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicios -->
+            <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-brand-dark text-center mb-16 uppercase tracking-wider">MIS SERVICIOS</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <!-- Servicio 1 -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-cyan flex flex-col h-full">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3">
+                            <span class="text-3xl">📊</span> Asesorías Financieras
+                        </h3>
+                        <p class="text-gray-700 mb-8 leading-relaxed">
+                            Análisis personalizado de tu situación financiera actual y creación de estrategias específicas para alcanzar tus metas.
+                        </p>
+                        <ul class="space-y-4 mb-10 flex-grow text-gray-700">
+                            <li class="flex gap-3"><span class="text-brand-accent-primary font-bold">💡</span> Evaluación de salud financiera y plan de mejora</li>
+                            <li class="flex gap-3"><span class="text-brand-accent-primary font-bold">📱</span> Plan de ahorro/presupuesto personalizado</li>
+                            <li class="flex gap-3"><span class="text-green-500 font-bold">✓</span> Estrategias de inversión para tu objetivo</li>
+                        </ul>
+                        <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow">Hacer mi diagnostico</a>
+                    </div>
+                    <!-- Servicio 2 -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-accent-primary flex flex-col h-full">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3">
+                            <span class="text-3xl">⛱️</span> Planes de Retiro
+                        </h3>
+                        <p class="text-gray-700 mb-8 leading-relaxed">
+                            Planes personalizados para asegurar tu futuro financiero y jubilarte con la tranquilidad que mereces.
+                        </p>
+                        <ul class="space-y-4 mb-10 flex-grow text-gray-700">
+                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">📈</span> Cálculo de necesidades de retiro</li>
+                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">🎯</span> Estrategias de inversión a largo plazo pasivas y activas</li>
+                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">📉</span> Deducciones fiscales mediante PPR</li>
+                        </ul>
+                        <button onclick="switchMainTab('retiro')" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow">Ver Planes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla Comparativa -->
+            <div class="bg-gray-50 py-16 md:py-24 border-y border-gray-200">
+                <div class="max-w-4xl mx-auto px-4">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-brand-dark">¿Porqué con Gabs?</h2>
+                        <a href="https://api.whatsapp.com/send?phone=5549226166" target="_blank" class="bg-brand-accent-primary text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-shadow uppercase text-sm text-center">Dame click para conocer casos de éxito</a>
+                    </div>
+                    <div class="overflow-x-auto bg-white rounded-2xl shadow border border-gray-100">
+                        <table class="w-full text-center border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="p-4 bg-white"></th>
+                                    <th class="p-4 bg-brand-accent-secondary text-brand-dark font-bold w-1/4">Gabs</th>
+                                    <th class="p-4 bg-gray-100 text-gray-600 font-bold w-1/4 border-l border-white">Asesor X</th>
+                                    <th class="p-4 bg-gray-100 text-gray-600 font-bold w-1/4 border-l border-white">Asesor Z</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-4 text-left font-medium">Únete a la comunidad privada</td>
+                                    <td class="p-4 bg-[#E6F7F9] text-2xl">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">❌</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 text-left font-medium">News Letter mensual</td>
+                                    <td class="p-4 bg-[#E6F7F9] text-2xl">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">❌</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 text-left font-medium">Seguimiento asíncrono</td>
+                                    <td class="p-4 bg-[#E6F7F9] text-2xl">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">❌</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">❌</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 text-left font-medium">Contenido gratuito</td>
+                                    <td class="p-4 bg-[#E6F7F9] text-2xl">✅</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">❌</td>
+                                    <td class="p-4 text-2xl border-l border-gray-50">✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-brand-dark text-center mb-16">¿Qué dicen de mis servicios?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
+                    <!-- Sofía -->
+                    <div class="bg-brand-dark text-white rounded-3xl p-8 relative mt-12 shadow-xl border-t-8 border-brand-cyan">
+                        <img src="assets/testim-sofia.jpg" alt="Sofía" class="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-1/2 transform -translate-x-1/2 object-cover">
+                        <h4 class="text-xl font-bold mt-10 mb-4">Sofía</h4>
+                        <p class="text-sm text-gray-200 leading-relaxed">Me gustaron mucho las asesorías. En ningún momento me sentí juzgada ya que Gabs siempre es muy empática. Estos espacios son totalmente personalizados para que cumplas tus metas de una forma realista y con un enfoque muy humano.</p>
+                    </div>
+                    <!-- Marco -->
+                    <div class="bg-brand-dark text-white rounded-3xl p-8 relative mt-12 shadow-xl border-t-8 border-brand-accent-primary">
+                        <img src="assets/testim-marco.jpg" alt="Marco" class="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-1/2 transform -translate-x-1/2 object-cover">
+                        <h4 class="text-xl font-bold mt-10 mb-4">Marco</h4>
+                        <p class="text-sm text-gray-200 leading-relaxed">Las sesiones de coaching me ayudaron a entender aspectos clave para mantener una buena salud financiera. Identifiqué gastos innecesarios y errores financieros, y comprendí la importancia de tener un plan de contingencia.</p>
+                    </div>
+                    <!-- Lourdes -->
+                    <div class="bg-brand-dark text-white rounded-3xl p-8 relative mt-12 shadow-xl border-t-8 border-brand-cyan">
+                        <img src="assets/testim-lourdes.jpg" alt="Lourdes" class="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-1/2 transform -translate-x-1/2 object-cover">
+                        <h4 class="text-xl font-bold mt-10 mb-4">Lourdes</h4>
+                        <p class="text-sm text-gray-200 leading-relaxed">Me permite sentir más control sobre mi vida y mis decisiones, así como mi retiro y eso es algo importante para mi porque al ser una persona un poco ansiosa, sentir un mayor nivel de conocimiento y control sobre mi patrimonio me da tranquilidad.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="max-w-5xl mx-auto px-4 py-16 md:py-24 border-t-2 border-gray-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1 space-y-4 text-gray-700 leading-relaxed">
+                        <p>Hace 7 años comencé mi camino en finanzas personales, aprendiendo sobre inversión, planificación de retiro, uso de tarjetas de crédito y presupuestos 🤓.</p>
+                        <p>Soy ingeniero en sistemas computacionales con especialización en diseño de experiencia de usuario 🤓. Estudié finanzas de manera autodidacta y compartí mis conocimientos en redes sociales, lo que fue bien recibido por la gente 💵.</p>
+                        <p>Llevo 3 años dedicándome a brindar coaching y asesoría de finanzas personales que muestran resultados inclusive 1 año después 🤩. Actualmente me estoy especializando en economía conductual.</p>
+                        <p class="font-bold text-gray-500 mt-4 text-sm">#cedula agente C396757</p>
+                    </div>
+                    <div class="order-1 md:order-2 text-center">
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-brand-dark mb-8">Hola, soy gabs</h2>
+                        <div class="relative inline-block w-48 md:w-64">
+                            <img src="assets/gabs-profile.png" alt="Gabs" class="w-full h-auto relative z-10">
+                            <!-- Background decoration to mimic the circle in the original photo -->
+                            <div class="absolute inset-0 bg-brand-cyan rounded-full transform scale-105 -z-10 translate-x-4 translate-y-4 opacity-10"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         
@@ -580,7 +741,7 @@
     <script>
         // Main Navigation Logic
         function switchMainTab(tab) {
-            const sections = ['retiro', 'coast', 'semaforo', 'sobremi'];
+            const sections = ['retiro', 'coast', 'sobremi'];
             
             sections.forEach(sec => {
                 const sectionEl = document.getElementById(`section-${sec}`);
