@@ -764,7 +764,7 @@
                                 <label class="block font-extrabold text-brand-dark">Aportación mensual a PPR</label>
                                 <span id="tax-aportacionDisplay" class="font-bold text-brand-orange bg-[#FFF5E6] px-3 py-1 rounded-full text-sm">$4,000</span>
                             </div>
-                            <p class="text-xs text-gray-500 mb-2 leading-relaxed">Puedes deducir hasta el 10% de tu ingreso anual o 5 UMAs anuales.</p>
+                            <p class="text-xs text-gray-500 mb-2 leading-relaxed">Puedes deducir hasta el 10% de tu ingreso anual o 5 UMAs anuales (aprox. $198,031).</p>
                             <input type="range" id="tax-aportacionSlider" min="0" max="100000" step="500" value="4000" class="w-full accent-brand-orange mt-2 cursor-pointer h-2 bg-gray-200 rounded-lg appearance-none" oninput="updateTaxPprInputFromSlider(); calculateTaxes()">
                             <div class="relative mt-4">
                                 <span class="absolute left-4 top-4 font-bold text-gray-400">$</span>
@@ -785,25 +785,86 @@
                             <span class="font-extrabold text-brand-dark text-lg" id="tax-res-ingresoAnual">$480,000.00</span>
                         </div>
                         
-                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
-                            <span class="font-bold text-sm md:text-base text-gray-500">Retención ISR Anual (Sin PPR):</span>
-                            <span class="font-extrabold text-red-500 text-lg" id="tax-res-isrSinPpr">$81,069.87</span>
+                        <div class="flex flex-col bg-gray-50 p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-sm md:text-base text-gray-500">Retención ISR Anual (Sin PPR):</span>
+                                <span class="font-extrabold text-red-500 text-lg" id="tax-res-isrSinPpr">$81,069.87</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-gray-500 font-bold">
+                                <span>Tasa efectiva: <span id="tax-res-tasaEfectivaSin">16.89%</span></span>
+                                <span id="tax-res-salariosSin">Equivale a 2.0 salarios</span>
+                            </div>
                         </div>
                         
-                        <div class="flex justify-between items-center bg-[#E6F7F9] p-4 rounded-xl border border-brand-cyan border-opacity-30">
-                            <div>
-                                <span class="font-bold text-sm md:text-base text-brand-dark block">Retención ISR Anual (Con PPR):</span>
-                                <span class="text-xs text-brand-cyan font-bold" id="tax-res-deduccionPprAnual">Deduciendo $48,000.00 anuales</span>
+                        <div class="flex flex-col bg-[#E6F7F9] p-4 rounded-xl border border-brand-cyan border-opacity-30">
+                            <div class="flex justify-between items-center mb-1">
+                                <div>
+                                    <span class="font-bold text-sm md:text-base text-brand-dark block">Retención ISR Anual (Con PPR):</span>
+                                    <span class="text-xs text-brand-cyan font-bold" id="tax-res-deduccionPprAnual">Deduciendo $48,000.00 anuales</span>
+                                </div>
+                                <span class="font-extrabold text-brand-cyan text-lg" id="tax-res-isrConPpr">$69,780.27</span>
                             </div>
-                            <span class="font-extrabold text-brand-cyan text-lg" id="tax-res-isrConPpr">$69,780.27</span>
+                            <div class="flex justify-between items-center text-xs text-brand-cyan font-bold">
+                                <span>Nueva tasa efectiva: <span id="tax-res-tasaEfectivaCon">14.54%</span></span>
+                                <span id="tax-res-salariosCon">Equivale a 1.7 salarios</span>
+                            </div>
                         </div>
                         
                         <!-- Saldo a favor Highlight -->
                         <div class="bg-[#FFF5E6] border-2 border-brand-orange p-6 rounded-2xl text-center shadow-sm relative overflow-hidden mt-6">
                             <p class="font-extrabold text-brand-orange uppercase tracking-wider text-sm mb-1 relative z-10">Tu Saldo a Favor / Ahorro de ISR</p>
                             <p class="text-4xl md:text-5xl font-black text-brand-dark mb-2 relative z-10" id="tax-res-saldoFavor">$11,289.60</p>
-                            <p class="text-sm font-bold text-gray-600 relative z-10">Nueva tasa efectiva de ISR: <span id="tax-res-ahorroPorcentaje" class="text-brand-orange">14.54%</span></p>
+                            <p class="text-sm font-bold text-brand-orange relative z-10" id="tax-res-salariosRecuperados">¡Recuperaste 0.3 meses de tu sueldo!</p>
                         </div>
+
+                        <!-- Detalle matemático (Desglose) -->
+                        <details class="mt-4 group bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+                            <summary class="font-bold text-sm text-gray-600 cursor-pointer p-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
+                                Conoce el detalle de tus deducciones (Art. 151)
+                                <span class="transform group-open:rotate-180 transition-transform text-lg leading-none">▼</span>
+                            </summary>
+                            <div class="p-4 border-t border-gray-200 text-sm space-y-2 text-gray-700 font-mono">
+                                <div class="flex justify-between">
+                                    <span>Ingreso anual acumulado bruto</span>
+                                    <span id="tax-det-ingresoAnual">480,000.00</span>
+                                </div>
+                                <div class="flex justify-between text-brand-orange font-bold">
+                                    <span>(-) Deducciones personales</span>
+                                    <span id="tax-det-deduccion">48,000.00</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 font-bold text-brand-dark">
+                                    <span>(=) Base grabable</span>
+                                    <span id="tax-det-base">432,000.00</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(-) Límite inferior</span>
+                                    <span id="tax-det-limiteInf">$424,353.98</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                                    <span>(=) Excedente límite inferior</span>
+                                    <span id="tax-det-excedente">7,646.02</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(*) % la tasa correspondiente</span>
+                                    <span id="tax-det-porcentaje">23.52%</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                                    <span>(=) Impuesto marginal</span>
+                                    <span id="tax-det-marginal">1,798.34</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(+) Cuota fija</span>
+                                    <span id="tax-det-cuotaFija">$67,981.92</span>
+                                </div>
+                                <div class="flex justify-between font-black text-brand-dark bg-yellow-200 -mx-4 px-4 py-2 mt-2">
+                                    <span>(=) Impuesto a retener</span>
+                                    <span id="tax-det-impuestoRetener">69,780.27</span>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                     
                     <div class="mt-10">
@@ -1461,7 +1522,7 @@
         ];
 
         function calcularISR(baseGravable) {
-            if (baseGravable <= 0) return 0;
+            if (baseGravable <= 0) return { total: 0, limInf: 0, excedente: 0, porc: 0, marginal: 0, cuotaFija: 0 };
             
             let fila = tablaISR2026[tablaISR2026.length - 1]; 
             for (let i = 0; i < tablaISR2026.length; i++) {
@@ -1473,7 +1534,14 @@
 
             const excedente = baseGravable - fila.limInf;
             const impuestoMarginal = excedente * (fila.porc / 100);
-            return fila.cuotaFija + impuestoMarginal;
+            return {
+                total: fila.cuotaFija + impuestoMarginal,
+                limInf: fila.limInf,
+                excedente: excedente,
+                porc: fila.porc,
+                marginal: impuestoMarginal,
+                cuotaFija: fila.cuotaFija
+            };
         }
 
         function updateTaxSliderFromInput() {
@@ -1518,19 +1586,46 @@
             document.getElementById('tax-aportacionDisplay').innerText = formatCurrency(aportacionMensual);
             document.getElementById('tax-res-ingresoAnual').innerText = formatCurrency(ingresoAnual);
 
-            const isrSinPpr = calcularISR(ingresoAnual);
+            const isrObjSin = calcularISR(ingresoAnual);
+            const isrSinPpr = isrObjSin.total;
+            
             const baseConPpr = ingresoAnual - aportacionAnual;
-            const isrConPpr = calcularISR(baseConPpr);
+            const isrObjCon = calcularISR(baseConPpr);
+            const isrConPpr = isrObjCon.total;
             
             const saldoFavor = isrSinPpr - isrConPpr;
-            const tasaEfectiva = ingresoAnual > 0 ? (isrConPpr / ingresoAnual) * 100 : 0;
+            
+            const tasaEfectivaSin = ingresoAnual > 0 ? (isrSinPpr / ingresoAnual) * 100 : 0;
+            const tasaEfectivaCon = ingresoAnual > 0 ? (isrConPpr / ingresoAnual) * 100 : 0;
+            
+            const salariosSin = ingresoMensual > 0 ? (isrSinPpr / ingresoMensual) : 0;
+            const salariosCon = ingresoMensual > 0 ? (isrConPpr / ingresoMensual) : 0;
+            const salariosRecuperados = ingresoMensual > 0 ? (saldoFavor / ingresoMensual) : 0;
 
             document.getElementById('tax-res-isrSinPpr').innerText = formatCurrency(isrSinPpr);
             document.getElementById('tax-res-deduccionPprAnual').innerText = `Deduciendo ${formatCurrency(aportacionAnual)} anuales`;
             document.getElementById('tax-res-isrConPpr').innerText = formatCurrency(isrConPpr);
             
             document.getElementById('tax-res-saldoFavor').innerText = formatCurrency(saldoFavor);
-            document.getElementById('tax-res-ahorroPorcentaje').innerText = `${tasaEfectiva.toFixed(2)}%`;
+            
+            document.getElementById('tax-res-tasaEfectivaSin').innerText = `${tasaEfectivaSin.toFixed(2)}%`;
+            document.getElementById('tax-res-salariosSin').innerText = `Equivale a ${salariosSin.toFixed(1)} salarios`;
+            
+            document.getElementById('tax-res-tasaEfectivaCon').innerText = `${tasaEfectivaCon.toFixed(2)}%`;
+            document.getElementById('tax-res-salariosCon').innerText = `Equivale a ${salariosCon.toFixed(1)} salarios`;
+            
+            document.getElementById('tax-res-salariosRecuperados').innerText = `¡Recuperaste ${salariosRecuperados.toFixed(1)} meses de tu sueldo!`;
+            
+            // Llenar desglose (Art. 151)
+            document.getElementById('tax-det-ingresoAnual').innerText = formatCurrency(ingresoAnual);
+            document.getElementById('tax-det-deduccion').innerText = formatCurrency(aportacionAnual);
+            document.getElementById('tax-det-base').innerText = formatCurrency(baseConPpr);
+            document.getElementById('tax-det-limiteInf').innerText = formatCurrency(isrObjCon.limInf);
+            document.getElementById('tax-det-excedente').innerText = formatCurrency(isrObjCon.excedente);
+            document.getElementById('tax-det-porcentaje').innerText = `${isrObjCon.porc.toFixed(2)}%`;
+            document.getElementById('tax-det-marginal').innerText = formatCurrency(isrObjCon.marginal);
+            document.getElementById('tax-det-cuotaFija').innerText = formatCurrency(isrObjCon.cuotaFija);
+            document.getElementById('tax-det-impuestoRetener').innerText = formatCurrency(isrObjCon.total);
         }
 
         // Initialize taxes on load
