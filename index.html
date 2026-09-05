@@ -744,7 +744,17 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto mb-16">
+            <!-- Tabs Navigation for Impuestos -->
+            <div class="flex justify-center mb-8 relative z-10">
+                <div class="bg-gray-200 p-1 rounded-xl inline-flex flex-wrap justify-center">
+                    <button id="btnTaxTabCalc" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors bg-white shadow text-brand-dark" onclick="switchTaxTab('calc')">Calculadora</button>
+                    <button id="btnTaxTabDetalle" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors text-gray-500 hover:text-brand-dark" onclick="switchTaxTab('detalle')">Conoce tus deducciones personales</button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: Calculator -->
+            <div id="taxTab-calc" class="block">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto mb-16">
                 <!-- PANEL: Inputs -->
                 <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-cyan sticky top-24">
                     <h2 class="text-xl font-bold text-brand-dark mb-6 border-b-2 border-gray-100 pb-2">Tus Datos</h2>
@@ -785,6 +795,11 @@
                             <span class="font-extrabold text-brand-dark text-lg" id="tax-res-ingresoAnual">$480,000.00</span>
                         </div>
                         
+                        <div class="flex justify-between items-center bg-[#FFF5E6] border border-brand-orange border-opacity-20 p-4 rounded-xl">
+                            <span class="font-bold text-sm md:text-base text-brand-orange">Aportaciones anuales acumuladas:</span>
+                            <span class="font-extrabold text-brand-orange text-lg" id="tax-res-aportacionAcumulada">$48,000.00</span>
+                        </div>
+                        
                         <div class="flex flex-col bg-gray-50 p-4 rounded-xl">
                             <div class="flex justify-between items-center mb-1">
                                 <span class="font-bold text-sm md:text-base text-gray-500">Retención ISR Anual (Sin PPR):</span>
@@ -817,54 +832,7 @@
                             <p class="text-sm font-bold text-brand-orange relative z-10" id="tax-res-salariosRecuperados">¡Recuperaste 0.3 meses de tu sueldo!</p>
                         </div>
 
-                        <!-- Detalle matemático (Desglose) -->
-                        <details class="mt-4 group bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                            <summary class="font-bold text-sm text-gray-600 cursor-pointer p-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
-                                Conoce el detalle de tus deducciones (Art. 151)
-                                <span class="transform group-open:rotate-180 transition-transform text-lg leading-none">▼</span>
-                            </summary>
-                            <div class="p-4 border-t border-gray-200 text-sm space-y-2 text-gray-700 font-mono">
-                                <div class="flex justify-between">
-                                    <span>Ingreso anual acumulado bruto</span>
-                                    <span id="tax-det-ingresoAnual">480,000.00</span>
-                                </div>
-                                <div class="flex justify-between text-brand-orange font-bold">
-                                    <span>(-) Deducciones personales</span>
-                                    <span id="tax-det-deduccion">48,000.00</span>
-                                </div>
-                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 font-bold text-brand-dark">
-                                    <span>(=) Base grabable</span>
-                                    <span id="tax-det-base">432,000.00</span>
-                                </div>
-                                
-                                <div class="flex justify-between mt-4">
-                                    <span>(-) Límite inferior</span>
-                                    <span id="tax-det-limiteInf">$424,353.98</span>
-                                </div>
-                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                                    <span>(=) Excedente límite inferior</span>
-                                    <span id="tax-det-excedente">7,646.02</span>
-                                </div>
-                                
-                                <div class="flex justify-between mt-4">
-                                    <span>(*) % la tasa correspondiente</span>
-                                    <span id="tax-det-porcentaje">23.52%</span>
-                                </div>
-                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                                    <span>(=) Impuesto marginal</span>
-                                    <span id="tax-det-marginal">1,798.34</span>
-                                </div>
-                                
-                                <div class="flex justify-between mt-4">
-                                    <span>(+) Cuota fija</span>
-                                    <span id="tax-det-cuotaFija">$67,981.92</span>
-                                </div>
-                                <div class="flex justify-between font-black text-brand-dark bg-yellow-200 -mx-4 px-4 py-2 mt-2">
-                                    <span>(=) Impuesto a retener</span>
-                                    <span id="tax-det-impuestoRetener">69,780.27</span>
-                                </div>
-                            </div>
-                        </details>
+
                     </div>
                     
                     <div class="mt-10">
@@ -873,6 +841,57 @@
                         </p>
                         <p class="text-center text-sm font-bold text-gray-500 mb-4">¿Quieres diseñar un plan a tu medida?</p>
                         <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="block w-full text-center bg-brand-orange text-white font-bold text-lg py-4 rounded-full shadow hover:shadow-lg transition-all transform hover:-translate-y-1 tracking-wide uppercase">Agendar Mi Cita Personalizada</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- TAB CONTENT: Detalle Art. 151 -->
+            <div id="taxTab-detalle" class="hidden max-w-3xl mx-auto mb-16">
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border-t-8 border-brand-cyan">
+                    <h2 class="text-2xl font-bold text-brand-dark mb-6 text-center">Detalle del cálculo (Artículo 151)</h2>
+                    <p class="text-gray-600 mb-8 text-center text-sm md:text-base">Así es como el SAT calcula tu saldo a favor utilizando la tabla anual de ISR y considerando tus aportaciones al PPR.</p>
+                    
+                    <div class="p-6 bg-gray-50 rounded-2xl border border-gray-200 text-sm md:text-base space-y-3 text-gray-700 font-mono shadow-inner">
+                        <div class="flex justify-between">
+                            <span>Ingreso anual acumulado bruto</span>
+                            <span id="tax-det-ingresoAnual" class="font-bold">480,000.00</span>
+                        </div>
+                        <div class="flex justify-between text-brand-orange font-bold bg-[#FFF5E6] -mx-6 px-6 py-2">
+                            <span>(-) Deducciones personales (PPR)</span>
+                            <span id="tax-det-deduccion">48,000.00</span>
+                        </div>
+                        <div class="flex justify-between border-b-2 border-brand-cyan pb-3 mb-3 font-bold text-brand-dark mt-3">
+                            <span>(=) Base grabable</span>
+                            <span id="tax-det-base">432,000.00</span>
+                        </div>
+                        
+                        <div class="flex justify-between mt-4">
+                            <span>(-) Límite inferior</span>
+                            <span id="tax-det-limiteInf">$424,353.98</span>
+                        </div>
+                        <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 text-gray-500">
+                            <span>(=) Excedente límite inferior</span>
+                            <span id="tax-det-excedente">7,646.02</span>
+                        </div>
+                        
+                        <div class="flex justify-between mt-4">
+                            <span>(*) % la tasa correspondiente</span>
+                            <span id="tax-det-porcentaje">23.52%</span>
+                        </div>
+                        <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 text-gray-500">
+                            <span>(=) Impuesto marginal</span>
+                            <span id="tax-det-marginal">1,798.34</span>
+                        </div>
+                        
+                        <div class="flex justify-between mt-4">
+                            <span>(+) Cuota fija</span>
+                            <span id="tax-det-cuotaFija">$67,981.92</span>
+                        </div>
+                        <div class="flex justify-between items-center font-black text-brand-dark bg-[#FFF176] -mx-6 px-6 py-4 mt-4 shadow-sm border-y border-yellow-300 text-lg">
+                            <span>(=) Impuesto a retener</span>
+                            <span id="tax-det-impuestoRetener">69,780.27</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1637,6 +1656,39 @@
                 calculateTaxes();
             }
         });
+
+        // Tax Tab Switching Logic
+        function switchTaxTab(tab) {
+            const btnCalc = document.getElementById('btnTaxTabCalc');
+            const btnDetalle = document.getElementById('btnTaxTabDetalle');
+            const contentCalc = document.getElementById('taxTab-calc');
+            const contentDetalle = document.getElementById('taxTab-detalle');
+
+            const activeClass = ['bg-white', 'shadow', 'text-brand-dark'];
+            const inactiveClass = ['text-gray-500', 'hover:text-brand-dark'];
+
+            if (tab === 'calc') {
+                contentCalc.classList.remove('hidden');
+                contentCalc.classList.add('block');
+                contentDetalle.classList.remove('block');
+                contentDetalle.classList.add('hidden');
+                
+                btnCalc.classList.add(...activeClass);
+                btnCalc.classList.remove(...inactiveClass);
+                btnDetalle.classList.add(...inactiveClass);
+                btnDetalle.classList.remove(...activeClass);
+            } else {
+                contentCalc.classList.add('hidden');
+                contentCalc.classList.remove('block');
+                contentDetalle.classList.add('block');
+                contentDetalle.classList.remove('hidden');
+                
+                btnDetalle.classList.add(...activeClass);
+                btnDetalle.classList.remove(...inactiveClass);
+                btnCalc.classList.add(...inactiveClass);
+                btnCalc.classList.remove(...activeClass);
+            }
+        }
 
     </script>
 </body>
