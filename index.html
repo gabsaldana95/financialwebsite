@@ -76,6 +76,7 @@
                 <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1">Aportaciones Retiro</button>
                 <button id="navBtn-coast" onclick="switchMainTab('coast')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Coast FIRE</button>
                 <button id="navBtn-sobremi" onclick="switchMainTab('sobremi')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Sobre mí</button>
+                <button id="navBtn-impuestos" onclick="switchMainTab('impuestos')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Calculadora Impuestos</button>
                 <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="bg-brand-orange text-white font-bold px-5 py-2 rounded-full hover:shadow-md hover:-translate-y-0.5 transform transition-all text-sm uppercase flex items-center ml-0 md:ml-4">Agendar Asesoría</a>
             </nav>
         </div>
@@ -733,6 +734,86 @@
         </section>
         
         
+        <!-- SECTION: Impuestos y PPR -->
+        <section id="section-impuestos" class="hidden">
+            <div class="text-center mb-8 relative max-w-4xl mx-auto py-4">
+                <div class="relative z-10">
+                    <p class="text-xs font-bold text-brand-cyan uppercase tracking-widest mb-2 border border-brand-cyan rounded-full px-4 py-1 inline-block">Proyección Anual 2026</p>
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Calculadora de Impuestos y PPR</h1>
+                    <p class="text-lg text-gray-600 font-medium">Calcula cuánto pagarás de ISR este año y descubre cuánto podrías ahorrar si inviertes en un Plan Personal de Retiro (Art. 151).</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto mb-16">
+                <!-- PANEL: Inputs -->
+                <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-cyan sticky top-24">
+                    <h2 class="text-xl font-bold text-brand-dark mb-6 border-b-2 border-gray-100 pb-2">Tus Datos</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-extrabold text-brand-dark mb-2">Ingreso mensual bruto</label>
+                            <p class="text-xs text-gray-500 mb-2">Antes de impuestos, retenciones o gastos.</p>
+                            <div class="relative">
+                                <span class="absolute left-4 top-4 font-bold text-gray-400">$</span>
+                                <input type="number" id="tax-ingresoMensual" value="40000" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-cyan focus:outline-none transition-colors" oninput="calculateTaxes()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block font-extrabold text-brand-dark">Aportación mensual a PPR</label>
+                                <span id="tax-aportacionDisplay" class="font-bold text-brand-orange bg-[#FFF5E6] px-3 py-1 rounded-full text-sm">$4,000</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mb-2 leading-relaxed">Puedes deducir hasta el 10% de tu ingreso anual o 5 UMAs anuales.</p>
+                            <input type="range" id="tax-aportacionSlider" min="0" max="100000" step="500" value="4000" class="w-full accent-brand-orange mt-2 cursor-pointer h-2 bg-gray-200 rounded-lg appearance-none" oninput="updateTaxPprInputFromSlider(); calculateTaxes()">
+                            <div class="relative mt-4">
+                                <span class="absolute left-4 top-4 font-bold text-gray-400">$</span>
+                                <input type="number" id="tax-aportacionMensual" value="4000" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-orange focus:outline-none transition-colors" oninput="updateTaxSliderFromInput(); calculateTaxes()">
+                            </div>
+                            <p id="tax-warning-tope" class="text-xs text-brand-orange font-bold mt-2 hidden">⚠️ Has alcanzado el tope máximo de deducción por ley.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL: Resultados -->
+                <div class="lg:col-span-7 bg-white p-6 md:p-8 rounded-3xl shadow-xl border-t-8 border-brand-orange h-full">
+                    <h2 class="text-xl font-bold text-brand-dark mb-6 border-b-2 border-gray-100 pb-2">Proyección Anual</h2>
+                    
+                    <div class="space-y-6 text-gray-700">
+                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+                            <span class="font-bold text-sm md:text-base">Ingreso Anual Bruto:</span>
+                            <span class="font-extrabold text-brand-dark text-lg" id="tax-res-ingresoAnual">$480,000.00</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+                            <span class="font-bold text-sm md:text-base text-gray-500">Retención ISR Anual (Sin PPR):</span>
+                            <span class="font-extrabold text-red-500 text-lg" id="tax-res-isrSinPpr">$81,069.87</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center bg-[#E6F7F9] p-4 rounded-xl border border-brand-cyan border-opacity-30">
+                            <div>
+                                <span class="font-bold text-sm md:text-base text-brand-dark block">Retención ISR Anual (Con PPR):</span>
+                                <span class="text-xs text-brand-cyan font-bold" id="tax-res-deduccionPprAnual">Deduciendo $48,000.00 anuales</span>
+                            </div>
+                            <span class="font-extrabold text-brand-cyan text-lg" id="tax-res-isrConPpr">$69,780.27</span>
+                        </div>
+                        
+                        <!-- Saldo a favor Highlight -->
+                        <div class="bg-[#FFF5E6] border-2 border-brand-orange p-6 rounded-2xl text-center shadow-sm relative overflow-hidden mt-6">
+                            <p class="font-extrabold text-brand-orange uppercase tracking-wider text-sm mb-1 relative z-10">Tu Saldo a Favor / Ahorro de ISR</p>
+                            <p class="text-4xl md:text-5xl font-black text-brand-dark mb-2 relative z-10" id="tax-res-saldoFavor">$11,289.60</p>
+                            <p class="text-sm font-bold text-gray-600 relative z-10">Nueva tasa efectiva de ISR: <span id="tax-res-ahorroPorcentaje" class="text-brand-orange">14.54%</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10">
+                        <p class="text-center text-sm font-bold text-gray-500 mb-4">¿Quieres diseñar un plan a tu medida?</p>
+                        <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="block w-full text-center bg-brand-orange text-white font-bold text-lg py-4 rounded-full shadow hover:shadow-lg transition-all transform hover:-translate-y-1 tracking-wide uppercase">Agendar Mi Cita Personalizada</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -760,7 +841,7 @@
     <script>
         // Main Navigation Logic
         function switchMainTab(tab) {
-            const sections = ['retiro', 'coast', 'sobremi'];
+            const sections = ['retiro', 'coast', 'sobremi', 'impuestos'];
             
             sections.forEach(sec => {
                 const sectionEl = document.getElementById(`section-${sec}`);
@@ -1363,6 +1444,102 @@
                 });
             }
         }
+
+        // --- CALCULADORA DE IMPUESTOS Y PPR ---
+        const tablaISR2026 = [
+            { limInf: 0.01, limSup: 10135.11, cuotaFija: 0.00, porc: 1.92 },
+            { limInf: 10135.12, limSup: 86022.11, cuotaFija: 194.59, porc: 6.40 },
+            { limInf: 86022.12, limSup: 151176.19, cuotaFija: 5051.36, porc: 10.88 },
+            { limInf: 151176.20, limSup: 175735.66, cuotaFija: 12140.12, porc: 16.00 },
+            { limInf: 175735.67, limSup: 210403.69, cuotaFija: 16069.64, porc: 17.92 },
+            { limInf: 210403.70, limSup: 424353.97, cuotaFija: 22282.15, porc: 21.36 },
+            { limInf: 424353.98, limSup: 668840.14, cuotaFija: 67981.92, porc: 23.52 },
+            { limInf: 668840.15, limSup: 1276925.98, cuotaFija: 125485.07, porc: 30.00 },
+            { limInf: 1276925.99, limSup: 1702567.97, cuotaFija: 307910.82, porc: 32.00 },
+            { limInf: 1702567.98, limSup: 5107703.92, cuotaFija: 444116.25, porc: 34.00 },
+            { limInf: 5107703.93, limSup: Infinity, cuotaFija: 1601862.47, porc: 35.00 }
+        ];
+
+        function calcularISR(baseGravable) {
+            if (baseGravable <= 0) return 0;
+            
+            let fila = tablaISR2026[tablaISR2026.length - 1]; 
+            for (let i = 0; i < tablaISR2026.length; i++) {
+                if (baseGravable >= tablaISR2026[i].limInf && baseGravable <= tablaISR2026[i].limSup) {
+                    fila = tablaISR2026[i];
+                    break;
+                }
+            }
+
+            const excedente = baseGravable - fila.limInf;
+            const impuestoMarginal = excedente * (fila.porc / 100);
+            return fila.cuotaFija + impuestoMarginal;
+        }
+
+        function updateTaxSliderFromInput() {
+            const input = document.getElementById('tax-aportacionMensual');
+            const slider = document.getElementById('tax-aportacionSlider');
+            slider.value = input.value;
+        }
+
+        function updateTaxPprInputFromSlider() {
+            const input = document.getElementById('tax-aportacionMensual');
+            const slider = document.getElementById('tax-aportacionSlider');
+            input.value = slider.value;
+        }
+
+        function calculateTaxes() {
+            const ingresoMensual = parseFloat(document.getElementById('tax-ingresoMensual').value) || 0;
+            const ingresoAnual = ingresoMensual * 12;
+            
+            // Tope de ley: 10% del ingreso anual o 5 UMAs anuales (aprox $198,031.80 para 2024), lo que resulte menor.
+            const maxPprAnual = Math.min(ingresoAnual * 0.10, 198031.80);
+            const maxPprMensual = maxPprAnual / 12;
+
+            const slider = document.getElementById('tax-aportacionSlider');
+            const input = document.getElementById('tax-aportacionMensual');
+            const warningTope = document.getElementById('tax-warning-tope');
+            
+            slider.max = Math.ceil(maxPprMensual > 0 ? maxPprMensual : 100000); 
+            
+            let aportacionMensual = parseFloat(input.value) || 0;
+            
+            if (aportacionMensual > maxPprMensual && ingresoAnual > 0) {
+                warningTope.classList.remove('hidden');
+                aportacionMensual = maxPprMensual;
+                input.value = aportacionMensual.toFixed(0);
+                slider.value = aportacionMensual;
+            } else {
+                warningTope.classList.add('hidden');
+            }
+
+            const aportacionAnual = aportacionMensual * 12;
+
+            document.getElementById('tax-aportacionDisplay').innerText = formatCurrency(aportacionMensual);
+            document.getElementById('tax-res-ingresoAnual').innerText = formatCurrency(ingresoAnual);
+
+            const isrSinPpr = calcularISR(ingresoAnual);
+            const baseConPpr = ingresoAnual - aportacionAnual;
+            const isrConPpr = calcularISR(baseConPpr);
+            
+            const saldoFavor = isrSinPpr - isrConPpr;
+            const tasaEfectiva = ingresoAnual > 0 ? (isrConPpr / ingresoAnual) * 100 : 0;
+
+            document.getElementById('tax-res-isrSinPpr').innerText = formatCurrency(isrSinPpr);
+            document.getElementById('tax-res-deduccionPprAnual').innerText = `Deduciendo ${formatCurrency(aportacionAnual)} anuales`;
+            document.getElementById('tax-res-isrConPpr').innerText = formatCurrency(isrConPpr);
+            
+            document.getElementById('tax-res-saldoFavor').innerText = formatCurrency(saldoFavor);
+            document.getElementById('tax-res-ahorroPorcentaje').innerText = `${tasaEfectiva.toFixed(2)}%`;
+        }
+
+        // Initialize taxes on load
+        window.addEventListener('DOMContentLoaded', () => {
+            if(document.getElementById('tax-ingresoMensual')) {
+                calculateTaxes();
+            }
+        });
+
     </script>
 </body>
 </html>
