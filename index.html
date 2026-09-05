@@ -756,7 +756,7 @@
             <div id="taxTab-calc" class="block">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto mb-16">
                 <!-- PANEL: Inputs -->
-                <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-cyan sticky top-24">
+                <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-cyan lg:sticky lg:top-24 h-fit">
                     <h2 class="text-xl font-bold text-brand-dark mb-6 border-b-2 border-gray-100 pb-2">Tus Datos</h2>
                     
                     <div class="space-y-6">
@@ -831,9 +831,56 @@
                             <p class="text-4xl md:text-5xl font-black text-brand-dark mb-2 relative z-10" id="tax-res-saldoFavor">$11,289.60</p>
                             <p class="text-sm font-bold text-brand-orange relative z-10" id="tax-res-salariosRecuperados">¡Recuperaste 0.3 meses de tu sueldo!</p>
                         </div>
+                        </div>
 
-
-                    </div>
+                        <!-- Detalle matemático (Desglose) -->
+                        <details class="mt-4 group bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+                            <summary class="font-bold text-sm text-gray-600 cursor-pointer p-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
+                                Conoce el detalle matemático de tu cálculo (Art. 151)
+                                <span class="transform group-open:rotate-180 transition-transform text-lg leading-none">▼</span>
+                            </summary>
+                            <div class="p-4 border-t border-gray-200 text-sm space-y-2 text-gray-700 font-mono">
+                                <div class="flex justify-between">
+                                    <span>Ingreso anual acumulado bruto</span>
+                                    <span id="tax-det-ingresoAnual">480,000.00</span>
+                                </div>
+                                <div class="flex justify-between text-brand-orange font-bold">
+                                    <span>(-) Deducciones personales</span>
+                                    <span id="tax-det-deduccion">48,000.00</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 font-bold text-brand-dark">
+                                    <span>(=) Base grabable</span>
+                                    <span id="tax-det-base">432,000.00</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(-) Límite inferior</span>
+                                    <span id="tax-det-limiteInf">$424,353.98</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                                    <span>(=) Excedente límite inferior</span>
+                                    <span id="tax-det-excedente">7,646.02</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(*) % la tasa correspondiente</span>
+                                    <span id="tax-det-porcentaje">23.52%</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                                    <span>(=) Impuesto marginal</span>
+                                    <span id="tax-det-marginal">1,798.34</span>
+                                </div>
+                                
+                                <div class="flex justify-between mt-4">
+                                    <span>(+) Cuota fija</span>
+                                    <span id="tax-det-cuotaFija">$67,981.92</span>
+                                </div>
+                                <div class="flex justify-between font-black text-brand-dark bg-yellow-200 -mx-4 px-4 py-2 mt-2">
+                                    <span>(=) Impuesto a retener</span>
+                                    <span id="tax-det-impuestoRetener">69,780.27</span>
+                                </div>
+                            </div>
+                        </details>
                     
                     <div class="mt-10">
                         <p class="text-sm text-gray-500 mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100 text-center leading-relaxed">
@@ -846,52 +893,45 @@
             </div>
             </div>
 
-            <!-- TAB CONTENT: Detalle Art. 151 -->
-            <div id="taxTab-detalle" class="hidden max-w-3xl mx-auto mb-16">
+            <!-- TAB CONTENT: Detalle Deducciones Personales -->
+            <div id="taxTab-detalle" class="hidden max-w-4xl mx-auto mb-16">
                 <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border-t-8 border-brand-cyan">
-                    <h2 class="text-2xl font-bold text-brand-dark mb-6 text-center">Detalle del cálculo (Artículo 151)</h2>
-                    <p class="text-gray-600 mb-8 text-center text-sm md:text-base">Así es como el SAT calcula tu saldo a favor utilizando la tabla anual de ISR y considerando tus aportaciones al PPR.</p>
+                    <h2 class="text-2xl font-bold text-brand-dark mb-6 text-center">Conoce tus deducciones personales</h2>
                     
-                    <div class="p-6 bg-gray-50 rounded-2xl border border-gray-200 text-sm md:text-base space-y-3 text-gray-700 font-mono shadow-inner">
-                        <div class="flex justify-between">
-                            <span>Ingreso anual acumulado bruto</span>
-                            <span id="tax-det-ingresoAnual" class="font-bold">480,000.00</span>
-                        </div>
-                        <div class="flex justify-between text-brand-orange font-bold bg-[#FFF5E6] -mx-6 px-6 py-2">
-                            <span>(-) Deducciones personales (PPR)</span>
-                            <span id="tax-det-deduccion">48,000.00</span>
-                        </div>
-                        <div class="flex justify-between border-b-2 border-brand-cyan pb-3 mb-3 font-bold text-brand-dark mt-3">
-                            <span>(=) Base grabable</span>
-                            <span id="tax-det-base">432,000.00</span>
+                    <div class="space-y-6 text-gray-700">
+                        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                            <h3 class="font-bold text-brand-cyan text-lg mb-2">1. Deducciones Personales Generales</h3>
+                            <p class="mb-4 text-sm md:text-base leading-relaxed">
+                                El SAT te permite deducir ciertos gastos personales a lo largo del año (como honorarios médicos, dentales, gastos hospitalarios, intereses reales de tu crédito hipotecario, colegiaturas, entre otros).
+                            </p>
+                            <p class="font-bold text-brand-dark text-sm bg-white p-3 rounded-xl border border-gray-200 inline-block w-full">
+                                🛑 Tope General: 15% de tu ingreso anual o 5 UMAs anuales (aprox. $198,031), lo que resulte menor.
+                            </p>
                         </div>
                         
-                        <div class="flex justify-between mt-4">
-                            <span>(-) Límite inferior</span>
-                            <span id="tax-det-limiteInf">$424,353.98</span>
-                        </div>
-                        <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 text-gray-500">
-                            <span>(=) Excedente límite inferior</span>
-                            <span id="tax-det-excedente">7,646.02</span>
-                        </div>
-                        
-                        <div class="flex justify-between mt-4">
-                            <span>(*) % la tasa correspondiente</span>
-                            <span id="tax-det-porcentaje">23.52%</span>
-                        </div>
-                        <div class="flex justify-between border-b border-gray-300 pb-2 mb-2 text-gray-500">
-                            <span>(=) Impuesto marginal</span>
-                            <span id="tax-det-marginal">1,798.34</span>
+                        <div class="bg-[#E6F7F9] p-6 rounded-2xl border border-brand-cyan border-opacity-30">
+                            <h3 class="font-bold text-brand-cyan text-lg mb-2 flex flex-wrap items-center gap-2">
+                                <span>2. El Súperpoder del PPR (Art. 151)</span> 
+                                <span class="bg-brand-orange text-white text-xs px-2 py-1 rounded-full uppercase tracking-wide">Beneficio Extra</span>
+                            </h3>
+                            <p class="mb-4 text-sm md:text-base leading-relaxed">
+                                ¡Aquí está el truco! Las aportaciones que haces a tu Plan Personal de Retiro (PPR) <strong>no entran en el tope general</strong>. Tienen su propio límite exclusivo. Esto significa que, además de deducir tus gastos médicos, puedes deducir aún más invirtiendo para tu retiro.
+                            </p>
+                            <p class="font-bold text-brand-dark text-sm bg-white p-3 rounded-xl border border-brand-cyan border-opacity-50 inline-block w-full">
+                                🛑 Tope Exclusivo PPR: 10% de tu ingreso anual o 5 UMAs anuales extra (aprox. $198,031), lo que resulte menor.
+                            </p>
                         </div>
                         
-                        <div class="flex justify-between mt-4">
-                            <span>(+) Cuota fija</span>
-                            <span id="tax-det-cuotaFija">$67,981.92</span>
+                        <div class="bg-[#FFF5E6] p-6 rounded-2xl border border-brand-orange border-opacity-30">
+                            <h3 class="font-bold text-brand-orange text-lg mb-2">3. Artículo 93 (RESICO y otros beneficios)</h3>
+                            <p class="text-sm md:text-base leading-relaxed">
+                                Recuerda que si te encuentras tributando bajo el régimen de <strong>RESICO</strong> (Régimen Simplificado de Confianza), no puedes aplicar deducciones personales. Sin embargo, existen otras estrategias fiscales bajo el <strong>Artículo 93 de la LISR</strong> (como exenciones de impuestos en tus ganancias) que puedes aprovechar con un PPR exento.
+                            </p>
                         </div>
-                        <div class="flex justify-between items-center font-black text-brand-dark bg-[#FFF176] -mx-6 px-6 py-4 mt-4 shadow-sm border-y border-yellow-300 text-lg">
-                            <span>(=) Impuesto a retener</span>
-                            <span id="tax-det-impuestoRetener">69,780.27</span>
-                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="inline-block bg-brand-orange text-white font-bold text-sm md:text-base px-8 py-4 rounded-full shadow hover:shadow-lg transition-all transform hover:-translate-y-1 tracking-wide uppercase">Analicemos tu caso en una asesoría</a>
                     </div>
                 </div>
             </div>
@@ -900,7 +940,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-brand-dark text-white py-8 mt-auto border-t-4 border-brand-cyan">
+    <footer class="bg-brand-dark text-white pt-8 pb-32 mt-auto border-t-4 border-brand-cyan">
         <div class="max-w-6xl mx-auto px-4 text-center">
             <p class="text-brand-cyan font-bold text-xl mb-4">GAB$ Coach Financiera</p>
             <p class="text-gray-400 font-medium text-sm">© 2026 GAB$ Coach Financiera. Todos los derechos reservados.</p>
