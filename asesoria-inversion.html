@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesoría de Inversión - GAB$ Coach Financiera</title>
+    <link rel="icon" type="image/png" href="assets/giby.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            'text-primary': '#000000',
+                            'bg-primary': '#FFFFFF',
+                            'text-secondary': '#129E9C',
+                            'bg-dark': '#05373A',
+                            'accent-primary': '#FA9C0F',
+                            'bg-tertiary': '#E6F7F9',
+                            'primary': '#00C2D9',
+                            'accent-secondary': '#FCEAC8',
+                            'accent-error': '#F08C82',
+                            'text-inactive': '#7E7E7E',
+                            'bg-secondary': '#EFEFEF',
+                            cyan: '#00C2D9',
+                            orange: '#FA9C0F',
+                            dark: '#05373A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        .gradient-dark {
+            background: linear-gradient(135deg, #05373A 0%, #0a4f53 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans flex flex-col min-h-screen relative overflow-x-hidden">
+    
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm border-b-4 border-brand-dark sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <a href="index.html"><img src="assets/logo.png" alt="GAB$ Coach Financiera Logo" class="h-16 object-contain cursor-pointer"></a>
+            <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-6">
+                <!-- Dropdown for Mis Asesorías -->
+                <div class="relative group">
+                    <button class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1">
+                        Mis asesorías
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-56">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+                            <a href="index.html#sobremi" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan font-bold">Ver todos los servicios</a>
+                            <a href="relajo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Ponle fin a tu relajo</a>
+                            <a href="checkeo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Check-up financiero</a>
+                            <a href="asesoria-retiro.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría para el retiro</a>
+                            <a href="asesoria-inversion.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría de inversión</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dropdown for Calculadoras -->
+                <div class="relative group">
+                    <button class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1">
+                        Calculadoras
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-64">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+                            <a href="index.html#retiro" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de aportaciones de retiro</a>
+                            <a href="index.html#coast" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora COAST FIRE</a>
+                            <a href="index.html#impuestos" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de ISR y deducciones</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section con fondo Dark Theme -->
+        <section class="py-24 gradient-dark relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <img src="assets/sparkle-white.png" alt="" class="absolute top-10 left-[15%] w-16 opacity-30 pointer-events-none animate-pulse">
+            <img src="assets/giby-coin.png" alt="" class="absolute bottom-10 right-[10%] w-24 opacity-20 transform -rotate-12 pointer-events-none">
+            
+            <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+                <div class="inline-block text-5xl md:text-6xl mb-6 bg-white bg-opacity-10 p-4 rounded-3xl backdrop-blur-sm border border-white border-opacity-20 shadow-lg">📈</div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-8">
+                    Haz que tu dinero trabaje para ti
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                    Una asesoría puntual y estructurada donde diseñaremos la ruta exacta para multiplicar tus ahorros y alcanzar tus metas. Resolvemos tus dudas, rebotamos ideas y te perfilamos para que inviertas con confianza.
+                </p>
+                <div class="mt-12">
+                    <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="inline-block bg-brand-cyan text-white font-bold text-xl px-10 py-5 rounded-full shadow-lg hover:shadow-xl hover:bg-teal-400 hover:-translate-y-1 transform transition-all tracking-wide uppercase">Agendar mi asesoría</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conoce a tu Asesora -->
+        <section class="py-20 bg-gray-50 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="w-full md:w-5/12">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-brand-cyan rounded-3xl transform translate-x-4 translate-y-4"></div>
+                            <img src="assets/profile_pic.jpg" alt="GAB$ Coach Financiera" class="relative rounded-3xl shadow-xl w-full object-cover aspect-[4/5]">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-7/12 space-y-6">
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-brand-dark">Hola, soy GAB$</h2>
+                        <h3 class="text-xl text-brand-cyan font-bold uppercase tracking-wide">Tu Asesora de Inversiones</h3>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Llevo más de 8 años inmersa en el mundo de las finanzas personales y 8 años invirtiendo por mi cuenta. Mi objetivo es que dejes de ver las inversiones como algo complejo o riesgoso, y empieces a hacer que tu dinero trabaje para ti <strong>CON LOS RECURSOS QUE TIENES HOY</strong>.
+                        </p>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Cuento con especialidades en Behavioral Economics por la UNAM, soy Agente de Seguros certificada por la CNSF y me sigo certificando en estrategias de retiro y wealth investment. Te guiaré paso a paso para que construyas un portafolio sólido y 100% alineado a la vida que quieres.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- El Proceso -->
+        <section class="py-20 relative bg-white">
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                <div class="text-center mb-16 relative">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-brand-dark">La Metodología</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">Un proceso claro y transparente para convertirte en inversionista sin importar tu nivel de experiencia.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    
+                    <!-- Paso 1 -->
+                    <div class="bg-gray-50 rounded-3xl p-8 border-l-8 border-brand-cyan shadow-sm hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Tus Metas y Dudas</h3>
+                        <p class="text-gray-700">Hablamos a profundidad sobre lo que quieres lograr con tu dinero. Resolvemos cualquier mito, miedo o duda técnica que tengas sobre las inversiones.</p>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="bg-gray-50 rounded-3xl p-8 border-l-8 border-brand-dark shadow-sm hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">✅</div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Perfilamiento</h3>
+                        <p class="text-gray-700">Realizamos una evaluación para descubrir tu tolerancia al riesgo y tu horizonte de inversión. Fundamental para no perder el sueño cuando los mercados se mueven.</p>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="bg-gray-50 rounded-3xl p-8 border-l-8 border-brand-orange shadow-sm hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">📝</div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Diseño del Plan</h3>
+                        <p class="text-gray-700">Rebotamos ideas y juntos estructuramos un portafolio de inversión adecuado y a tu medida, usando instrumentos regulados y eficientes.</p>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="bg-gray-50 rounded-3xl p-8 border-l-8 border-brand-accent-secondary shadow-sm hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Acompañamiento en la Ejecución</h3>
+                        <p class="text-gray-700">No te dejo solo. Tendrás seguimientos asíncronos para apoyarte paso a paso mientras abres tus cuentas y realizas tu primera inversión.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Instrumentos que revisaremos -->
+        <section class="py-20 gradient-dark relative overflow-hidden">
+            <!-- Decorative Elements for Dark Theme -->
+            <img src="assets/sparkle-white.png" alt="" class="absolute top-20 right-20 w-12 opacity-30 pointer-events-none animate-pulse">
+            
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white">¿Qué categorías de inversión revisaremos?</h2>
+                    <p class="text-lg text-gray-200 mt-4 max-w-2xl mx-auto">Exploraremos diversos instrumentos dentro del sistema financiero para que sepas exactamente dónde y cómo poner a trabajar tu dinero.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    
+                    <!-- Renta Fija -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-3xl p-8 border-t-8 border-t-brand-cyan shadow-xl hover:bg-opacity-20 transition-all">
+                        <div class="text-5xl mb-4 text-center drop-shadow-md">🛡️</div>
+                        <h3 class="text-2xl font-bold text-white mb-4 text-center">Renta Fija</h3>
+                        <p class="text-gray-200 mb-8 text-center">Ideales para proteger tu dinero, mantener liquidez y saber exactamente cuánto vas a ganar.</p>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <span class="bg-white bg-opacity-20 text-white font-bold px-4 py-2 rounded-full text-sm border border-white border-opacity-30">CETES</span>
+                            <span class="bg-white bg-opacity-20 text-white font-bold px-4 py-2 rounded-full text-sm border border-white border-opacity-30">Bonos</span>
+                            <span class="bg-white bg-opacity-20 text-white font-bold px-4 py-2 rounded-full text-sm border border-white border-opacity-30">SOFIPOS</span>
+                            <span class="bg-white bg-opacity-20 text-white font-bold px-4 py-2 rounded-full text-sm border border-white border-opacity-30">Crowdlending</span>
+                        </div>
+                    </div>
+
+                    <!-- Renta Variable -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-3xl p-8 border-t-8 border-t-brand-orange shadow-xl hover:bg-opacity-20 transition-all">
+                        <div class="text-5xl mb-4 text-center drop-shadow-md">🚀</div>
+                        <h3 class="text-2xl font-bold text-white mb-4 text-center">Renta Variable</h3>
+                        <p class="text-gray-200 mb-8 text-center">El motor de crecimiento de tu portafolio a largo plazo, donde el interés compuesto hace su magia.</p>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <span class="bg-brand-orange bg-opacity-90 text-white font-bold px-4 py-2 rounded-full text-sm shadow-sm">Acciones</span>
+                            <span class="bg-brand-orange bg-opacity-90 text-white font-bold px-4 py-2 rounded-full text-sm shadow-sm">Fondo de acciones</span>
+                            <span class="bg-brand-orange bg-opacity-90 text-white font-bold px-4 py-2 rounded-full text-sm shadow-sm">ETFs</span>
+                            <span class="bg-brand-orange bg-opacity-90 text-white font-bold px-4 py-2 rounded-full text-sm shadow-sm">FIBRAS</span>
+                            <span class="bg-brand-orange bg-opacity-90 text-white font-bold px-4 py-2 rounded-full text-sm shadow-sm">Crowdfunding</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Entregables / Paquete -->
+        <section class="bg-gray-100 py-24 relative overflow-hidden">
+            <img src="assets/giby-bill.png" alt="" class="absolute top-1/4 right-5 w-32 opacity-10 transform rotate-12 pointer-events-none">
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border-t-8 border-brand-dark">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-8 flex items-center justify-center gap-4 text-center">
+                        🎁 ¿Qué incluye la asesoría?
+                    </h2>
+                    
+                    <ul class="space-y-6 text-lg text-gray-700 mb-12">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 bg-brand-tertiary p-2 rounded-full">
+                                <span class="text-brand-dark font-bold">✓</span>
+                            </div>
+                            <div>
+                                <strong class="text-brand-dark block text-xl">Sesión estratégica 1 a 1</strong>
+                                El espacio ideal para rebotar ideas, resolver todas tus dudas sobre instrumentos y trazar el mapa de ruta.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 bg-brand-tertiary p-2 rounded-full">
+                                <span class="text-brand-dark font-bold">✓</span>
+                            </div>
+                            <div>
+                                <strong class="text-brand-dark block text-xl">Tu Plan de Inversión Documentado</strong>
+                                Te llevas por escrito la estrategia exacta acordada, con los activos e instrumentos perfilados para ti.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 bg-brand-tertiary p-2 rounded-full">
+                                <span class="text-brand-dark font-bold">✓</span>
+                            </div>
+                            <div>
+                                <strong class="text-brand-dark block text-xl">Seguimientos Asíncronos</strong>
+                                Soporte continuo posterior a la sesión para guiarte en el proceso de fondeo y compra, para que no te atores en la tecnología.
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 mb-12 p-6 bg-brand-tertiary rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border border-brand-cyan border-opacity-30">
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-1">Inversión de la asesoría</h3>
+                            <p class="text-gray-600 text-sm">Incluye la sesión 1 a 1, tu plan documentado y seguimientos asíncronos.</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl font-extrabold text-brand-dark">
+                            $1,000 <span class="text-lg text-gray-500 font-normal">MXN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="inline-block bg-brand-dark text-white font-bold text-xl px-12 py-5 rounded-full shadow-lg hover:shadow-xl hover:bg-opacity-90 hover:-translate-y-1 transform transition-all uppercase w-full md:w-auto">
+                            AGENDAR ASESORÍA
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white py-12 border-t border-opacity-20 border-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400">&copy; 2024 GAB$ Coach Financiera. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

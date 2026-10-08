@@ -12,7 +12,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Coast FIRE - GAB$ Coach Financiera</title>
+    <title>GAB$ Coach Financiera</title>
     <link rel="icon" type="image/png" href="assets/giby.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -71,13 +71,42 @@
     <!-- Navbar -->
     <header class="bg-white shadow-sm border-b-4 border-brand-orange sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <img src="assets/logo.png" alt="GAB$ Coach Financiera Logo" class="h-16 object-contain cursor-pointer" onclick="switchMainTab('retiro')">
-            <nav class="flex flex-wrap justify-center gap-2 md:gap-6">
-                <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1">Aportaciones Retiro</button>
-                <button id="navBtn-coast" onclick="switchMainTab('coast')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Coast FIRE</button>
-                <button id="navBtn-sobremi" onclick="switchMainTab('sobremi')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Sobre mí</button>
-                <button id="navBtn-impuestos" onclick="switchMainTab('impuestos')" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent">Calculadora Impuestos</button>
-                <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="bg-brand-orange text-white font-bold px-5 py-2 rounded-full hover:shadow-md hover:-translate-y-0.5 transform transition-all text-sm uppercase flex items-center ml-0 md:ml-4">Agendar Asesoría</a>
+            <img src="assets/logo.png" alt="GAB$ Coach Financiera Logo" class="h-16 object-contain cursor-pointer" onclick="switchMainTab('sobremi')">
+            <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-6">
+                <!-- Dropdown for Mis Asesorías -->
+                <div class="relative group">
+                    <button id="navBtn-sobremi" onclick="switchMainTab('sobremi')" class="font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1 flex items-center gap-1">
+                        Mis asesorías
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <!-- Contenedor con padding invisible para mantener el hover al bajar -->
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-56">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+                            <button onclick="switchMainTab('sobremi')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan font-bold">Ver todos los servicios</button>
+                            <a href="relajo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Ponle fin a tu relajo</a>
+                            <a href="checkeo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Check-up financiero</a>
+                            <a href="asesoria-retiro.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría para el retiro</a>
+                            <a href="asesoria-inversion.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría de inversión</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dropdown for Calculadoras -->
+                <div class="relative group">
+                    <button id="calcDropdownTrigger" class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1">
+                        Calculadoras
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <!-- Añadimos un div invisible más grande (padding superior) para que el hover no se pierda al bajar el cursor -->
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-64">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+                            <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de aportaciones de retiro</button>
+                            <button id="navBtn-coast" onclick="switchMainTab('coast')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora COAST FIRE</button>
+                            <button id="navBtn-impuestos" onclick="switchMainTab('impuestos')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de ISR y deducciones</button>
+                        </div>
+                    </div>
+                </div>
+
             </nav>
         </div>
     </header>
@@ -86,7 +115,7 @@
     <main class="flex-grow max-w-6xl mx-auto px-4 py-8 md:py-12 w-full">
         
         <!-- SECTION: Aportaciones para el retiro (HOME) -->
-        <section id="section-retiro" class="block">
+        <section id="section-retiro" class="hidden">
             <div class="text-center mb-8 relative max-w-4xl mx-auto py-4">
                 <img src="assets/giby-coin.png" alt="" class="absolute hidden md:block left-4 top-0 w-16 opacity-20 transform -rotate-12 pointer-events-none">
                 <img src="assets/giby-bill.png" alt="" class="absolute hidden md:block right-0 bottom-0 w-24 opacity-20 transform rotate-6 pointer-events-none">
@@ -548,7 +577,7 @@
         </section>
 
         <!-- SECTION: Sobre mí -->
-        <section id="section-sobremi" class="hidden">
+        <section id="section-sobremi" class="block">
             <!-- Hero -->
             <div class="max-w-6xl mx-auto px-4 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div>
@@ -597,38 +626,76 @@
             <!-- Servicios -->
             <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-brand-dark text-center mb-16 uppercase tracking-wider">MIS SERVICIOS</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                    <!-- Servicio 1 -->
-                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-cyan flex flex-col h-full">
-                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3">
-                            <span class="text-3xl">📊</span> Asesorías Financieras
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Servicio 1: Ponle fin a tu relajo financiero -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-orange flex flex-col h-full hover:shadow-xl transition-shadow">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3 leading-tight">
+                            <span class="text-3xl">🌪️</span> Ponle fin a tu relajo financiero
                         </h3>
                         <p class="text-gray-700 mb-8 leading-relaxed">
-                            Análisis personalizado de tu situación financiera actual y creación de estrategias específicas para alcanzar tus metas.
+                            Un plan pensado para ponerle orden a tus finanzas en 3 sesiones mediante un presupuesto hecho a la medida.
                         </p>
                         <ul class="space-y-4 mb-10 flex-grow text-gray-700">
-                            <li class="flex gap-3"><span class="text-brand-accent-primary font-bold">💡</span> Evaluación de salud financiera y plan de mejora</li>
-                            <li class="flex gap-3"><span class="text-brand-accent-primary font-bold">📱</span> Plan de ahorro/presupuesto personalizado</li>
-                            <li class="flex gap-3"><span class="text-brand-accent-primary font-bold">📉</span> Estrategias para liquidar tu deuda</li>
-                            <li class="flex gap-3"><span class="text-green-500 font-bold">✓</span> Estrategias de inversión para tu objetivo</li>
-                            <li class="flex gap-3"><span class="text-green-500 font-bold">✓</span> Descuento por más de 3 sesiones</li>
+                            <li class="flex gap-3"><span class="text-brand-orange font-bold">💻</span> 3 Sesiones remotas de seguimiento</li>
+                            <li class="flex gap-3"><span class="text-brand-orange font-bold">🙋🏻‍♀️</span> Presupuesto basado en tus números</li>
+                            <li class="flex gap-3"><span class="text-brand-orange font-bold">⚙️</span> Sistema de control de gastos e ingresos</li>
+                            <li class="flex gap-3"><span class="text-brand-orange font-bold">📝</span> Material de trabajo y plantillas</li>
+                            <li class="flex gap-3"><span class="text-brand-orange font-bold">✅</span> Plan de mejora próximos 90 días</li>
                         </ul>
-                        <a href="https://api.whatsapp.com/send?phone=5549226166" target="_blank" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow">Agendar mi asesoría</a>
+                        <a href="relajo-financiero.html" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow mt-auto">Más información</a>
                     </div>
-                    <!-- Servicio 2 -->
-                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-accent-primary flex flex-col h-full">
-                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3">
-                            <span class="text-3xl">⛱️</span> Planes de Retiro
+                    
+                    <!-- Servicio 2: Check up financiero -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-cyan flex flex-col h-full hover:shadow-xl transition-shadow">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3 leading-tight">
+                            <span class="text-3xl">🧪</span> Check up financiero
+                        </h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Así como vas al médico para hacerte revisiones preventivas, este servicio diagnostica la salud actual de tus finanzas para prevenir problemas y recetarte estrategias claras hacia tus metas.
+                        </p>
+                        <div class="bg-brand-tertiary p-4 rounded-xl mb-8 border border-brand-cyan border-opacity-30">
+                            <p class="text-sm text-brand-dark font-bold">🎯 Ideal para ti si...</p>
+                            <p class="text-sm text-gray-700 mt-1">Buscas encontrar la raíz de tus fugas de dinero o simplemente quieres validar de mano de un experto que vas por el camino correcto.</p>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-grow text-gray-700">
+                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">💻</span> 1 sesión remota de evaluación</li>
+                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">🚦</span> Evaluación de salud financiera y plan de mejora</li>
+                        </ul>
+                        <a href="checkeo-financiero.html" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow mt-auto">Más información</a>
+                    </div>
+                    
+                    <!-- Servicio 3: Asesoría para el retiro -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-brand-dark flex flex-col h-full hover:shadow-xl transition-shadow">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3 leading-tight">
+                            <span class="text-3xl">⛱️</span> Asesoría para el retiro
                         </h3>
                         <p class="text-gray-700 mb-8 leading-relaxed">
                             Planes personalizados para asegurar tu futuro financiero y jubilarte con la tranquilidad que mereces.
                         </p>
                         <ul class="space-y-4 mb-10 flex-grow text-gray-700">
-                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">📈</span> Cálculo de necesidades de retiro</li>
-                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">🎯</span> Estrategias de inversión a largo plazo pasivas y activas</li>
-                            <li class="flex gap-3"><span class="text-brand-cyan font-bold">📉</span> Deducciones fiscales mediante PPR</li>
+                            <li class="flex gap-3"><span class="text-brand-dark font-bold">📈</span> Cálculo de necesidades de retiro</li>
+                            <li class="flex gap-3"><span class="text-brand-dark font-bold">🎯</span> Estrategias de inversión a largo plazo</li>
+                            <li class="flex gap-3"><span class="text-brand-dark font-bold">🌴</span> Estrategías activas y pasivas para tu retiro</li>
+                            <li class="flex gap-3"><span class="text-brand-dark font-bold">📉</span> Deducciones fiscales mediante PPR</li>
                         </ul>
-                        <button onclick="switchMainTab('retiro')" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow">Conoce los planes</button>
+                        <a href="asesoria-retiro.html" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow mt-auto">Más información</a>
+                    </div>
+
+                    <!-- Servicio 4: Asesoría de inversión -->
+                    <div class="bg-white rounded-3xl p-8 md:p-10 shadow-lg border-t-8 border-[#129E9C] flex flex-col h-full hover:shadow-xl transition-shadow">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6 flex items-center gap-3 leading-tight">
+                            <span class="text-3xl">📈</span> Asesoría de inversión
+                        </h3>
+                        <p class="text-gray-700 mb-8 leading-relaxed">
+                            Hablamos de tus metas, resolvemos tus dudas, rebotamos ideas y te perfilamos como inversionista para crear un plan de inversión a tu medida.
+                        </p>
+                        <ul class="space-y-4 mb-10 flex-grow text-gray-700">
+                            <li class="flex gap-3"><span class="text-[#129E9C] font-bold">🎯</span> Definición de metas financieras</li>
+                            <li class="flex gap-3"><span class="text-[#129E9C] font-bold">✅</span> Perfilamiento como inversionista</li>
+                            <li class="flex gap-3"><span class="text-[#129E9C] font-bold">📝</span> Plan de inversión personalizado</li>
+                            <li class="flex gap-3"><span class="text-[#129E9C] font-bold">📱</span> Seguimiento asíncrono para ejecutarlo</li>
+                        </ul>
+                        <a href="asesoria-inversion.html" class="block w-full text-center bg-brand-accent-secondary text-brand-dark font-bold text-lg py-4 rounded-full hover:bg-brand-accent-primary hover:text-white transition-colors uppercase shadow mt-auto">Más información</a>
                     </div>
                 </div>
             </div>
@@ -716,9 +783,9 @@
             <div class="max-w-5xl mx-auto px-4 py-16 md:py-24 border-t-2 border-gray-100">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="order-2 md:order-1 space-y-4 text-gray-700 leading-relaxed">
-                        <p>Hace 7 años comencé mi camino en finanzas personales, aprendiendo sobre inversión, planificación de retiro, uso de tarjetas de crédito y presupuestos 🤓.</p>
+                        <p>Hace 8 años comencé mi camino en finanzas personales, aprendiendo sobre inversión, planificación de retiro, uso de tarjetas de crédito y presupuestos 🤓.</p>
                         <p>Llevo 4 años dedicándome a brindar coaching y asesoría de finanzas personales que muestran resultados inclusive años después 🤩.</p>
-                        <p>Estudié Ingeniería computacional con especialización en UX 🤓. Actualmente soy asesora financiera especializada en economía conductual, agente de seguros certificada, y estoy certificandome en retiro e inversión patrimonial.👴🏻</p>
+                        <p>Estudié Ingeniería computacional con especialización en UX 🤓 y trabajé por 3 años en un Bootcamp dónde aprendí sobre metodologías de enseñanza. Actualmente soy asesora financiera especializada en economía conductual por la UNAM, agente de seguros certificada por la CNSF, y estoy certificandome en retiro e inversión patrimonial.👴🏻</p>
                         <p class="font-bold text-gray-500 mt-4 text-sm">Busca mi cédula de agente de seguros <a href="https://agentesajustadores.cnsf.gob.mx/Agentes" target="_blank" class="text-brand-cyan underline hover:text-brand-dark transition-colors">aquí</a>. #cedula agente C396757</p>
                         
                         <!-- Podcast -->
@@ -1019,13 +1086,35 @@
                 if (sec === tab) {
                     sectionEl.classList.remove('hidden');
                     sectionEl.classList.add('block');
-                    navBtn.className = 'font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1';
+                    if (navBtn) {
+                        if (sec === 'sobremi') {
+                            navBtn.className = 'font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1';
+                        } else {
+                            navBtn.className = 'block w-full text-left px-4 py-3 text-sm font-bold text-brand-cyan bg-gray-50 transition-colors border-l-4 border-brand-cyan hover:bg-gray-50 hover:text-brand-cyan hover:border-brand-cyan';
+                        }
+                    }
                 } else {
                     sectionEl.classList.add('hidden');
                     sectionEl.classList.remove('block');
-                    navBtn.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent';
+                    if (navBtn) {
+                        if (sec === 'sobremi') {
+                            navBtn.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent';
+                        } else {
+                            navBtn.className = 'block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan';
+                        }
+                    }
                 }
             });
+
+            // Update Calculadoras trigger
+            const calcTrigger = document.getElementById('calcDropdownTrigger');
+            if (calcTrigger) {
+                if (['retiro', 'coast', 'impuestos'].includes(tab)) {
+                    calcTrigger.className = 'font-bold text-brand-cyan hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-brand-cyan flex items-center gap-1';
+                } else {
+                    calcTrigger.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1';
+                }
+            }
         }
 
 
@@ -1776,6 +1865,12 @@
             }
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            if (['retiro', 'coast', 'impuestos', 'sobremi'].includes(hash)) {
+                switchMainTab(hash);
+            }
+        });
     </script>
 </body>
 </html>

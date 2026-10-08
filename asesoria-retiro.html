@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesoría para el retiro - GAB$ Coach Financiera</title>
+    <link rel="icon" type="image/png" href="assets/giby.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            'text-primary': '#000000',
+                            'bg-primary': '#FFFFFF',
+                            'text-secondary': '#129E9C',
+                            'bg-dark': '#05373A',
+                            'accent-primary': '#FA9C0F',
+                            'bg-tertiary': '#E6F7F9',
+                            'primary': '#00C2D9',
+                            'accent-secondary': '#FCEAC8',
+                            'accent-error': '#F08C82',
+                            'text-inactive': '#7E7E7E',
+                            'bg-secondary': '#EFEFEF',
+                            cyan: '#00C2D9',
+                            orange: '#FA9C0F',
+                            dark: '#05373A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1BBAD8 0%, #158b9f 100%);
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans flex flex-col min-h-screen relative overflow-x-hidden">
+    
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm border-b-4 border-brand-dark sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <a href="index.html"><img src="assets/logo.png" alt="GAB$ Coach Financiera Logo" class="h-16 object-contain cursor-pointer"></a>
+            <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-6">
+                <!-- Dropdown for Mis Asesorías -->
+                <div class="relative group">
+                    <button class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1">
+                        Mis asesorías
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-56">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+                            <a href="index.html#sobremi" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan font-bold">Ver todos los servicios</a>
+                            <a href="relajo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Ponle fin a tu relajo</a>
+                            <a href="checkeo-financiero.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Check-up financiero</a>
+                            <a href="asesoria-retiro.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría para el retiro</a>
+                            <a href="asesoria-inversion.html" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Asesoría de inversión</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dropdown for Calculadoras -->
+                <div class="relative group">
+                    <button class="font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1">
+                        Calculadoras
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 pt-2 z-50 w-64">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+                            <a href="index.html#retiro" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de aportaciones de retiro</a>
+                            <a href="index.html#coast" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora COAST FIRE</a>
+                            <a href="index.html#impuestos" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de ISR y deducciones</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="py-20 lg:py-28 bg-white relative">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="lg:w-1/2 space-y-6">
+                        <div class="inline-block text-6xl md:text-7xl mb-4">👵🏻👴🏻</div>
+                        <h1 class="text-4xl md:text-5xl font-extrabold text-brand-dark leading-tight">
+                            ¿Aún no has planeado para tu <span class="text-brand-orange">retiro</span>?
+                        </h1>
+                        <p class="text-lg text-gray-700 leading-relaxed mt-6">
+                            🌟 Como millennial, entiendo perfectamente los desafíos financieros que enfrentamos: la presión social, el sueño de la casa propia parece lejano, la incertidumbre sobre el futuro y la presión de "tenerlo todo resuelto".
+                        </p>
+                        <p class="text-lg text-gray-700 leading-relaxed font-semibold">
+                            🚀 Mi misión es ayudarte a diseñar el retiro que realmente quieres, utilizando estrategias financieras inteligentes y personalizadas que se adapten a tu realidad actual.
+                        </p>
+                    </div>
+
+                    <!-- Value Grid -->
+                    <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                        <!-- Enfoque Práctico -->
+                        <div class="bg-gray-50 p-6 rounded-2xl border-t-4 border-brand-cyan shadow-sm flex gap-4 items-start">
+                            <div class="w-12 h-12 rounded-xl bg-brand-cyan text-white flex items-center justify-center text-2xl shrink-0">💡</div>
+                            <div>
+                                <h3 class="font-bold text-brand-dark text-lg mb-1">Enfoque Práctico</h3>
+                                <p class="text-sm text-gray-600">Estrategias reales para personas reales, sin teorías complicadas.</p>
+                            </div>
+                        </div>
+                        <!-- Comprensión Millennial -->
+                        <div class="bg-gray-50 p-6 rounded-2xl border-t-4 border-brand-accent-secondary shadow-sm flex gap-4 items-start">
+                            <div class="w-12 h-12 rounded-xl bg-brand-accent-secondary flex items-center justify-center text-2xl shrink-0">💖</div>
+                            <div>
+                                <h3 class="font-bold text-brand-dark text-lg mb-1">Comprensión Millennial</h3>
+                                <p class="text-sm text-gray-600">Entiendo tus metas, tus miedos y tus aspiraciones.</p>
+                            </div>
+                        </div>
+                        <!-- Acompañamiento Personal -->
+                        <div class="bg-gray-50 p-6 rounded-2xl border-t-4 border-brand-orange shadow-sm flex gap-4 items-start">
+                            <div class="w-12 h-12 rounded-xl bg-brand-orange text-white flex items-center justify-center text-2xl shrink-0">🤝</div>
+                            <div>
+                                <h3 class="font-bold text-brand-dark text-lg mb-1">Acompañamiento Personal</h3>
+                                <p class="text-sm text-gray-600">Estaré contigo en tu transformación financiera.</p>
+                            </div>
+                        </div>
+                        <!-- Resultados Medibles -->
+                        <div class="bg-gray-50 p-6 rounded-2xl border-t-4 border-brand-dark shadow-sm flex gap-4 items-start">
+                            <div class="w-12 h-12 rounded-xl bg-brand-dark text-white flex items-center justify-center text-2xl shrink-0">🎯</div>
+                            <div>
+                                <h3 class="font-bold text-brand-dark text-lg mb-1">Resultados Medibles</h3>
+                                <p class="text-sm text-gray-600">Planes con objetivos claros y seguimiento constante.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="py-20 bg-brand-orange relative">
+            <div class="max-w-3xl mx-auto px-4 relative z-10">
+                <div class="bg-white rounded-[2rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                    <!-- Badges -->
+                    <div class="flex flex-wrap gap-3 mb-8 justify-center">
+                        <span class="bg-gray-100 text-gray-700 font-bold px-4 py-2 rounded-full text-sm">Estrategia bajo esfuerzo</span>
+                    </div>
+
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-brand-dark mb-4 flex items-center justify-center gap-2">
+                            <span>🐷</span> Plan Personal Para el Retiro
+                        </h2>
+                        <div class="text-3xl md:text-4xl font-extrabold text-brand-orange uppercase tracking-wide">
+                            Costo de la asesoría $0
+                        </div>
+                    </div>
+
+                    <ul class="space-y-4 mb-10 text-gray-700 text-lg max-w-xl mx-auto">
+                        <li class="flex items-start gap-3"><span class="mt-1">👌</span> 1 sesión en la que vemos cuánto cuesta tu retiro y cómo alcanzarlo</li>
+                        <li class="flex items-start gap-3"><span class="mt-1">😎</span> Inversiones en la bolsa mediante ETFs que siguen los principales indices (S&P500, ACWI, NASDAQ100).</li>
+                        <li class="flex items-start gap-3"><span class="mt-1">✅</span> Perfilamiento inversionista</li>
+                        <li class="flex items-start gap-3"><span class="mt-1">💳</span> Plan de aportaciones domiciliadas a débito o crédito</li>
+                        <li class="flex items-start gap-3"><span class="mt-1">💵</span> Deducción fiscal de impuestos mediante PPRS</li>
+                    </ul>
+
+                    <div class="text-center">
+                        <a href="https://calendly.com/finanzascongabs/30min" target="_blank" class="inline-block w-full md:w-auto bg-[#FCEAC8] text-brand-dark font-extrabold text-xl px-12 py-5 rounded-full shadow hover:shadow-lg hover:-translate-y-1 transform transition-all uppercase">
+                            🗓️ AGENDAR ASESORÍA GRATIS
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-4xl font-extrabold text-brand-dark text-center mb-16 uppercase tracking-tight">Preguntas Frecuentes</h2>
+                
+                <div class="space-y-4">
+                    
+                    <!-- FAQ Item 1 -->
+                    <details class="group bg-white rounded-xl shadow-sm border border-gray-100 open:shadow-md transition-all">
+                        <summary class="flex justify-between items-center font-bold text-lg md:text-xl text-brand-dark cursor-pointer p-6">
+                            ¿La asesoría me sirve si lo que busco es ahorrar e invertir por mi cuenta fuera de un PPR?
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-6 pt-0 text-gray-600 bg-gray-50 rounded-b-xl border-t border-gray-100 text-sm md:text-base leading-relaxed mt-2">
+                            Sí, la asesoría está orientada para el retiro ya que considero que es un objetivo primario en la vida de cualquier persona; sin embargo los conocimientos los puedes implementar por tu cuenta si lo que buscas es invertir de manera independiente para tu retiro.
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 2 -->
+                    <details class="group bg-white rounded-xl shadow-sm border border-gray-100 open:shadow-md transition-all">
+                        <summary class="flex justify-between items-center font-bold text-lg md:text-xl text-brand-dark cursor-pointer p-6">
+                            ¿Veremos temas sobre PPRs?
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-6 pt-0 text-gray-600 bg-gray-50 rounded-b-xl border-t border-gray-100 text-sm md:text-base leading-relaxed mt-2">
+                            Sí, aunque en la asesoría planteamos el problema general del retiro y como puedes invertir por tu cuenta para ello, al final nos enfocamos en PPRs porque es un instrumento diseñado específicamente para este fin y por lo tanto tiene beneficios fiscales que por tu cuenta no tendrías. Mi recomendación es siempre tener la triada: Tu AFORE, tu PPR, y tus inversiones para el retiro.
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 3 -->
+                    <details class="group bg-white rounded-xl shadow-sm border border-gray-100 open:shadow-md transition-all">
+                        <summary class="flex justify-between items-center font-bold text-lg md:text-xl text-brand-dark cursor-pointer p-6">
+                            ¿Tu administras mi dinero?
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-6 pt-0 text-gray-600 bg-gray-50 rounded-b-xl border-t border-gray-100 text-sm md:text-base leading-relaxed mt-2">
+                            No, sólo brindo asesoramiento. En el caso de los PPRs Allianz es el gestor, y en el caso activo, la idea es que lo implementes tu. Mi responsabilidad como tu asesor será darte guía y continuidad una vez adquieras tu PPR.
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 4 -->
+                    <details class="group bg-white rounded-xl shadow-sm border border-gray-100 open:shadow-md transition-all">
+                        <summary class="flex justify-between items-center font-bold text-lg md:text-xl text-brand-dark cursor-pointer p-6">
+                            ¿Tienes cédula de agente para promover los productos de Allianz?
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-6 pt-0 text-gray-600 bg-gray-50 rounded-b-xl border-t border-gray-100 text-sm md:text-base leading-relaxed mt-2">
+                            Sí mi #cedula C396757, la ley es estricta en este sentido, no puedes promoverlos por más de 18 meses consecutivos sin haber sacado tu cédula (licencia) de agente. Puedes buscarme en la base de datos de la CNSF: <a href="https://agentesajustadores.cnsf.gob.mx/Agentes" target="_blank" class="text-brand-cyan hover:underline">https://agentesajustadores.cnsf.gob.mx/Agentes</a>
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 5 -->
+                    <details class="group bg-white rounded-xl shadow-sm border border-gray-100 open:shadow-md transition-all">
+                        <summary class="flex justify-between items-center font-bold text-lg md:text-xl text-brand-dark cursor-pointer p-6">
+                            ¿Promueves algún otro producto de otra aseguradora o casa de bolsa?
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-6 pt-0 text-gray-600 bg-gray-50 rounded-b-xl border-t border-gray-100 text-sm md:text-base leading-relaxed mt-2">
+                            No. Sólo promuevo aquellos productos que yo misma he probado como clienta. De momento sólo PPRs de Allianz y seguro de vida de Allianz.
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400">&copy; 2024 GAB$ Coach Financiera. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
