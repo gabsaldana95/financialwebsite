@@ -866,26 +866,40 @@
                     
                     <div class="space-y-6">
                         <div>
-                            <label class="block font-extrabold text-brand-dark mb-2">Ingreso mensual bruto</label>
-                            <p class="text-xs text-gray-500 mb-2">Antes de impuestos, retenciones o gastos.</p>
+                            <label for="tax-ingresoMensualNeto" class="block font-extrabold text-brand-dark mb-1">Ingreso mensual neto</label>
+                            <p id="tax-ingresoNetoHelp" class="text-xs text-gray-500 mb-2">Lo que recibes libre al mes después de impuestos y retenciones (Sueldos y Salarios).</p>
                             <div class="relative">
-                                <span class="absolute left-4 top-4 font-bold text-gray-400">$</span>
-                                <input type="number" id="tax-ingresoMensual" value="40000" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-cyan focus:outline-none transition-colors" oninput="calculateTaxes()">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">$</span>
+                                <input type="number" id="tax-ingresoMensualNeto" name="ingresoMensualNeto" value="40000" min="0" step="any" inputmode="decimal" aria-describedby="tax-ingresoNetoHelp" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-cyan focus:outline-none transition-colors">
+                            </div>
+
+                            <!-- Salario mensual bruto calculado automáticamente (Sueldos y Salarios) -->
+                            <div class="mt-3 bg-[#E6F7F9] border border-brand-cyan border-opacity-30 rounded-xl p-4" aria-live="polite">
+                                <div class="flex justify-between items-center gap-2">
+                                    <div>
+                                        <span class="block text-xs font-extrabold text-brand-dark uppercase tracking-wide">Ingreso mensual bruto</span>
+                                        <span class="block text-[11px] text-gray-600">Calculado en automático (Sueldos y Salarios)</span>
+                                    </div>
+                                    <span id="tax-ingresoBrutoCalculado" class="font-extrabold text-brand-dark text-xl">$50,708.85</span>
+                                </div>
+                                <div class="mt-2 pt-2 border-t border-brand-cyan border-opacity-20 text-xs">
+                                    <a href="https://runahr.com/mx/recursos/nomina/calculadora-salario-neto-o-bruto/" target="_blank" rel="noopener noreferrer" class="font-bold text-brand-cyan underline hover:text-brand-dark transition-colors">Conoce el desglose completo aquí</a>
+                                </div>
                             </div>
                         </div>
 
                         <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="block font-extrabold text-brand-dark">Aportación mensual a PPR</label>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="tax-aportacionMensual" class="block font-extrabold text-brand-dark">Aportación mensual a PPR</label>
                                 <span id="tax-aportacionDisplay" class="font-bold text-brand-orange bg-[#FFF5E6] px-3 py-1 rounded-full text-sm">$4,000</span>
                             </div>
-                            <p class="text-xs text-gray-500 mb-2 leading-relaxed">Puedes deducir hasta el 10% de tu ingreso anual o 5 UMAs anuales (aprox. $198,031).</p>
-                            <input type="range" id="tax-aportacionSlider" min="0" max="100000" step="500" value="4000" class="w-full accent-brand-orange mt-2 cursor-pointer h-2 bg-gray-200 rounded-lg appearance-none" oninput="updateTaxPprInputFromSlider(); calculateTaxes()">
+                            <p id="tax-aportacionHelp" class="text-xs text-gray-500 mb-2 leading-relaxed">Puedes deducir hasta el 10% de tu ingreso anual bruto o 5 UMAs anuales (aprox. $198,031).</p>
+                            <input type="range" id="tax-aportacionSlider" name="aportacionMensualSlider" aria-label="Deslizador de aportación mensual a PPR" min="0" max="100000" step="500" value="4000" class="w-full accent-brand-orange mt-2 cursor-pointer h-2 bg-gray-200 rounded-lg appearance-none">
                             <div class="relative mt-4">
-                                <span class="absolute left-4 top-4 font-bold text-gray-400">$</span>
-                                <input type="number" id="tax-aportacionMensual" value="4000" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-orange focus:outline-none transition-colors" oninput="updateTaxSliderFromInput(); calculateTaxes()">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">$</span>
+                                <input type="number" id="tax-aportacionMensual" name="aportacionMensual" value="4000" min="0" step="any" inputmode="decimal" aria-describedby="tax-aportacionHelp tax-warning-tope" class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-4 pl-8 pr-4 text-brand-dark font-bold text-xl focus:border-brand-orange focus:outline-none transition-colors">
                             </div>
-                            <p id="tax-warning-tope" class="text-xs text-brand-orange font-bold mt-2 hidden">⚠️ Has alcanzado el tope máximo de deducción por ley.</p>
+                            <p id="tax-warning-tope" aria-live="polite" class="text-xs text-brand-orange font-bold mt-2 hidden">⚠️ Has alcanzado el tope máximo de deducción por ley.</p>
                         </div>
                     </div>
                 </div>
@@ -1709,6 +1723,27 @@
         }
 
         // --- CALCULADORA DE IMPUESTOS Y PPR ---
+        const UMA_DIARIA_2026 = 117.31;
+        const FACTOR_INTEGRACION_LEY = 1.0493; // 15 días aguinaldo, 12 días vacaciones, 25% prima vacacional
+        const SALARIO_MINIMO_REF = 248.93;
+        const DIAS_MES = 30;
+        const SUBSIDIO_LIMITE_MENSUAL_2026 = 11492.66;
+        const SUBSIDIO_MONTO_MENSUAL_2026 = 535.65;
+
+        const tablaISRMensual2026 = [
+            { limInf: 0.01, cuotaFija: 0.00, porc: 1.92 },
+            { limInf: 844.60, cuotaFija: 16.22, porc: 6.40 },
+            { limInf: 7168.52, cuotaFija: 420.95, porc: 10.88 },
+            { limInf: 12598.03, cuotaFija: 1011.68, porc: 16.00 },
+            { limInf: 14644.65, cuotaFija: 1339.14, porc: 17.92 },
+            { limInf: 17533.65, cuotaFija: 1856.84, porc: 21.36 },
+            { limInf: 35362.84, cuotaFija: 5665.16, porc: 23.52 },
+            { limInf: 55736.89, cuotaFija: 10457.09, porc: 30.00 },
+            { limInf: 106410.51, cuotaFija: 25659.23, porc: 32.00 },
+            { limInf: 141880.67, cuotaFija: 37009.69, porc: 34.00 },
+            { limInf: 425642.00, cuotaFija: 133488.54, porc: 35.00 }
+        ];
+
         const tablaISR2026 = [
             { limInf: 0.01, limSup: 10135.11, cuotaFija: 0.00, porc: 1.92 },
             { limInf: 10135.12, limSup: 86022.11, cuotaFija: 194.59, porc: 6.40 },
@@ -1723,18 +1758,119 @@
             { limInf: 5107703.93, limSup: Infinity, cuotaFija: 1601862.47, porc: 35.00 }
         ];
 
+        function formatCurrencyDecimals(value) {
+            return new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        }
+
+        // Cálculo mensual de Sueldos y Salarios (metodología RunaHR: ISR mensual + cuota obrera IMSS + subsidio al empleo)
+        function calcularNetoDesdeBrutoMensual(bruto) {
+            if (bruto <= 0) {
+                return { bruto: 0, neto: 0, isr: 0, imss: 0, subsidio: 0, sbc: 0 };
+            }
+
+            let tramo = tablaISRMensual2026[tablaISRMensual2026.length - 1];
+            for (let i = 0; i < tablaISRMensual2026.length - 1; i++) {
+                if (bruto >= tablaISRMensual2026[i].limInf && bruto < tablaISRMensual2026[i + 1].limInf) {
+                    tramo = tablaISRMensual2026[i];
+                    break;
+                }
+            }
+
+            const excedente = bruto - tramo.limInf;
+            const marginal = excedente * (tramo.porc / 100);
+            const isrTarifa = tramo.cuotaFija + marginal;
+
+            // SDI y SBC topado a 25 UMAs
+            const sueldoDiarioRedondeado = Math.round((bruto / DIAS_MES) * 100) / 100;
+            const sdi = sueldoDiarioRedondeado * FACTOR_INTEGRACION_LEY;
+            const sbc = Math.round(Math.min(sdi, 25 * UMA_DIARIA_2026) * 100) / 100;
+
+            // Cuotas obreras IMSS (30 días)
+            const excedenteImss = sbc > (3 * UMA_DIARIA_2026) ? (sbc - (3 * UMA_DIARIA_2026)) * 0.004 * DIAS_MES : 0;
+            const prestacionesDinero = sbc * 0.0025 * DIAS_MES;
+            const gastosMedicosPensionados = sbc * 0.00375 * DIAS_MES;
+            const invalidezYVida = sbc * 0.00625 * DIAS_MES;
+            const cesantiaYVejez = sbc * 0.01125 * DIAS_MES;
+            const imss = excedenteImss + prestacionesDinero + gastosMedicosPensionados + invalidezYVida + cesantiaYVejez;
+
+            // Subsidio al empleo y umbral de salario mínimo para Sueldos y Salarios
+            const subsidioDisponible = bruto <= SUBSIDIO_LIMITE_MENSUAL_2026 ? SUBSIDIO_MONTO_MENSUAL_2026 : 0;
+            let subsidioAplicado = Math.min(subsidioDisponible, isrTarifa);
+
+            const sueldoDiario = bruto / DIAS_MES;
+            let isrNeto = Math.max(0, isrTarifa - subsidioAplicado);
+            if (sueldoDiario < SALARIO_MINIMO_REF + 0.02) {
+                isrNeto = 0;
+                subsidioAplicado = 0;
+            }
+
+            const subsidio = Math.round(subsidioAplicado * 100) / 100;
+            const isr = Math.round(isrNeto * 100) / 100;
+            const neto = Math.round((bruto - imss - isr) * 100) / 100;
+
+            return { bruto, neto, isr, imss, subsidio, sbc };
+        }
+
+        // Conversión inversa Neto -> Bruto mensual para empleado en Sueldos y Salarios
+        function calcularBrutoDesdeNetoMensual(netoDeseado) {
+            if (!netoDeseado || netoDeseado <= 0) {
+                return { bruto: 0, neto: 0, isr: 0, imss: 0, subsidio: 0, sbc: 0 };
+            }
+
+            const target = Math.round(netoDeseado * 100) / 100;
+            const startCents = Math.max(1, Math.floor(target * 100));
+            const subLimitCents = Math.round(SUBSIDIO_LIMITE_MENSUAL_2026 * 100);
+
+            function buscarBrutoEnRango(lowCents, highCents) {
+                while (calcularNetoDesdeBrutoMensual(highCents / 100).neto < target) {
+                    highCents *= 2;
+                }
+                let lo = lowCents;
+                let hi = highCents;
+                while (lo < hi) {
+                    const mid = Math.floor((lo + hi) / 2);
+                    if (calcularNetoDesdeBrutoMensual(mid / 100).neto >= target) {
+                        hi = mid;
+                    } else {
+                        lo = mid + 1;
+                    }
+                }
+                for (let c = Math.max(lowCents, lo - 5); c <= lo + 5; c++) {
+                    if (calcularNetoDesdeBrutoMensual(c / 100).neto >= target) {
+                        return c;
+                    }
+                }
+                return lo;
+            }
+
+            let brutoCents;
+            if (startCents <= subLimitCents && calcularNetoDesdeBrutoMensual(subLimitCents / 100).neto >= target) {
+                brutoCents = buscarBrutoEnRango(startCents, subLimitCents);
+            } else {
+                const low = Math.max(startCents, subLimitCents + 1);
+                brutoCents = buscarBrutoEnRango(low, Math.ceil(target * 165) + 100);
+            }
+
+            return calcularNetoDesdeBrutoMensual(brutoCents / 100);
+        }
+
         function calcularISR(baseGravable) {
             if (baseGravable <= 0) return { total: 0, limInf: 0, excedente: 0, porc: 0, marginal: 0, cuotaFija: 0 };
             
             let fila = tablaISR2026[tablaISR2026.length - 1]; 
-            for (let i = 0; i < tablaISR2026.length; i++) {
-                if (baseGravable >= tablaISR2026[i].limInf && baseGravable <= tablaISR2026[i].limSup) {
+            for (let i = 0; i < tablaISR2026.length - 1; i++) {
+                if (baseGravable >= tablaISR2026[i].limInf && baseGravable < tablaISR2026[i + 1].limInf) {
                     fila = tablaISR2026[i];
                     break;
                 }
             }
 
-            const excedente = baseGravable - fila.limInf;
+            const excedente = Math.max(0, baseGravable - fila.limInf);
             const impuestoMarginal = excedente * (fila.porc / 100);
             return {
                 total: fila.cuotaFija + impuestoMarginal,
@@ -1758,9 +1894,15 @@
             input.value = slider.value;
         }
 
-        function calculateTaxes() {
-            const ingresoMensual = parseFloat(document.getElementById('tax-ingresoMensual').value) || 0;
+        function calculateTaxes(commitClamp = false) {
+            const ingresoNetoInput = document.getElementById('tax-ingresoMensualNeto');
+            const ingresoMensualNeto = Math.max(0, parseFloat(ingresoNetoInput.value) || 0);
+            const nominaMensual = calcularBrutoDesdeNetoMensual(ingresoMensualNeto);
+            const ingresoMensual = nominaMensual.bruto;
             const ingresoAnual = ingresoMensual * 12;
+
+            // Actualizar salario mensual bruto calculado
+            document.getElementById('tax-ingresoBrutoCalculado').innerText = formatCurrencyDecimals(ingresoMensual);
             
             // Tope de ley: 10% del ingreso anual o 5 UMAs anuales (aprox $198,031.80 para 2024), lo que resulte menor.
             const maxPprAnual = Math.min(ingresoAnual * 0.10, 198031.80);
@@ -1772,12 +1914,14 @@
             
             slider.max = Math.ceil(maxPprMensual > 0 ? maxPprMensual : 100000); 
             
-            let aportacionMensual = parseFloat(input.value) || 0;
+            let aportacionMensual = Math.max(0, parseFloat(input.value) || 0);
             
             if (aportacionMensual > maxPprMensual && ingresoAnual > 0) {
                 warningTope.classList.remove('hidden');
                 aportacionMensual = maxPprMensual;
-                input.value = aportacionMensual.toFixed(0);
+                if (commitClamp) {
+                    input.value = aportacionMensual.toFixed(0);
+                }
                 slider.value = aportacionMensual;
             } else {
                 warningTope.classList.add('hidden');
@@ -1787,11 +1931,12 @@
 
             document.getElementById('tax-aportacionDisplay').innerText = formatCurrency(aportacionMensual);
             document.getElementById('tax-res-ingresoAnual').innerText = formatCurrency(ingresoAnual);
+            document.getElementById('tax-res-aportacionAcumulada').innerText = formatCurrency(aportacionAnual);
 
             const isrObjSin = calcularISR(ingresoAnual);
             const isrSinPpr = isrObjSin.total;
             
-            const baseConPpr = ingresoAnual - aportacionAnual;
+            const baseConPpr = Math.max(0, ingresoAnual - aportacionAnual);
             const isrObjCon = calcularISR(baseConPpr);
             const isrConPpr = isrObjCon.total;
             
@@ -1830,10 +1975,37 @@
             document.getElementById('tax-det-impuestoRetener').innerText = formatCurrency(isrObjCon.total);
         }
 
-        // Initialize taxes on load
+        // Initialize taxes and listeners on load
         window.addEventListener('DOMContentLoaded', () => {
-            if(document.getElementById('tax-ingresoMensual')) {
-                calculateTaxes();
+            const ingresoNetoEl = document.getElementById('tax-ingresoMensualNeto');
+            const aportacionInputEl = document.getElementById('tax-aportacionMensual');
+            const aportacionSliderEl = document.getElementById('tax-aportacionSlider');
+
+            if (ingresoNetoEl) {
+                ingresoNetoEl.addEventListener('input', () => {
+                    document.getElementById('tax-warning-tope').classList.add('hidden');
+                    calculateTaxes(false);
+                });
+                ingresoNetoEl.addEventListener('blur', () => calculateTaxes(true));
+
+                if (aportacionSliderEl) {
+                    aportacionSliderEl.addEventListener('input', () => {
+                        updateTaxPprInputFromSlider();
+                        calculateTaxes(true);
+                    });
+                }
+
+                if (aportacionInputEl) {
+                    aportacionInputEl.addEventListener('input', () => {
+                        updateTaxSliderFromInput();
+                        calculateTaxes(false);
+                    });
+                    aportacionInputEl.addEventListener('blur', () => {
+                        calculateTaxes(true);
+                    });
+                }
+
+                calculateTaxes(true);
             }
         });
 
