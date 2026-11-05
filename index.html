@@ -103,6 +103,7 @@
                             <button id="navBtn-retiro" onclick="switchMainTab('retiro')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de aportaciones de retiro</button>
                             <button id="navBtn-coast" onclick="switchMainTab('coast')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora COAST FIRE</button>
                             <button id="navBtn-impuestos" onclick="switchMainTab('impuestos')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Calculadora de ISR y deducciones</button>
+                            <button id="navBtn-perfil" onclick="switchMainTab('perfil')" class="block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan">Test de Perfil Inversionista</button>
                         </div>
                     </div>
                 </div>
@@ -1167,6 +1168,507 @@
             </div>
         </section>
 
+        <!-- SECTION: Test de Perfil Inversionista -->
+        <section id="section-perfil" class="hidden">
+            <div class="text-center mb-8 relative max-w-4xl mx-auto py-4">
+                <img src="assets/giby-coin.png" alt="" class="absolute hidden md:block left-4 top-0 w-16 opacity-20 transform -rotate-12 pointer-events-none">
+                <img src="assets/giby-bill.png" alt="" class="absolute hidden md:block right-0 bottom-0 w-24 opacity-20 transform rotate-6 pointer-events-none">
+                <div class="relative z-10">
+                    <p class="text-xs font-bold text-brand-cyan uppercase tracking-widest mb-2 border border-brand-cyan rounded-full px-4 py-1 inline-block">12 Preguntas • Basado en tu Meta • Tu Estrategia</p>
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4">Define tu <span class="text-brand-cyan">Perfil Inversionista</span></h1>
+                    <p class="text-lg text-gray-600 font-medium max-w-2xl mx-auto">Descubre qué combinación de instrumentos se adapta mejor a tu meta, tu plazo de inversión y tu tolerancia al riesgo.</p>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation for Perfil Inversionista -->
+            <div class="flex justify-center mb-8 relative z-10">
+                <div class="bg-gray-200 p-1 rounded-xl inline-flex flex-wrap justify-center">
+                    <button id="btnPerfilTabTest" type="button" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors bg-white shadow text-brand-dark" onclick="switchPerfilTab('test')">Test Interactivo</button>
+                    <button id="btnPerfilTabInfo" type="button" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors text-gray-500 hover:text-brand-dark" onclick="switchPerfilTab('info')">Puntajes y Portafolios por Edad</button>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 1: TEST INTERACTIVO -->
+            <div id="perfilTab-test" class="block">
+                <!-- Nota Importante: No hay un solo perfil único -->
+                <div class="max-w-3xl mx-auto mb-8 bg-[#FFF5E6] border-l-8 border-brand-orange rounded-2xl p-5 md:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="text-3xl flex-shrink-0" aria-hidden="true">💡</div>
+                    <div>
+                        <h2 class="font-extrabold text-brand-dark text-base md:text-lg mb-1">Importante: No tienes un solo perfil inversionista único</h2>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            Tu perfil <strong>depende directamente de la meta y el plazo de tiempo</strong> para el que estás invirtiendo. Puedes ser <em>conservador</em> para el enganche de tu casa en 2 años y, al mismo tiempo, <em>agresivo</em> para tu retiro en 25 años. Al responder, piensa exclusivamente en la meta que elijas abajo.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="max-w-3xl mx-auto mb-16">
+                    <!-- PASO 0: Configurar Meta y Plazo -->
+                    <div id="perfil-step-intro" class="bg-white rounded-3xl shadow-xl border-t-8 border-brand-cyan p-6 md:p-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full bg-brand-dark text-white flex items-center justify-center font-extrabold text-lg">1</div>
+                            <div>
+                                <h2 class="text-xl md:text-2xl font-extrabold text-brand-dark">Primero, define tu <span class="text-brand-cyan italic">meta</span></h2>
+                                <p class="text-xs md:text-sm text-gray-500">El plazo de tu meta determinará automáticamente el horizonte de tiempo en tu resultado.</p>
+                            </div>
+                        </div>
+
+                        <form id="perfilIntroForm" class="space-y-6" novalidate>
+                            <div>
+                                <label for="perfil-goal-name" class="block font-extrabold text-brand-dark mb-1">¿Para qué meta te estás perfilando hoy?</label>
+                                <p id="perfil-goal-help" class="text-xs text-gray-500 mb-3">Elige una opción rápida o escribe tu propia meta personalizada.</p>
+                                
+                                <!-- Chips de metas sugeridas -->
+                                <div class="flex flex-wrap gap-2 mb-3" role="group" aria-label="Metas sugeridas">
+                                    <button type="button" onclick="selectPresetGoal('Mi retiro', 5)" class="preset-goal-btn text-xs font-bold px-3.5 py-2 rounded-full border-2 border-brand-cyan/30 bg-[#E6F7F9] text-brand-dark hover:bg-brand-cyan hover:text-white transition-colors">🏖️ Mi retiro (20+ años)</button>
+                                    <button type="button" onclick="selectPresetGoal('Comprar casa o depa', 3)" class="preset-goal-btn text-xs font-bold px-3.5 py-2 rounded-full border-2 border-brand-cyan/30 bg-[#E6F7F9] text-brand-dark hover:bg-brand-cyan hover:text-white transition-colors">🏠 Comprar casa / depa (5-10 años)</button>
+                                    <button type="button" onclick="selectPresetGoal('Crecer mi patrimonio', 4)" class="preset-goal-btn text-xs font-bold px-3.5 py-2 rounded-full border-2 border-brand-cyan/30 bg-[#E6F7F9] text-brand-dark hover:bg-brand-cyan hover:text-white transition-colors">📈 Crecer patrimonio (10-20 años)</button>
+                                    <button type="button" onclick="selectPresetGoal('Viaje o compra grande', 2)" class="preset-goal-btn text-xs font-bold px-3.5 py-2 rounded-full border-2 border-brand-cyan/30 bg-[#E6F7F9] text-brand-dark hover:bg-brand-cyan hover:text-white transition-colors">✈️ Viaje / Auto (2-5 años)</button>
+                                    <button type="button" onclick="selectPresetGoal('Meta de corto plazo', 1)" class="preset-goal-btn text-xs font-bold px-3.5 py-2 rounded-full border-2 border-brand-cyan/30 bg-[#E6F7F9] text-brand-dark hover:bg-brand-cyan hover:text-white transition-colors">🛡️ Meta a corto plazo (1 año)</button>
+                                </div>
+
+                                <input type="text" id="perfil-goal-name" name="goalName" required aria-describedby="perfil-goal-help perfil-intro-error" placeholder="Ej. Mi retiro, Jubilación, Enganche de departamento..." class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl py-3.5 px-4 text-brand-dark font-bold text-base focus:border-brand-cyan focus:bg-white focus:outline-none transition-colors" value="Mi retiro">
+                            </div>
+
+                            <fieldset>
+                                <legend class="block font-extrabold text-brand-dark mb-1">¿En cuánto tiempo planeas usar el dinero de esta meta?</legend>
+                                <p class="text-xs text-gray-500 mb-3">Este plazo responde la pregunta de horizonte de inversión y tiene un peso clave en tu perfil.</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5" id="perfil-horizon-options">
+                                    <label for="horizon-1" class="cursor-pointer">
+                                        <input type="radio" id="horizon-1" name="goalHorizon" value="1" class="sr-only peer">
+                                        <div class="p-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-center peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark hover:border-brand-cyan/50 transition-all h-full flex flex-col justify-center">
+                                            <span class="font-extrabold text-brand-dark text-sm block">1 año</span>
+                                            <span class="text-[11px] text-gray-500">Corto plazo</span>
+                                        </div>
+                                    </label>
+                                    <label for="horizon-2" class="cursor-pointer">
+                                        <input type="radio" id="horizon-2" name="goalHorizon" value="2" class="sr-only peer">
+                                        <div class="p-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-center peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark hover:border-brand-cyan/50 transition-all h-full flex flex-col justify-center">
+                                            <span class="font-extrabold text-brand-dark text-sm block">2 a 5 años</span>
+                                            <span class="text-[11px] text-gray-500">Mediano-corto</span>
+                                        </div>
+                                    </label>
+                                    <label for="horizon-3" class="cursor-pointer">
+                                        <input type="radio" id="horizon-3" name="goalHorizon" value="3" class="sr-only peer">
+                                        <div class="p-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-center peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark hover:border-brand-cyan/50 transition-all h-full flex flex-col justify-center">
+                                            <span class="font-extrabold text-brand-dark text-sm block">5 a 10 años</span>
+                                            <span class="text-[11px] text-gray-500">Mediano plazo</span>
+                                        </div>
+                                    </label>
+                                    <label for="horizon-4" class="cursor-pointer">
+                                        <input type="radio" id="horizon-4" name="goalHorizon" value="4" class="sr-only peer">
+                                        <div class="p-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-center peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark hover:border-brand-cyan/50 transition-all h-full flex flex-col justify-center">
+                                            <span class="font-extrabold text-brand-dark text-sm block">10 a 20 años</span>
+                                            <span class="text-[11px] text-gray-500">Largo plazo</span>
+                                        </div>
+                                    </label>
+                                    <label for="horizon-5" class="cursor-pointer">
+                                        <input type="radio" id="horizon-5" name="goalHorizon" value="5" checked class="sr-only peer">
+                                        <div class="p-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-center peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark hover:border-brand-cyan/50 transition-all h-full flex flex-col justify-center">
+                                            <span class="font-extrabold text-brand-dark text-sm block">20 o más años</span>
+                                            <span class="text-[11px] text-gray-500">Muy largo plazo</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </fieldset>
+
+                            <p id="perfil-intro-error" role="alert" aria-live="polite" class="text-sm font-bold text-red-600 hidden"></p>
+
+                            <div class="pt-2">
+                                <button type="submit" class="w-full bg-brand-orange text-white font-extrabold text-lg py-4 px-8 rounded-full shadow-md hover:shadow-xl hover:bg-brand-accent-primary transition-all transform hover:-translate-y-0.5 uppercase tracking-wide">
+                                    Comenzar Test para esta Meta ➔
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PASO 1..12: Cuestionario Interactivo -->
+                    <div id="perfil-step-quiz" class="hidden bg-white rounded-3xl shadow-xl border-t-8 border-brand-cyan p-6 md:p-10">
+                        <!-- Banner de Meta Activa -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 bg-[#E6F7F9] border border-brand-cyan/30 px-4 py-3 rounded-2xl mb-6">
+                            <div class="flex items-center gap-2 text-xs md:text-sm text-brand-dark">
+                                <span class="font-extrabold uppercase tracking-wider text-brand-cyan">Meta activa:</span>
+                                <strong id="perfil-active-goal-badge" class="font-extrabold">Mi retiro</strong>
+                                <span class="text-gray-400">•</span>
+                                <span id="perfil-active-horizon-badge" class="font-bold text-gray-600">20 o más años</span>
+                            </div>
+                            <button type="button" onclick="editPerfilGoal()" class="text-xs font-extrabold text-brand-cyan underline hover:text-brand-dark transition-colors">Cambiar meta</button>
+                        </div>
+
+                        <!-- Barra de Progreso -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-500 mb-2">
+                                <span id="perfil-progress-label">Pregunta 1 de 12</span>
+                                <span id="perfil-progress-pct" class="text-brand-cyan">8%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                <div id="perfil-progress-bar" class="bg-brand-cyan h-3 rounded-full transition-all duration-300" style="width: 8%"></div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs font-bold uppercase tracking-wider text-brand-orange mb-3">
+                            Al responder piensa en las inversiones para: <span id="perfil-goal-reminder" class="underline">Mi retiro</span>
+                        </p>
+
+                        <form id="perfilQuestionForm" novalidate>
+                            <fieldset id="perfil-question-fieldset">
+                                <legend id="perfil-question-title" tabindex="-1" class="text-xl md:text-2xl font-extrabold text-brand-dark mb-2 focus:outline-none">
+                                    1. Edad
+                                </legend>
+                                <p id="perfil-question-subtitle" class="text-xs md:text-sm text-gray-500 mb-5"></p>
+
+                                <div id="perfil-options-container" class="space-y-3">
+                                    <!-- Opciones generadas dinámicamente -->
+                                </div>
+                            </fieldset>
+
+                            <!-- Campo opcional final (solo si la meta es Retiro) -->
+                            <div id="perfil-wish-box" class="hidden mt-8 bg-gradient-to-r from-[#E6F7F9] to-[#FCEAC8]/40 p-5 md:p-6 rounded-2xl border-2 border-brand-cyan/40">
+                                <label for="perfil-future-wish" class="block font-extrabold text-brand-dark text-base md:text-lg mb-1">
+                                    ✨ Si pudieras desearle algo a tu yo viejito, ¿qué le desearías?
+                                </label>
+                                <p id="perfil-wish-help" class="text-xs text-gray-600 mb-3">Querido yo retirado te deseo... Escríbelo en 3 renglones (Opcional)</p>
+                                <textarea id="perfil-future-wish" name="futureWish" rows="3" maxlength="300" aria-describedby="perfil-wish-help" placeholder="Querido yo retirado te deseo..." class="w-full bg-white border-2 border-gray-200 rounded-xl p-3.5 text-brand-dark text-sm md:text-base focus:border-brand-cyan focus:outline-none transition-colors"></textarea>
+                            </div>
+
+                            <p id="perfil-quiz-error" role="alert" aria-live="polite" class="text-sm font-bold text-red-600 mt-4 hidden"></p>
+
+                            <!-- Botones de navegación -->
+                            <div class="flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-8 pt-6 border-t border-gray-100">
+                                <button type="button" id="perfil-prev-btn" onclick="prevPerfilQuestion()" class="w-full sm:w-auto px-6 py-3.5 rounded-full font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors text-sm uppercase tracking-wide">
+                                    ← Anterior
+                                </button>
+                                <button type="submit" id="perfil-next-btn" class="w-full sm:w-auto px-8 py-3.5 rounded-full font-extrabold text-white bg-brand-cyan hover:bg-brand-dark shadow-md hover:shadow-lg transition-all text-sm md:text-base uppercase tracking-wide">
+                                    Siguiente ➔
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PASO FINAL: Resultados y Recomendaciones -->
+                    <div id="perfil-step-results" class="hidden space-y-8">
+                        <!-- Tarjeta Principal de Resultado -->
+                        <div class="gradient-bg text-white rounded-3xl shadow-2xl p-6 md:p-10 relative overflow-hidden">
+                            <div class="relative z-10 text-center">
+                                <span class="inline-block bg-white/15 border border-white/25 text-brand-accent-secondary text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full mb-3">
+                                    Resultado para tu meta: <span id="res-perfil-goal">Mi retiro</span> (<span id="res-perfil-horizon">20 o más años</span>)
+                                </span>
+                                <p class="text-sm uppercase tracking-widest text-cyan-100 font-bold mb-1">Tu perfil inversionista es</p>
+                                <h2 id="res-perfil-title" tabindex="-1" class="text-4xl md:text-6xl font-extrabold text-brand-accent-secondary drop-shadow mb-3 focus:outline-none">
+                                    Moderado
+                                </h2>
+                                <div class="inline-flex items-center gap-2 bg-brand-dark/40 px-4 py-1.5 rounded-full text-sm font-bold text-white mb-6">
+                                    <span>Puntaje total: <strong id="res-perfil-score" class="text-brand-accent-secondary">40</strong> / 65 pts</span>
+                                </div>
+                                <p id="res-perfil-summary" class="text-base md:text-lg text-white/95 max-w-2xl mx-auto leading-relaxed"></p>
+                            </div>
+
+                            <!-- Alerta si el plazo es corto pero el puntaje salió alto -->
+                            <div id="res-perfil-horizon-warning" class="hidden mt-6 bg-[#FFF5E6] text-brand-dark p-4 md:p-5 rounded-2xl border-2 border-brand-orange text-left shadow-md">
+                                <p class="font-extrabold text-brand-orange text-sm uppercase tracking-wide mb-1">⚠️ Nota clave sobre el plazo de tu meta</p>
+                                <p id="res-perfil-horizon-warning-text" class="text-xs md:text-sm text-gray-800 leading-relaxed"></p>
+                            </div>
+                        </div>
+
+                        <!-- Distribución Renta Fija vs Renta Variable según Perfil de Riesgo y Edad -->
+                        <div class="bg-white rounded-3xl shadow-xl border-t-8 border-brand-orange p-6 md:p-10">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                                <h3 class="text-2xl font-extrabold text-brand-dark">Portafolio Sugerido según tu Perfil y Edad</h3>
+                                <span id="res-perfil-age-tag" class="inline-block bg-[#FCEAC8] text-brand-dark font-extrabold text-xs uppercase tracking-wider px-3.5 py-1.5 rounded-full w-fit">En tus 30s & Moderado</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-6">De acuerdo con tu perfil de riesgo y tu etapa de vida, esta es la configuración sugerida entre Renta Fija y Renta Variable:</p>
+
+                            <!-- Gráfica circular e Indicadores Visuales Renta Fija / Variable -->
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6 bg-gray-50 p-5 md:p-6 rounded-2xl border border-gray-200">
+                                <div class="lg:col-span-5 flex flex-col items-center">
+                                    <div class="relative w-48 h-48 md:w-56 md:h-56">
+                                        <canvas id="perfilPortfolioChart"></canvas>
+                                    </div>
+                                    <span id="res-perfil-portfolio-pill" class="mt-3 bg-[#FFF176] text-brand-dark font-black text-xs md:text-sm uppercase tracking-wider px-4 py-1.5 rounded-lg shadow-sm text-center">
+                                        EN TUS 30S & MODERADO
+                                    </span>
+                                </div>
+
+                                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                                    <div class="bg-[#E6F7F9] border border-brand-cyan/30 rounded-2xl p-5">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-extrabold text-brand-dark text-base">🛡️ Renta Fija</span>
+                                            <span id="res-perfil-rf-badge" class="font-black text-brand-cyan bg-white px-3 py-1 rounded-full text-sm border border-brand-cyan/30">30%</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-3">Categoría donde ya tienes pactada una tasa de retorno y una fecha para recibir tu dinero (ej. Deuda gubernamental / CETES, Bonos).</p>
+                                        <div class="w-full bg-white rounded-full h-3 overflow-hidden border border-brand-cyan/20">
+                                            <div id="res-perfil-rf-bar" class="bg-brand-cyan h-3 rounded-full transition-all duration-500" style="width: 30%"></div>
+                                        </div>
+                                        <p id="res-perfil-rf-pct" class="text-xs font-extrabold text-brand-dark mt-2 text-right">Renta Fija: 30%</p>
+                                    </div>
+
+                                    <div class="bg-[#FFF5E6] border border-brand-orange/30 rounded-2xl p-5">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-extrabold text-brand-dark text-base">🚀 Renta Variable</span>
+                                            <span id="res-perfil-rv-badge" class="font-black text-brand-orange bg-white px-3 py-1 rounded-full text-sm border border-brand-orange/30">70%</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-3">Categoría donde NO tienes una tasa pactada y obtienes tu ganancia cuando decidas vender a largo plazo (ej. ETFs, Acciones).</p>
+                                        <div class="w-full bg-white rounded-full h-3 overflow-hidden border border-brand-orange/20">
+                                            <div id="res-perfil-rv-bar" class="bg-brand-orange h-3 rounded-full transition-all duration-500" style="width: 70%"></div>
+                                        </div>
+                                        <p id="res-perfil-rv-pct" class="text-xs font-extrabold text-brand-dark mt-2 text-right">Renta Variable: 70%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-8 text-center">
+                                <button type="button" onclick="switchPerfilTab('info')" class="inline-flex items-center gap-2 text-xs md:text-sm font-extrabold text-brand-cyan underline hover:text-brand-dark transition-colors">
+                                    <span>📊 Ver tabla de puntajes y todos los Portafolios según tu Perfil de Riesgo y Edad</span>
+                                    <span>➔</span>
+                                </button>
+                            </div>
+
+                            <!-- Resumen de tus respuestas en forma de tabla -->
+                            <div class="bg-gray-50 rounded-2xl p-5 md:p-6 border border-gray-200 mb-8">
+                                <h4 class="font-extrabold text-brand-dark text-lg mb-4 flex items-center gap-2">
+                                    <span>📋</span> Resumen de tus preguntas y respuestas
+                                </h4>
+                                <div class="overflow-x-auto bg-white rounded-xl border border-gray-200">
+                                    <table class="w-full text-left border-collapse text-xs md:text-sm">
+                                        <thead>
+                                            <tr class="bg-brand-dark text-white uppercase tracking-wider">
+                                                <th scope="col" class="p-3 md:p-4">Pregunta</th>
+                                                <th scope="col" class="p-3 md:p-4">Tu Respuesta</th>
+                                                <th scope="col" class="p-3 md:p-4 text-center w-24">Puntos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="res-perfil-answers-tbody" class="divide-y divide-gray-100 text-gray-700">
+                                            <!-- Generado dinámicamente por JS -->
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="bg-[#E6F7F9] font-extrabold text-brand-dark border-t-2 border-brand-cyan">
+                                                <td colspan="2" class="p-3 md:p-4 text-right uppercase tracking-wider">Puntaje Total:</td>
+                                                <td id="res-perfil-answers-total" class="p-3 md:p-4 text-center text-brand-cyan text-base">40 pts</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Deseo para el yo retirado (si la meta es retiro y lo escribió) -->
+                            <div id="res-perfil-wish-card" class="hidden mb-8 bg-gradient-to-r from-[#E6F7F9] to-[#FCEAC8]/50 p-6 rounded-2xl border-2 border-brand-cyan/40">
+                                <p class="text-xs font-extrabold uppercase tracking-widest text-brand-dark mb-1">💌 Querido yo retirado te deseo...</p>
+                                <blockquote id="res-perfil-wish-text" class="text-base md:text-lg italic font-bold text-brand-dark"></blockquote>
+                            </div>
+
+                            <!-- Recordatorio de múltiples metas + Botones de acción -->
+                            <div class="bg-[#E6F7F9] rounded-2xl p-5 md:p-6 border border-brand-cyan/30 text-center mb-6">
+                                <p class="font-extrabold text-brand-dark text-base mb-1">🔄 ¿Tienes otra meta con un plazo distinto?</p>
+                                <p class="text-xs md:text-sm text-gray-700 mb-4">Recuerda que no existe un único perfil para todo tu dinero. Haz la prueba con otra meta (por ejemplo, un ahorro a 2 años vs. tu retiro) y observa cómo cambia tu estrategia.</p>
+                                <div class="flex flex-wrap justify-center gap-3">
+                                    <button type="button" onclick="resetPerfilQuiz(true)" class="bg-white text-brand-dark border-2 border-brand-cyan font-extrabold text-sm px-6 py-3 rounded-full hover:bg-brand-cyan hover:text-white transition-colors uppercase tracking-wide">
+                                        Perfilar otra meta distinta
+                                    </button>
+                                    <button type="button" onclick="reviewPerfilAnswers()" class="text-xs md:text-sm font-bold text-gray-600 underline hover:text-brand-dark px-4 py-2">
+                                        Revisar o cambiar mis respuestas
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="text-center pt-2">
+                                <p class="text-sm font-bold text-gray-500 mb-3">¿Quieres armar tu portafolio paso a paso según este perfil?</p>
+                                <a href="asesoria-inversion.html" class="w-full sm:w-auto min-w-[280px] inline-block bg-brand-orange text-white font-extrabold text-base md:text-lg px-8 py-4 rounded-full shadow-md hover:shadow-xl transition-all transform hover:-translate-y-0.5 tracking-wide uppercase">
+                                    Conocer la Asesoría Patrimonial ➔
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- GLOSARIO INVERSIONISTA -->
+                        <div class="bg-white rounded-3xl shadow-xl border-t-8 border-brand-cyan p-6 md:p-10">
+                            <div class="text-center mb-8">
+                                <p class="text-xs font-extrabold uppercase tracking-widest text-brand-text-secondary mb-1">Finanzas con Gabs</p>
+                                <h3 class="text-2xl md:text-4xl font-extrabold text-[#F08C82] tracking-wide uppercase">Glosario Inversionista</h3>
+                            </div>
+
+                            <dl class="divide-y divide-gray-100">
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-dark text-lg">Inversión</dt>
+                                    <dd class="sm:col-span-8 text-gray-700 text-sm md:text-base">Hacer crecer tu dinero a cambio de darlo prestado.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-text-secondary text-lg">Portafolio de inversión</dt>
+                                    <dd class="sm:col-span-8 text-brand-text-secondary text-sm md:text-base font-medium">Estrategia de crecimiento para tu dinero. Puede ser conservadora, moderada, o arriesgada.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-dark text-lg">Rendimiento</dt>
+                                    <dd class="sm:col-span-8 text-gray-700 text-sm md:text-base">Cuánto creció tu dinero con un tiempo y riesgo dado.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-text-secondary text-lg">Activo</dt>
+                                    <dd class="sm:col-span-8 text-brand-text-secondary text-sm md:text-base font-medium">En lo que se está invirtiendo. Algo productivo. También se refiere a qué tanto tiempo le dedicas a administrar.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-dark text-lg">Pasivo</dt>
+                                    <dd class="sm:col-span-8 text-gray-700 text-sm md:text-base">Aquello que te cuesta dinero. No produce. También se refiere a que dedicas poco tiempo a administrar.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-text-secondary text-lg">Renta Fija</dt>
+                                    <dd class="sm:col-span-8 text-brand-text-secondary text-sm md:text-base font-medium">Categoría de activo dónde ya tienes pactado una tasa de retorno y una fecha para recibir tu dinero. Menor ganancia.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-dark text-lg">Acción</dt>
+                                    <dd class="sm:col-span-8 text-gray-700 text-sm md:text-base">Parte de dinero que le presto a una empresa para fondear sus proyectos.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-text-secondary text-lg">Renta Variable</dt>
+                                    <dd class="sm:col-span-8 text-brand-text-secondary text-sm md:text-base font-medium">Categoría de activo dónde NO tienes una tasa de retorno pactada y tu dinero lo obtienes cuando decidas vender. Mayor ganancia.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-dark text-lg">ETF</dt>
+                                    <dd class="sm:col-span-8 text-gray-700 text-sm md:text-base">Canasta de acciones de múltiples empresas. Es un instrumento de renta variable diversificado. Sirve para mitigar el riesgo.</dd>
+                                </div>
+                                <div class="py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
+                                    <dt class="sm:col-span-4 font-extrabold text-brand-text-secondary text-lg">Deuda gubernamental</dt>
+                                    <dd class="sm:col-span-8 text-brand-text-secondary text-sm md:text-base font-medium">Parte de dinero que le presto al gobierno de un país para fondear sus proyectos. Es renta fija.</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 2: PUNTAJES Y PORTAFOLIOS POR EDAD -->
+            <div id="perfilTab-info" class="hidden max-w-4xl mx-auto mb-16 space-y-8">
+                <!-- Tarjeta 1: Tabla de Puntajes de Perfil Inversionista -->
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border-t-8 border-brand-cyan">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-brand-dark mb-3 text-center">Tabla de Puntajes de Perfil Inversionista</h2>
+                    <p class="text-sm md:text-base text-gray-600 text-center max-w-2xl mx-auto mb-6">
+                        La suma de tus respuestas (del 1 al 5 en cada pregunta, más el plazo de tu meta) define qué tanta tolerancia y capacidad tienes para asumir riesgo en esa meta específica:
+                    </p>
+
+                    <div class="overflow-x-auto bg-white rounded-2xl border border-gray-200 shadow-sm">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm">
+                            <thead>
+                                <tr class="bg-brand-dark text-white uppercase tracking-wider">
+                                    <th scope="col" class="p-3.5 rounded-tl-xl">Puntaje</th>
+                                    <th scope="col" class="p-3.5">Perfil</th>
+                                    <th scope="col" class="p-3.5">Renta Fija</th>
+                                    <th scope="col" class="p-3.5 rounded-tr-xl">Renta Variable</th>
+                                </tr>
+                            </thead>
+                            <tbody id="res-perfil-table-body" class="divide-y divide-gray-200 font-medium text-gray-700">
+                                <tr data-profile-row="muy-conservador">
+                                    <td class="p-3.5 font-bold">13 - 20</td>
+                                    <td class="p-3.5 font-bold text-brand-dark">Muy conservador</td>
+                                    <td class="p-3.5 font-extrabold text-brand-cyan text-base">++</td>
+                                    <td class="p-3.5 font-extrabold text-gray-400 text-base">--</td>
+                                </tr>
+                                <tr data-profile-row="conservador">
+                                    <td class="p-3.5 font-bold">21 - 31</td>
+                                    <td class="p-3.5 font-bold text-brand-dark">Conservador</td>
+                                    <td class="p-3.5 font-extrabold text-brand-cyan text-base">+</td>
+                                    <td class="p-3.5 font-extrabold text-gray-400 text-base">-</td>
+                                </tr>
+                                <tr data-profile-row="moderado">
+                                    <td class="p-3.5 font-bold">32 - 45</td>
+                                    <td class="p-3.5 font-bold text-brand-dark">Moderado</td>
+                                    <td class="p-3.5 font-extrabold text-brand-cyan text-base">=</td>
+                                    <td class="p-3.5 font-extrabold text-brand-orange text-base">=</td>
+                                </tr>
+                                <tr data-profile-row="agresivo">
+                                    <td class="p-3.5 font-bold">46 - 55</td>
+                                    <td class="p-3.5 font-bold text-brand-dark">Agresivo</td>
+                                    <td class="p-3.5 font-extrabold text-gray-400 text-base">-</td>
+                                    <td class="p-3.5 font-extrabold text-brand-orange text-base">+</td>
+                                </tr>
+                                <tr data-profile-row="muy-agresivo">
+                                    <td class="p-3.5 font-bold">56 - 65</td>
+                                    <td class="p-3.5 font-bold text-brand-dark">Muy agresivo</td>
+                                    <td class="p-3.5 font-extrabold text-gray-400 text-base">--</td>
+                                    <td class="p-3.5 font-extrabold text-brand-orange text-base">++</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: ¿Por qué se sugieren estas combinaciones de portafolios según tu Perfil de Riesgo y Edad? -->
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border-t-8 border-brand-orange">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-brand-dark mb-4 text-center">
+                        Portafolios según tu Perfil de Riesgo y Edad
+                    </h2>
+                    <p class="text-sm md:text-base text-gray-600 text-center max-w-2xl mx-auto mb-8">
+                        ¿Por qué cambian los porcentajes de Renta Fija y Renta Variable conforme cumplimos años, incluso dentro del mismo perfil?
+                    </p>
+
+                    <!-- Explicación educativa -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-[#E6F7F9] p-5 rounded-2xl border border-brand-cyan/30">
+                            <div class="text-2xl mb-2" aria-hidden="true">⏳</div>
+                            <h3 class="font-extrabold text-brand-dark text-base mb-2">1. El tiempo es tu amortiguador</h3>
+                            <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+                                En tus <strong>20s y 30s</strong> tienes décadas por delante. Si el mercado cae un año, tienes tiempo de sobra para esperar a que se recupere y aprovechar el interés compuesto de la <strong>Renta Variable</strong>.
+                            </p>
+                        </div>
+
+                        <div class="bg-[#FFF5E6] p-5 rounded-2xl border border-brand-orange/30">
+                            <div class="text-2xl mb-2" aria-hidden="true">🛡️</div>
+                            <h3 class="font-extrabold text-brand-dark text-base mb-2">2. Proteger lo que ya construiste</h3>
+                            <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Al llegar a tus <strong>40s y 50s</strong>, tu patrimonio acumulado ya es mayor y la fecha para usar tu dinero está más cerca. Por eso vamos pasando ganancias hacia <strong>Renta Fija</strong> para blindarlas.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                            <div class="text-2xl mb-2" aria-hidden="true">⚖️</div>
+                            <h3 class="font-extrabold text-brand-dark text-base mb-2">3. Dormir en paz sin perder ante la inflación</h3>
+                            <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Incluso un perfil <em>Conservador</em> joven necesita algo de Renta Variable para superar la inflación a largo plazo, mientras que un perfil <em>Arriesgado</em> en sus 50s necesita una base de Renta Fija para dar estabilidad a su retiro.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Matriz completa de Portafolios según tu Perfil de Riesgo y Edad -->
+                    <div class="overflow-x-auto bg-white rounded-2xl border border-gray-200 shadow-sm mb-8">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm">
+                            <thead>
+                                <tr class="bg-brand-dark text-white uppercase tracking-wider">
+                                    <th scope="col" class="p-3.5 rounded-tl-xl text-left">Perfil de Riesgo</th>
+                                    <th scope="col" class="p-3.5">En sus 20s</th>
+                                    <th scope="col" class="p-3.5">En sus 30s</th>
+                                    <th scope="col" class="p-3.5">En sus 40s</th>
+                                    <th scope="col" class="p-3.5 rounded-tr-xl">En sus 50s+</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 font-medium text-gray-700">
+                                <tr>
+                                    <th scope="row" class="p-3.5 text-left font-extrabold text-brand-dark bg-gray-50">Conservador</th>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">50% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">50% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">60% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">40% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">70% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">30% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">80% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">20% Renta Variable</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="p-3.5 text-left font-extrabold text-brand-dark bg-gray-50">Moderado</th>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">20% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">80% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">30% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">70% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">40% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">60% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">50% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">50% Renta Variable</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="p-3.5 text-left font-extrabold text-brand-dark bg-gray-50">Arriesgado (Agresivo)</th>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">10% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">90% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">20% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">80% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">30% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">70% Renta Variable</span></td>
+                                    <td class="p-3.5"><span class="block font-extrabold text-brand-cyan">60% Renta Fija</span><span class="block text-xs text-brand-orange font-bold">40% Renta Variable</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" onclick="switchPerfilTab('test')" class="inline-block bg-brand-cyan text-white font-extrabold text-sm md:text-base px-8 py-4 rounded-full shadow hover:bg-brand-dark transition-all uppercase tracking-wide">
+                            ← Volver al Test Interactivo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -1207,7 +1709,7 @@
     <script>
         // Main Navigation Logic
         function switchMainTab(tab) {
-            const sections = ['retiro', 'coast', 'sobremi', 'impuestos'];
+            const sections = ['retiro', 'coast', 'sobremi', 'impuestos', 'perfil'];
             
             sections.forEach(sec => {
                 const sectionEl = document.getElementById(`section-${sec}`);
@@ -1218,7 +1720,7 @@
                     sectionEl.classList.add('block');
                     if (navBtn) {
                         if (sec === 'sobremi') {
-                            navBtn.className = 'font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1';
+                            navBtn.className = 'font-bold text-brand-cyan border-b-2 border-brand-cyan transition-colors px-2 py-1 flex items-center gap-1';
                         } else {
                             navBtn.className = 'block w-full text-left px-4 py-3 text-sm font-bold text-brand-cyan bg-gray-50 transition-colors border-l-4 border-brand-cyan hover:bg-gray-50 hover:text-brand-cyan hover:border-brand-cyan';
                         }
@@ -1228,7 +1730,7 @@
                     sectionEl.classList.remove('block');
                     if (navBtn) {
                         if (sec === 'sobremi') {
-                            navBtn.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent';
+                            navBtn.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1';
                         } else {
                             navBtn.className = 'block w-full text-left px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 hover:text-brand-cyan transition-colors border-l-4 border-transparent hover:border-brand-cyan';
                         }
@@ -1239,7 +1741,7 @@
             // Update Calculadoras trigger
             const calcTrigger = document.getElementById('calcDropdownTrigger');
             if (calcTrigger) {
-                if (['retiro', 'coast', 'impuestos'].includes(tab)) {
+                if (['retiro', 'coast', 'impuestos', 'perfil'].includes(tab)) {
                     calcTrigger.className = 'font-bold text-brand-cyan hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-brand-cyan flex items-center gap-1';
                 } else {
                     calcTrigger.className = 'font-bold text-gray-500 hover:text-brand-dark transition-colors px-2 py-1 border-b-2 border-transparent flex items-center gap-1';
@@ -2189,9 +2691,668 @@
             }
         }
 
+        // --- TEST DE PERFIL INVERSIONISTA ---
+        const PERFIL_HORIZON_LABELS = {
+            1: '1 año',
+            2: '2 a 5 años',
+            3: '5 a 10 años',
+            4: '10 a 20 años',
+            5: '20 o más años'
+        };
+
+        const PERFIL_QUESTIONS = [
+            {
+                id: 1,
+                title: '1. Edad',
+                subtitle: 'Selecciona el rango de tu edad actual.',
+                options: [
+                    { points: 1, text: 'Menos de 20' },
+                    { points: 2, text: 'Entre 21 y 35' },
+                    { points: 3, text: 'Entre 35 y 45' },
+                    { points: 4, text: 'Entre 45 y 55' },
+                    { points: 5, text: '55 o más' }
+                ]
+            },
+            {
+                id: 3,
+                title: '2. ¿Cuál es el principal objetivo de tu inversión?',
+                subtitle: 'Piensa en qué buscas lograr con el dinero destinado a esta meta.',
+                options: [
+                    { points: 1, text: 'Preservar su valor' },
+                    { points: 2, text: 'Crecimiento bajo' },
+                    { points: 3, text: 'Crecimiento bajo y flujo de ingreso' },
+                    { points: 4, text: 'Crecimiento moderado' },
+                    { points: 5, text: 'Crecimiento agresivo' }
+                ]
+            },
+            {
+                id: 4,
+                title: '3. En el futuro esperas que tu ingreso actual...',
+                subtitle: 'Considera la proyección de tu carrera o fuentes de ingreso en los próximos años.',
+                options: [
+                    { points: 1, text: 'Baje drásticamente' },
+                    { points: 2, text: 'Baje un poco' },
+                    { points: 3, text: 'Se quede igual' },
+                    { points: 4, text: 'Incremente con la inflación' },
+                    { points: 5, text: 'Se incremente considerablemente' }
+                ]
+            },
+            {
+                id: 5,
+                title: '4. ¿Cuánto tienes ahorrado para emergencias?',
+                subtitle: 'Tu respaldo ante imprevistos evita que tengas que tocar tus inversiones antes de tiempo.',
+                options: [
+                    { points: 1, text: 'Nada' },
+                    { points: 2, text: '3 meses de gastos' },
+                    { points: 3, text: '6 meses de gastos' },
+                    { points: 4, text: '9 meses de gastos' },
+                    { points: 5, text: '1 año o más de gastos' }
+                ]
+            },
+            {
+                id: 6,
+                title: '5. ¿Qué tanto sabes de inversiones?',
+                subtitle: 'Tu experiencia previa influye en qué tan cómodo te sientes con distintos instrumentos.',
+                options: [
+                    { points: 1, text: 'Nunca he invertido' },
+                    { points: 2, text: 'Soy nuevo, menos de 1 año' },
+                    { points: 3, text: 'Llevo invirtiendo un par de años pero poco diversificad@, soy principiante' },
+                    { points: 4, text: 'Llevo muchos años invirtiendo y diversificadamente, soy intermedio' },
+                    { points: 5, text: 'Tengo décadas invirtiendo, tengo un conocimiento avanzado' }
+                ]
+            },
+            {
+                id: 7,
+                title: '6. ¿Qué estilo de inversión prefieres hoy?',
+                subtitle: 'Elige la afirmación con la que más te identifiques para esta meta.',
+                options: [
+                    { points: 1, text: 'Tener poco crecimiento y ganancias constantes aunque no estén disponibles y sean bajas. Saber cuánto y cuándo voy a recibir mis ganancias.' },
+                    { points: 2, text: 'Tener poco crecimiento pero mayor liquidez, me gustaría recibir pagos mensuales y saber cuánto y cuándo.' },
+                    { points: 3, text: 'Arriesgar un poco para ganar un poco más, podría tolerar pérdidas pequeñas y temporales.' },
+                    { points: 4, text: 'Arriesgar más para ganar mucho más, no me interesa tanto la pérdida sino la ganancia.' },
+                    { points: 5, text: 'Me gusta ser más especulador e invertir en tendencias de largo plazo, sé que la probabilidad de perder mi dinero es alta.' }
+                ]
+            },
+            {
+                id: 8,
+                title: '7. ¿Qué harías si tu inversión perdiera el 50% de su valor de un día a otro?',
+                subtitle: 'Imagina una caída fuerte del mercado: ¿cuál sería tu reacción más honesta?',
+                options: [
+                    { points: 1, text: 'No podría tolerarlo, vendería' },
+                    { points: 2, text: 'Aguantaría un par de días, si no mejora vendo' },
+                    { points: 3, text: 'Dejaría pasar unos meses, si no mejora vendo' },
+                    { points: 4, text: 'Si no afecta mi tesis de inversión, no hago nada al respecto' },
+                    { points: 5, text: 'Es momento de comprar' }
+                ]
+            },
+            {
+                id: 9,
+                title: '8. ¿Qué tan disponible quisieras tener tu dinero?',
+                subtitle: 'Qué tanta liquidez necesitas sobre el capital que vas a invertir en esta meta.',
+                options: [
+                    { points: 1, text: 'Me urge tenerlo disponible todo el tiempo' },
+                    { points: 2, text: 'Puedo esperar hasta 6 meses' },
+                    { points: 3, text: 'Puedo esperar hasta 1 año' },
+                    { points: 4, text: 'Puedo esperar hasta 5 años' },
+                    { points: 5, text: 'Puedo esperar más de 7 años' }
+                ]
+            },
+            {
+                id: 10,
+                title: '9. ¿Cuentas con ahorros y/o seguros?',
+                subtitle: 'Tener protección financiera protege tu patrimonio ante eventualidades médicas o personales.',
+                options: [
+                    { points: 1, text: 'Ninguno' },
+                    { points: 2, text: 'Fondo de emergencias solamente' },
+                    { points: 3, text: 'Seguro de gastos médicos mayores' },
+                    { points: 4, text: 'Seguro de vida' },
+                    { points: 5, text: 'Una combinación de los últimos 3' }
+                ]
+            },
+            {
+                id: 11,
+                title: '10. ¿Qué tanto tolerarías ver caer tu inversión?',
+                subtitle: 'El porcentaje máximo de minusvalía temporal que podrías ver sin perder el sueño.',
+                options: [
+                    { points: 1, text: 'Nada, 0%' },
+                    { points: 2, text: 'Hasta un 10%' },
+                    { points: 3, text: 'Hasta un 20%' },
+                    { points: 4, text: 'Hasta un 30%' },
+                    { points: 5, text: 'Hasta un 50%' }
+                ]
+            },
+            {
+                id: 12,
+                title: '11. ¿Consideras tus ingresos estables?',
+                subtitle: 'La estabilidad de tu flujo de efectivo influye en tu capacidad de asumir riesgo.',
+                options: [
+                    { points: 1, text: 'Nada estables' },
+                    { points: 2, text: 'Poco estables' },
+                    { points: 3, text: 'Estables por un periodo corto de tiempo' },
+                    { points: 4, text: 'Muy estables' },
+                    { points: 5, text: 'Estables por años' }
+                ]
+            },
+            {
+                id: 13,
+                title: '12. Tus finanzas son...',
+                subtitle: 'Sé total y completamente honest@ con tu situación actual.',
+                options: [
+                    { points: 1, text: 'En crisis, tengo un relajo, gasto más de lo que ingreso' },
+                    { points: 2, text: 'Apretadas, puedo costear mis gastos básicos pero nada más' },
+                    { points: 3, text: 'Justas, puedo costear algo más que mis gastos básicos' },
+                    { points: 4, text: 'Holgadas, puedo ahorrar entre un 10%-20% de lo que me ingresa' },
+                    { points: 5, text: 'Súper holgadas, puedo ahorrar más de 30% de lo que me ingresa' }
+                ]
+            }
+        ];
+
+        const PERFIL_CATEGORIES = [
+            {
+                key: 'muy-conservador',
+                portfolioGroup: 'conservador',
+                min: 13,
+                max: 20,
+                name: 'Muy conservador',
+                summary: 'Priorizas la seguridad total y la preservación de tu dinero por encima de altos rendimientos. Prefieres saber exactamente cuánto vas a ganar y evitar sorpresas o minusvalías.'
+            },
+            {
+                key: 'conservador',
+                portfolioGroup: 'conservador',
+                min: 21,
+                max: 31,
+                name: 'Conservador',
+                summary: 'Buscas estabilidad y tranquilidad para tu dinero, pero estás abiert@ a dar pequeños pasos para obtener un rendimiento ligeramente superior a la inflación sin arriesgar tu tranquilidad.'
+            },
+            {
+                key: 'moderado',
+                portfolioGroup: 'moderado',
+                min: 32,
+                max: 45,
+                name: 'Moderado',
+                summary: 'Buscas un equilibrio inteligente entre seguridad y crecimiento. Comprendes que para hacer crecer tu patrimonio necesitas asumir cierta volatilidad temporal, siempre respaldad@ por una base estable.'
+            },
+            {
+                key: 'agresivo',
+                portfolioGroup: 'arriesgado',
+                min: 46,
+                max: 55,
+                name: 'Agresivo',
+                summary: 'Tu prioridad es multiplicar tu patrimonio a mediano y largo plazo. Tienes la estabilidad financiera y la templanza emocional para ver fluctuaciones en el mercado sin vender por pánico.'
+            },
+            {
+                key: 'muy-agresivo',
+                portfolioGroup: 'arriesgado',
+                min: 56,
+                max: 65,
+                name: 'Muy agresivo',
+                summary: 'Buscas el máximo crecimiento patrimonial en el largo plazo. Cuentas con finanzas holgadas, horizonte amplio y ves las caídas fuertes del mercado como oportunidades para comprar más barato.'
+            }
+        ];
+
+        // Configuraciones de Portafolio según Perfil de Riesgo y Edad (de la infografía)
+        // Edad: 1 = Menos de 20 (En sus 20s), 2 = Entre 21 y 35 (En sus 20s / 30s), 3 = Entre 35 y 45 (En sus 40s), 4 = Entre 45 y 55 (En sus 50s), 5 = 55 o más (En sus 50s)
+        const PERFIL_PORTFOLIO_BY_AGE = {
+            conservador: {
+                1: { rf: 50, rv: 50, ageLabel: 'EN SUS 20S', groupLabel: 'CONSERVADOR' },
+                2: { rf: 60, rv: 40, ageLabel: 'EN SUS 30S', groupLabel: 'CONSERVADOR' },
+                3: { rf: 70, rv: 30, ageLabel: 'EN SUS 40S', groupLabel: 'CONSERVADOR' },
+                4: { rf: 80, rv: 20, ageLabel: 'EN SUS 50S', groupLabel: 'CONSERVADOR' },
+                5: { rf: 80, rv: 20, ageLabel: 'EN SUS 50S', groupLabel: 'CONSERVADOR' }
+            },
+            moderado: {
+                1: { rf: 20, rv: 80, ageLabel: 'EN SUS 20S', groupLabel: 'MODERADO' },
+                2: { rf: 30, rv: 70, ageLabel: 'EN SUS 30S', groupLabel: 'MODERADO' },
+                3: { rf: 40, rv: 60, ageLabel: 'EN SUS 40S', groupLabel: 'MODERADO' },
+                4: { rf: 50, rv: 50, ageLabel: 'EN SUS 50S', groupLabel: 'MODERADO' },
+                5: { rf: 50, rv: 50, ageLabel: 'EN SUS 50S', groupLabel: 'MODERADO' }
+            },
+            arriesgado: {
+                1: { rf: 10, rv: 90, ageLabel: 'EN SUS 20S', groupLabel: 'ARRIESGADO' },
+                2: { rf: 20, rv: 80, ageLabel: 'EN SUS 30S', groupLabel: 'ARRIESGADO' },
+                3: { rf: 30, rv: 70, ageLabel: 'EN SUS 40S', groupLabel: 'ARRIESGADO' },
+                4: { rf: 60, rv: 40, ageLabel: 'EN SUS 50S', groupLabel: 'ARRIESGADO' },
+                5: { rf: 60, rv: 40, ageLabel: 'EN SUS 50S', groupLabel: 'ARRIESGADO' }
+            }
+        };
+
+        let perfilPortfolioChartInstance = null;
+
+        let perfilState = {
+            goalName: 'Mi retiro',
+            horizonPoints: 5,
+            currentQuestionIndex: 0,
+            answers: {}, // { 1: 2, 3: 4, ... }
+            futureWish: ''
+        };
+
+        function isRetirementGoal(goalName) {
+            const normalized = (goalName || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+            return /\b(retiro|jubilacion|retirado|retirada|pension|rentas?\s+vitalicias?)\b/.test(normalized);
+        }
+
+        function switchPerfilTab(tab) {
+            const tabTest = document.getElementById('perfilTab-test');
+            const tabInfo = document.getElementById('perfilTab-info');
+            const btnTest = document.getElementById('btnPerfilTabTest');
+            const btnInfo = document.getElementById('btnPerfilTabInfo');
+
+            if (!tabTest || !tabInfo || !btnTest || !btnInfo) return;
+
+            const activeClasses = ['bg-white', 'shadow', 'text-brand-dark'];
+            const inactiveClasses = ['text-gray-500', 'hover:text-brand-dark'];
+
+            if (tab === 'test') {
+                tabTest.classList.remove('hidden');
+                tabTest.classList.add('block');
+                tabInfo.classList.remove('block');
+                tabInfo.classList.add('hidden');
+
+                btnTest.classList.add(...activeClasses);
+                btnTest.classList.remove(...inactiveClasses);
+                btnInfo.classList.remove(...activeClasses);
+                btnInfo.classList.add(...inactiveClasses);
+            } else {
+                tabTest.classList.remove('block');
+                tabTest.classList.add('hidden');
+                tabInfo.classList.remove('hidden');
+                tabInfo.classList.add('block');
+
+                btnInfo.classList.add(...activeClasses);
+                btnInfo.classList.remove(...inactiveClasses);
+                btnTest.classList.remove(...activeClasses);
+                btnTest.classList.add(...inactiveClasses);
+            }
+        }
+
+        function selectPresetGoal(goalName, horizonPoints) {
+            const goalInput = document.getElementById('perfil-goal-name');
+            if (goalInput) {
+                goalInput.value = goalName;
+                goalInput.setCustomValidity('');
+            }
+            const radio = document.getElementById(`horizon-${horizonPoints}`);
+            if (radio) {
+                radio.checked = true;
+            }
+            const errEl = document.getElementById('perfil-intro-error');
+            if (errEl) errEl.classList.add('hidden');
+        }
+
+        function startPerfilQuiz(e) {
+            if (e) e.preventDefault();
+            const goalInput = document.getElementById('perfil-goal-name');
+            const selectedHorizon = document.querySelector('input[name="goalHorizon"]:checked');
+            const errEl = document.getElementById('perfil-intro-error');
+
+            const goalName = (goalInput ? goalInput.value.trim() : '');
+            if (!goalName) {
+                if (errEl) {
+                    errEl.textContent = '⚠️ Por favor escribe o selecciona la meta para la cual te estás perfilando.';
+                    errEl.classList.remove('hidden');
+                }
+                if (goalInput) goalInput.focus();
+                return;
+            }
+
+            if (errEl) errEl.classList.add('hidden');
+            const horizonPoints = selectedHorizon ? parseInt(selectedHorizon.value, 10) : 5;
+
+            perfilState.goalName = goalName;
+            perfilState.horizonPoints = horizonPoints;
+
+            document.getElementById('perfil-active-goal-badge').textContent = goalName;
+            document.getElementById('perfil-active-horizon-badge').textContent = PERFIL_HORIZON_LABELS[horizonPoints] || '';
+            document.getElementById('perfil-goal-reminder').textContent = goalName;
+
+            document.getElementById('perfil-step-intro').classList.add('hidden');
+            document.getElementById('perfil-step-results').classList.add('hidden');
+            document.getElementById('perfil-step-quiz').classList.remove('hidden');
+
+            renderPerfilQuestion(perfilState.currentQuestionIndex, true);
+        }
+
+        function editPerfilGoal() {
+            document.getElementById('perfil-step-quiz').classList.add('hidden');
+            document.getElementById('perfil-step-results').classList.add('hidden');
+            document.getElementById('perfil-step-intro').classList.remove('hidden');
+            const goalInput = document.getElementById('perfil-goal-name');
+            if (goalInput) goalInput.focus();
+        }
+
+        function renderPerfilQuestion(index, moveFocus = false) {
+            const q = PERFIL_QUESTIONS[index];
+            if (!q) return;
+
+            const total = PERFIL_QUESTIONS.length;
+            const pct = Math.round(((index + 1) / total) * 100);
+
+            document.getElementById('perfil-progress-label').textContent = `Pregunta ${index + 1} de ${total}`;
+            document.getElementById('perfil-progress-pct').textContent = `${pct}%`;
+            document.getElementById('perfil-progress-bar').style.width = `${pct}%`;
+
+            const titleEl = document.getElementById('perfil-question-title');
+            const subtitleEl = document.getElementById('perfil-question-subtitle');
+            titleEl.textContent = q.title;
+            subtitleEl.textContent = q.subtitle || '';
+
+            const optionsContainer = document.getElementById('perfil-options-container');
+            optionsContainer.innerHTML = '';
+
+            const currentAnswer = perfilState.answers[q.id];
+
+            q.options.forEach(opt => {
+                const inputId = `perfil-q${q.id}-opt${opt.points}`;
+                const isChecked = currentAnswer === opt.points;
+
+                const wrapper = document.createElement('div');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = inputId;
+                input.name = `perfil_q_${q.id}`;
+                input.value = String(opt.points);
+                input.checked = isChecked;
+                input.className = 'sr-only peer';
+
+                input.addEventListener('change', () => {
+                    perfilState.answers[q.id] = opt.points;
+                    const quizErr = document.getElementById('perfil-quiz-error');
+                    if (quizErr) quizErr.classList.add('hidden');
+                });
+
+                const label = document.createElement('label');
+                label.setAttribute('for', inputId);
+                label.className = 'flex items-center gap-4 p-4 rounded-2xl border-2 border-gray-200 bg-gray-50 cursor-pointer transition-all hover:border-brand-cyan/60 hover:bg-white peer-checked:border-brand-cyan peer-checked:bg-[#E6F7F9] peer-checked:shadow-sm peer-focus-visible:ring-2 peer-focus-visible:ring-brand-dark';
+
+                const badge = document.createElement('span');
+                badge.className = 'w-9 h-9 rounded-full bg-white border-2 border-brand-cyan/40 text-brand-dark font-extrabold text-sm flex items-center justify-center flex-shrink-0';
+                badge.textContent = `${opt.points}`;
+                badge.setAttribute('aria-hidden', 'true');
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'text-brand-dark font-bold text-sm md:text-base leading-snug';
+                textSpan.textContent = opt.text;
+
+                label.appendChild(badge);
+                label.appendChild(textSpan);
+                wrapper.appendChild(input);
+                wrapper.appendChild(label);
+                optionsContainer.appendChild(wrapper);
+            });
+
+            // Mostrar el deseo para tu yo retirado SOLO en la última pregunta y SOLO si la meta es retiro
+            const wishBox = document.getElementById('perfil-wish-box');
+            if (index === total - 1 && isRetirementGoal(perfilState.goalName)) {
+                wishBox.classList.remove('hidden');
+            } else {
+                wishBox.classList.add('hidden');
+            }
+
+            // Actualizar texto de botones Anterior / Siguiente
+            const prevBtn = document.getElementById('perfil-prev-btn');
+            const nextBtn = document.getElementById('perfil-next-btn');
+            prevBtn.textContent = index === 0 ? '← Volver a mi meta' : '← Anterior';
+            if (index === total - 1) {
+                nextBtn.textContent = 'Ver mi Perfil y Portafolio ✨';
+                nextBtn.className = 'w-full sm:w-auto px-8 py-3.5 rounded-full font-extrabold text-white bg-brand-orange hover:bg-brand-accent-primary shadow-md hover:shadow-lg transition-all text-sm md:text-base uppercase tracking-wide';
+            } else {
+                nextBtn.textContent = 'Siguiente ➔';
+                nextBtn.className = 'w-full sm:w-auto px-8 py-3.5 rounded-full font-extrabold text-white bg-brand-cyan hover:bg-brand-dark shadow-md hover:shadow-lg transition-all text-sm md:text-base uppercase tracking-wide';
+            }
+
+            const quizErr = document.getElementById('perfil-quiz-error');
+            if (quizErr) quizErr.classList.add('hidden');
+
+            if (moveFocus) {
+                titleEl.focus();
+            }
+        }
+
+        function prevPerfilQuestion() {
+            if (perfilState.currentQuestionIndex === 0) {
+                editPerfilGoal();
+                return;
+            }
+            perfilState.currentQuestionIndex -= 1;
+            renderPerfilQuestion(perfilState.currentQuestionIndex, true);
+        }
+
+        function handlePerfilQuestionSubmit(e) {
+            if (e) e.preventDefault();
+            const q = PERFIL_QUESTIONS[perfilState.currentQuestionIndex];
+            if (!q) return;
+
+            const selected = document.querySelector(`input[name="perfil_q_${q.id}"]:checked`);
+            const quizErr = document.getElementById('perfil-quiz-error');
+
+            if (!selected) {
+                if (quizErr) {
+                    quizErr.textContent = '⚠️ Por favor selecciona una opción para continuar.';
+                    quizErr.classList.remove('hidden');
+                }
+                return;
+            }
+
+            perfilState.answers[q.id] = parseInt(selected.value, 10);
+
+            if (perfilState.currentQuestionIndex < PERFIL_QUESTIONS.length - 1) {
+                perfilState.currentQuestionIndex += 1;
+                renderPerfilQuestion(perfilState.currentQuestionIndex, true);
+            } else {
+                const wishInput = document.getElementById('perfil-future-wish');
+                perfilState.futureWish = (isRetirementGoal(perfilState.goalName) && wishInput) ? wishInput.value.trim() : '';
+                showPerfilResults();
+            }
+        }
+
+        function renderPerfilPortfolioChart(rfPct, rvPct) {
+            const canvas = document.getElementById('perfilPortfolioChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            if (perfilPortfolioChartInstance) {
+                perfilPortfolioChartInstance.destroy();
+            }
+
+            perfilPortfolioChartInstance = new Chart(ctx, {
+                type: 'pie',
+                plugins: [window.ChartDataLabels],
+                data: {
+                    labels: ['Renta fija', 'Renta variable'],
+                    datasets: [{
+                        data: [rfPct, rvPct],
+                        backgroundColor: ['#00C2D9', '#FA9C0F'],
+                        borderColor: '#FFFFFF',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#FFFFFF',
+                            font: {
+                                weight: '800',
+                                size: 13,
+                                family: "'Nunito', sans-serif"
+                            },
+                            formatter: function(value, context) {
+                                const label = context.chart.data.labels[context.dataIndex];
+                                return `${label}\n${value}%`;
+                            },
+                            textAlign: 'center'
+                        }
+                    }
+                }
+            });
+        }
+
+        function showPerfilResults() {
+            // Sumar el puntaje del plazo de la meta inicial + las 12 preguntas
+            let totalScore = perfilState.horizonPoints || 1;
+            PERFIL_QUESTIONS.forEach(q => {
+                totalScore += (perfilState.answers[q.id] || 1);
+            });
+
+            let matchedCategory = PERFIL_CATEGORIES[0];
+            for (const cat of PERFIL_CATEGORIES) {
+                if (totalScore >= cat.min && totalScore <= cat.max) {
+                    matchedCategory = cat;
+                    break;
+                }
+            }
+            if (totalScore > 65) matchedCategory = PERFIL_CATEGORIES[PERFIL_CATEGORIES.length - 1];
+
+            document.getElementById('res-perfil-goal').textContent = perfilState.goalName;
+            document.getElementById('res-perfil-horizon').textContent = PERFIL_HORIZON_LABELS[perfilState.horizonPoints] || '';
+            document.getElementById('res-perfil-title').textContent = matchedCategory.name;
+            document.getElementById('res-perfil-score').textContent = String(totalScore);
+            document.getElementById('res-perfil-summary').textContent = matchedCategory.summary;
+
+            // Advertencia cuando la meta es de corto plazo (1 año o 2-5 años) pero el puntaje global sugiere riesgo alto
+            const horizonWarningBox = document.getElementById('res-perfil-horizon-warning');
+            const horizonWarningText = document.getElementById('res-perfil-horizon-warning-text');
+            if (perfilState.horizonPoints === 1 && totalScore >= 32) {
+                horizonWarningBox.classList.remove('hidden');
+                horizonWarningText.innerHTML = `Aunque por tu experiencia, finanzas y tolerancia al riesgo obtuviste <strong>${totalScore} puntos (${matchedCategory.name})</strong>, tu meta <strong>"${perfilState.goalName}"</strong> tiene un plazo de solo <strong>1 año</strong>. Para dinero que vas a utilizar en el corto plazo, se recomienda usar una estrategia <strong>Conservadora / Renta Fija</strong> para evitar que una caída temporal del mercado afecte tu meta justo cuando necesitas retirar el dinero.`;
+            } else if (perfilState.horizonPoints === 2 && totalScore >= 46) {
+                horizonWarningBox.classList.remove('hidden');
+                horizonWarningText.innerHTML = `Obtuviste <strong>${totalScore} puntos (${matchedCategory.name})</strong>, pero el plazo para tu meta <strong>"${perfilState.goalName}"</strong> es de <strong>2 a 5 años</strong>. En horizontes menores a 5 años, conviene moderar la proporción de Renta Variable para no depender de cómo esté la bolsa el año en que uses tu dinero.`;
+            } else {
+                horizonWarningBox.classList.add('hidden');
+            }
+
+            // Configuración de Portafolio según Perfil de Riesgo y Edad (de la imagen)
+            const agePoints = perfilState.answers[1] || 2;
+            const groupMap = PERFIL_PORTFOLIO_BY_AGE[matchedCategory.portfolioGroup] || PERFIL_PORTFOLIO_BY_AGE.moderado;
+            const portfolioCfg = groupMap[agePoints] || groupMap[2];
+
+            document.getElementById('res-perfil-age-tag').textContent = `${portfolioCfg.ageLabel} & ${portfolioCfg.groupLabel}`;
+            document.getElementById('res-perfil-portfolio-pill').textContent = `${portfolioCfg.ageLabel} & ${portfolioCfg.groupLabel}`;
+            document.getElementById('res-perfil-rf-badge').textContent = `${portfolioCfg.rf}%`;
+            document.getElementById('res-perfil-rv-badge').textContent = `${portfolioCfg.rv}%`;
+            document.getElementById('res-perfil-rf-bar').style.width = `${portfolioCfg.rf}%`;
+            document.getElementById('res-perfil-rv-bar').style.width = `${portfolioCfg.rv}%`;
+            document.getElementById('res-perfil-rf-pct').textContent = `Renta Fija: ${portfolioCfg.rf}%`;
+            document.getElementById('res-perfil-rv-pct').textContent = `Renta Variable: ${portfolioCfg.rv}%`;
+
+            // Llenar tabla resumen de preguntas y respuestas
+            const answersTbody = document.getElementById('res-perfil-answers-tbody');
+            answersTbody.innerHTML = '';
+
+            // Fila 0: Meta y plazo seleccionado al inicio
+            const trGoal = document.createElement('tr');
+            trGoal.className = 'bg-[#E6F7F9]/50';
+            const tdGoalQ = document.createElement('td');
+            tdGoalQ.className = 'p-3 md:p-4 font-extrabold text-brand-dark';
+            tdGoalQ.textContent = `Plazo de tu meta (${perfilState.goalName})`;
+            const tdGoalA = document.createElement('td');
+            tdGoalA.className = 'p-3 md:p-4 font-bold text-brand-dark';
+            tdGoalA.textContent = PERFIL_HORIZON_LABELS[perfilState.horizonPoints] || '';
+            const tdGoalPts = document.createElement('td');
+            tdGoalPts.className = 'p-3 md:p-4 text-center font-extrabold text-brand-cyan';
+            tdGoalPts.textContent = `${perfilState.horizonPoints} ${perfilState.horizonPoints === 1 ? 'pt' : 'pts'}`;
+            trGoal.appendChild(tdGoalQ);
+            trGoal.appendChild(tdGoalA);
+            trGoal.appendChild(tdGoalPts);
+            answersTbody.appendChild(trGoal);
+
+            PERFIL_QUESTIONS.forEach(q => {
+                const pts = perfilState.answers[q.id] || 1;
+                const chosenOpt = q.options.find(o => o.points === pts);
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="p-3 md:p-4 font-bold text-brand-dark">${q.title}</td>
+                    <td class="p-3 md:p-4 text-gray-700">${chosenOpt ? chosenOpt.text : ''}</td>
+                    <td class="p-3 md:p-4 text-center font-extrabold text-brand-cyan">${pts} ${pts === 1 ? 'pt' : 'pts'}</td>
+                `;
+                answersTbody.appendChild(tr);
+            });
+
+            document.getElementById('res-perfil-answers-total').textContent = `${totalScore} pts`;
+
+            // Deseo para el yo retirado (solo si la meta es retiro y escribió algo)
+            const wishCard = document.getElementById('res-perfil-wish-card');
+            const wishText = document.getElementById('res-perfil-wish-text');
+            if (isRetirementGoal(perfilState.goalName) && perfilState.futureWish) {
+                wishText.textContent = `“${perfilState.futureWish}”`;
+                wishCard.classList.remove('hidden');
+            } else {
+                wishCard.classList.add('hidden');
+            }
+
+            // Resaltar fila activa en la tabla de referencia
+            document.querySelectorAll('#res-perfil-table-body tr').forEach(tr => {
+                if (tr.getAttribute('data-profile-row') === matchedCategory.key) {
+                    tr.className = 'bg-[#E6F7F9] ring-2 ring-inset ring-brand-cyan font-extrabold';
+                } else {
+                    tr.className = '';
+                }
+            });
+
+            document.getElementById('perfil-step-intro').classList.add('hidden');
+            document.getElementById('perfil-step-quiz').classList.add('hidden');
+            document.getElementById('perfil-step-results').classList.remove('hidden');
+
+            renderPerfilPortfolioChart(portfolioCfg.rf, portfolioCfg.rv);
+
+            const resTitle = document.getElementById('res-perfil-title');
+            if (resTitle) resTitle.focus();
+        }
+
+        function resetPerfilQuiz(clearGoal = false) {
+            perfilState.currentQuestionIndex = 0;
+            if (clearGoal) {
+                const goalInput = document.getElementById('perfil-goal-name');
+                if (goalInput) goalInput.value = '';
+            }
+            document.getElementById('perfil-step-results').classList.add('hidden');
+            document.getElementById('perfil-step-quiz').classList.add('hidden');
+            document.getElementById('perfil-step-intro').classList.remove('hidden');
+            const goalInput = document.getElementById('perfil-goal-name');
+            if (goalInput) goalInput.focus();
+        }
+
+        function reviewPerfilAnswers() {
+            perfilState.currentQuestionIndex = 0;
+            document.getElementById('perfil-step-results').classList.add('hidden');
+            document.getElementById('perfil-step-intro').classList.add('hidden');
+            document.getElementById('perfil-step-quiz').classList.remove('hidden');
+            renderPerfilQuestion(0, true);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const introForm = document.getElementById('perfilIntroForm');
+            if (introForm) {
+                introForm.addEventListener('submit', startPerfilQuiz);
+            }
+            const goalInput = document.getElementById('perfil-goal-name');
+            if (goalInput) {
+                goalInput.addEventListener('input', () => {
+                    const errEl = document.getElementById('perfil-intro-error');
+                    if (errEl) errEl.classList.add('hidden');
+                });
+            }
+            const questionForm = document.getElementById('perfilQuestionForm');
+            if (questionForm) {
+                questionForm.addEventListener('submit', handlePerfilQuestionSubmit);
+            }
+
             const hash = window.location.hash.substring(1);
-            if (['retiro', 'coast', 'impuestos', 'sobremi'].includes(hash)) {
+            if (['retiro', 'coast', 'impuestos', 'sobremi', 'perfil'].includes(hash)) {
                 switchMainTab(hash);
             }
         });
