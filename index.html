@@ -271,7 +271,7 @@
                     <p class="text-gray-600 text-sm md:text-base max-w-3xl">Observa cómo crecen tus aportaciones acumuladas a lo largo de los años hasta llegar a tu edad de retiro, gracias al rendimiento estimado.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-end">
                     <div>
                         <label for="compoundPmtInput" class="block text-sm font-bold text-gray-700 mb-1">
                             Aportación mensual para proyectar
@@ -281,10 +281,69 @@
                             <input type="number" id="compoundPmtInput" class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors text-lg font-semibold" value="0" min="0">
                         </div>
                     </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col justify-center">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Monto total acumulado a los <span id="compoundRetAgeLabel">65</span></span>
-                        <div class="text-2xl md:text-3xl font-extrabold text-brand-cyan" id="compoundTotalResult">$0</div>
+
+                    <div>
+                        <label for="compoundAgeInput" class="block text-sm font-bold text-gray-700 mb-1">
+                            Tu edad actual
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="compoundAgeInput" class="w-full pr-14 pl-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors text-lg font-semibold" value="30" min="15" max="65">
+                            <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">años</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="compoundReturnRateInput" class="block text-sm font-bold text-gray-700 mb-1">
+                            Rendimiento Real Anual Estimado (Después de inflación)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="compoundReturnRateInput" class="w-full pr-8 pl-4 py-3 rounded-lg border-2 border-gray-200 focus:border-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan transition-colors text-lg font-semibold" value="6" min="0" max="20" step="0.1">
+                            <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Cards (Depósitos adicionales, Interés acumulado, Total) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between text-center">
+                        <div class="p-5 flex flex-col items-center justify-center flex-grow">
+                            <span class="text-sm font-bold text-gray-500 mb-3">Depósitos adicionales acumulados</span>
+                            <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <ellipse cx="12" cy="6" rx="8" ry="3"></ellipse>
+                                <path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"></path>
+                                <path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"></path>
+                                <path d="M4 14v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-brand-cyan/15 border-t border-brand-cyan/30 py-4 px-3">
+                            <div class="text-xl md:text-2xl font-extrabold text-brand-dark" id="compoundDepositsResult">$0</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between text-center">
+                        <div class="p-5 flex flex-col items-center justify-center flex-grow">
+                            <span class="text-sm font-bold text-gray-500 mb-3">Interés acumulado</span>
+                            <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M4 4v11a1 1 0 001 1h14a1 1 0 001-1V4M9 20l3-4 3 4M8 11l3-3 2 2 3-3"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-brand-orange/15 border-t border-brand-orange/30 py-4 px-3">
+                            <div class="text-xl md:text-2xl font-extrabold text-brand-dark" id="compoundInterestResult">$0</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between text-center">
+                        <div class="p-5 flex flex-col items-center justify-center flex-grow">
+                            <span class="text-sm font-bold text-gray-500 mb-3">Total (a los <span id="compoundRetAgeLabel">65</span> años)</span>
+                            <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="15" height="10" rx="1"></rect>
+                                <path d="M6 18h14a1 1 0 001-1V8"></path>
+                                <circle cx="10.5" cy="10" r="2.5"></circle>
+                            </svg>
+                        </div>
+                        <div class="bg-brand-dark text-white py-4 px-3">
+                            <div class="text-xl md:text-2xl font-extrabold text-brand-accent-secondary" id="compoundTotalResult">$0</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1223,6 +1282,30 @@
             
             const compoundInput = document.getElementById('compoundPmtInput');
             if (compoundInput) compoundInput.addEventListener('input', () => updateCompoundInterestChart(null));
+
+            const compoundAgeEl = document.getElementById('compoundAgeInput');
+            const retCurrentAgeEl = document.getElementById('retCurrentAge');
+            if (compoundAgeEl) {
+                if (retCurrentAgeEl) {
+                    const syncCompoundAge = () => {
+                        compoundAgeEl.value = retCurrentAgeEl.value;
+                        updateCompoundInterestChart(null);
+                    };
+                    retCurrentAgeEl.addEventListener('input', syncCompoundAge);
+                    compoundAgeEl.value = retCurrentAgeEl.value;
+                }
+                compoundAgeEl.addEventListener('input', () => updateCompoundInterestChart(null));
+            }
+
+            const compoundReturnRateEl = document.getElementById('compoundReturnRateInput');
+            const retReturnRateEl = document.getElementById('retReturnRate');
+            if (retReturnRateEl && compoundReturnRateEl) {
+                retReturnRateEl.addEventListener('input', () => {
+                    compoundReturnRateEl.value = retReturnRateEl.value;
+                    updateCompoundInterestChart(null);
+                });
+                compoundReturnRateEl.addEventListener('input', () => updateCompoundInterestChart(null));
+            }
             
             const satToggle = document.getElementById('toggleSatReturn');
             if (satToggle) satToggle.addEventListener('change', () => updateCompoundInterestChart(null));
@@ -1230,11 +1313,12 @@
             calculateRetiro();
         });
 
-        function formatCurrency(value) {
+        function formatCurrency(value, decimals = 0) {
             return new Intl.NumberFormat('es-MX', {
                 style: 'currency',
                 currency: 'MXN',
-                maximumFractionDigits: 0
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
             }).format(value);
         }
 
@@ -1249,7 +1333,7 @@
             
             const yearsToRetire = Math.max(0, retirementAge - currentAge);
             const nMonths = yearsToRetire * 12;
-            const i = Math.pow(1 + returnRate, 1/12) - 1;
+            const i = returnRate / 12;
 
             const userPmt = parseFloat(document.getElementById('retUserPmtChart').value) || 0;
             const gapEl = document.getElementById('retUserPmtGap');
@@ -1420,10 +1504,12 @@
         let compoundInterestChartInstance = null;
 
         function updateCompoundInterestChart(calculatedPmt = null) {
-            const currentAge = parseInt(document.getElementById('retCurrentAge').value) || 0;
-            const retirementAge = parseInt(document.getElementById('retRetirementAge').value) || 65;
+            const compoundAgeEl = document.getElementById('compoundAgeInput');
+            const currentAge = Math.min(65, parseInt(compoundAgeEl ? compoundAgeEl.value : document.getElementById('retCurrentAge').value) || 0);
+            const retirementAge = 65;
             const currentSavings = parseFloat(document.getElementById('retCurrentSavings').value) || 0;
-            const returnRate = parseFloat(document.getElementById('retReturnRate').value) / 100 || 0;
+            const compoundReturnRateEl = document.getElementById('compoundReturnRateInput');
+            const returnRate = parseFloat(compoundReturnRateEl ? compoundReturnRateEl.value : document.getElementById('retReturnRate').value) / 100 || 0;
             const pmtInputEl = document.getElementById('compoundPmtInput');
             
             if (calculatedPmt !== null) {
@@ -1445,7 +1531,7 @@
                 pmt += taxReturnMonthly;
             }
             
-            const i = Math.pow(1 + returnRate, 1/12) - 1;
+            const i = returnRate / 12;
             const yearsToRetire = Math.max(0, retirementAge - currentAge);
             
             document.getElementById('compoundRetAgeLabel').innerText = retirementAge;
@@ -1454,6 +1540,8 @@
             let dataAportado = [];
             let dataSat = [];
             let dataIntereses = [];
+            let totalDepositosAdicionales = 0;
+            let totalIntereses = 0;
             let totalAcumulado = 0;
 
             for (let y = 0; y <= yearsToRetire; y++) {
@@ -1461,8 +1549,9 @@
                 let age = currentAge + y;
                 labels.push(age + ' años');
                 
-                let aportadoBase = currentSavings + (displayPmt * nMonths);
-                let aportadoSat = (taxReturnMonthly * nMonths);
+                let depositosAdicionalesBase = displayPmt * nMonths;
+                let aportadoBase = currentSavings + depositosAdicionalesBase;
+                let aportadoSat = taxReturnMonthly * nMonths;
                 let totalAportado = aportadoBase + aportadoSat;
                 
                 let acumulado = 0;
@@ -1481,11 +1570,17 @@
                 dataIntereses.push(intereses);
                 
                 if (y === yearsToRetire) {
+                    totalDepositosAdicionales = depositosAdicionalesBase + aportadoSat;
+                    totalIntereses = intereses;
                     totalAcumulado = acumulado;
                 }
             }
             
-            document.getElementById('compoundTotalResult').innerText = formatCurrency(totalAcumulado);
+            const depositsEl = document.getElementById('compoundDepositsResult');
+            if (depositsEl) depositsEl.innerText = formatCurrency(totalDepositosAdicionales, 2);
+            const interestEl = document.getElementById('compoundInterestResult');
+            if (interestEl) interestEl.innerText = formatCurrency(totalIntereses, 2);
+            document.getElementById('compoundTotalResult').innerText = formatCurrency(totalAcumulado, 2);
 
             const ctx = document.getElementById('compoundInterestChart').getContext('2d');
             
@@ -1571,7 +1666,7 @@
             const fireTarget = annualIncome / withdrawalRate;
             
             // Monthly return rate
-            const i = Math.pow(1 + returnRate, 1/12) - 1;
+            const i = returnRate / 12;
             
             // Calculate PMT using FV Annuity Formula
             let pmt = 0;
