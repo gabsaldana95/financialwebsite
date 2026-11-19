@@ -16,6 +16,8 @@
     <link rel="icon" type="image/png" href="assets/giby.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -63,6 +65,29 @@
         }
         input[type=number] {
             -moz-appearance: textfield;
+        }
+        @media print {
+            body {
+                background: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            header,
+            footer,
+            .fixed,
+            .no-print,
+            #perfil-step-intro,
+            #perfil-step-quiz {
+                display: none !important;
+            }
+            main {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+            #perfil-step-results,
+            #perfil-step-results * {
+                overflow: visible !important;
+            }
         }
     </style>
 </head>
@@ -1184,7 +1209,7 @@
             </div>
 
             <!-- Tabs Navigation for Perfil Inversionista -->
-            <div class="flex justify-center mb-8 relative z-10">
+            <div class="flex justify-center mb-8 relative z-10 no-print">
                 <div class="bg-gray-200 p-1 rounded-xl inline-flex flex-wrap justify-center">
                     <button id="btnPerfilTabTest" type="button" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors bg-white shadow text-brand-dark" onclick="switchPerfilTab('test')">Test Interactivo</button>
                     <button id="btnPerfilTabInfo" type="button" class="px-6 py-2 rounded-lg font-bold text-sm transition-colors text-gray-500 hover:text-brand-dark" onclick="switchPerfilTab('info')">Puntajes y Portafolios por Edad</button>
@@ -1370,6 +1395,16 @@
                                 <p class="font-extrabold text-brand-orange text-sm uppercase tracking-wide mb-1">⚠️ Nota clave sobre el plazo de tu meta</p>
                                 <p id="res-perfil-horizon-warning-text" class="text-xs md:text-sm text-gray-800 leading-relaxed"></p>
                             </div>
+
+                            <div class="relative z-10 text-center mt-6 no-print">
+                                <button type="button" data-perfil-pdf-btn onclick="downloadPerfilPDF()" class="inline-flex items-center justify-center gap-2.5 bg-white text-brand-dark hover:bg-brand-accent-secondary font-extrabold text-sm md:text-base px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark disabled:opacity-60 disabled:cursor-wait">
+                                    <svg class="w-5 h-5 flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+                                    </svg>
+                                    <span data-perfil-pdf-label>Descargar mi perfil en PDF</span>
+                                </button>
+                                <p id="perfil-pdf-status" role="status" aria-live="polite" class="hidden mt-3 text-xs md:text-sm font-bold text-white/95"></p>
+                            </div>
                         </div>
 
                         <!-- Distribución Renta Fija vs Renta Variable según Perfil de Riesgo y Edad -->
@@ -1418,7 +1453,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-8 text-center">
+                            <div class="mb-8 text-center no-print">
                                 <button type="button" onclick="switchPerfilTab('info')" class="inline-flex items-center gap-2 text-xs md:text-sm font-extrabold text-brand-cyan underline hover:text-brand-dark transition-colors">
                                     <span>📊 Ver tabla de puntajes y todos los Portafolios según tu Perfil de Riesgo y Edad</span>
                                     <span>➔</span>
@@ -1459,10 +1494,16 @@
                             </div>
 
                             <!-- Recordatorio de múltiples metas + Botones de acción -->
-                            <div class="bg-[#E6F7F9] rounded-2xl p-5 md:p-6 border border-brand-cyan/30 text-center mb-6">
+                            <div class="bg-[#E6F7F9] rounded-2xl p-5 md:p-6 border border-brand-cyan/30 text-center mb-6 no-print">
                                 <p class="font-extrabold text-brand-dark text-base mb-1">🔄 ¿Tienes otra meta con un plazo distinto?</p>
                                 <p class="text-xs md:text-sm text-gray-700 mb-4">Recuerda que no existe un único perfil para todo tu dinero. Haz la prueba con otra meta (por ejemplo, un ahorro a 2 años vs. tu retiro) y observa cómo cambia tu estrategia.</p>
                                 <div class="flex flex-wrap justify-center gap-3">
+                                    <button type="button" data-perfil-pdf-btn onclick="downloadPerfilPDF()" class="inline-flex items-center justify-center gap-2 bg-brand-dark text-white font-extrabold text-sm px-6 py-3 rounded-full shadow hover:bg-brand-cyan transition-colors uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan disabled:opacity-60 disabled:cursor-wait">
+                                        <svg class="w-4 h-4 flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+                                        </svg>
+                                        <span data-perfil-pdf-label>Descargar perfil en PDF</span>
+                                    </button>
                                     <button type="button" onclick="resetPerfilQuiz(true)" class="bg-white text-brand-dark border-2 border-brand-cyan font-extrabold text-sm px-6 py-3 rounded-full hover:bg-brand-cyan hover:text-white transition-colors uppercase tracking-wide">
                                         Perfilar otra meta distinta
                                     </button>
@@ -1472,7 +1513,7 @@
                                 </div>
                             </div>
 
-                            <div class="text-center pt-2">
+                            <div class="text-center pt-2 no-print">
                                 <p class="text-sm font-bold text-gray-500 mb-3">¿Quieres armar tu portafolio paso a paso según este perfil?</p>
                                 <a href="asesoria-inversion.html" class="w-full sm:w-auto min-w-[280px] inline-block bg-brand-orange text-white font-extrabold text-base md:text-lg px-8 py-4 rounded-full shadow-md hover:shadow-xl transition-all transform hover:-translate-y-0.5 tracking-wide uppercase">
                                     Conocer la Asesoría de Inversión ➔
@@ -2926,7 +2967,8 @@
             horizonPoints: 5,
             currentQuestionIndex: 0,
             answers: {}, // { 1: 2, 3: 4, ... }
-            futureWish: ''
+            futureWish: '',
+            lastResult: null
         };
 
         function isRetirementGoal(goalName) {
@@ -3218,8 +3260,10 @@
             }
             if (totalScore > 65) matchedCategory = PERFIL_CATEGORIES[PERFIL_CATEGORIES.length - 1];
 
+            const horizonLabel = PERFIL_HORIZON_LABELS[perfilState.horizonPoints] || '';
+
             document.getElementById('res-perfil-goal').textContent = perfilState.goalName;
-            document.getElementById('res-perfil-horizon').textContent = PERFIL_HORIZON_LABELS[perfilState.horizonPoints] || '';
+            document.getElementById('res-perfil-horizon').textContent = horizonLabel;
             document.getElementById('res-perfil-title').textContent = matchedCategory.name;
             document.getElementById('res-perfil-score').textContent = String(totalScore);
             document.getElementById('res-perfil-summary').textContent = matchedCategory.summary;
@@ -3227,12 +3271,15 @@
             // Advertencia cuando la meta es de corto plazo (1 año o 2-5 años) pero el puntaje global sugiere riesgo alto
             const horizonWarningBox = document.getElementById('res-perfil-horizon-warning');
             const horizonWarningText = document.getElementById('res-perfil-horizon-warning-text');
+            let horizonWarningPlain = '';
             if (perfilState.horizonPoints === 1 && totalScore >= 32) {
                 horizonWarningBox.classList.remove('hidden');
                 horizonWarningText.innerHTML = `Aunque por tu experiencia, finanzas y tolerancia al riesgo obtuviste <strong>${totalScore} puntos (${matchedCategory.name})</strong>, tu meta <strong>"${perfilState.goalName}"</strong> tiene un plazo de solo <strong>1 año</strong>. Para dinero que vas a utilizar en el corto plazo, se recomienda usar una estrategia <strong>Conservadora / Renta Fija</strong> para evitar que una caída temporal del mercado afecte tu meta justo cuando necesitas retirar el dinero.`;
+                horizonWarningPlain = `Aunque por tu experiencia, finanzas y tolerancia al riesgo obtuviste ${totalScore} puntos (${matchedCategory.name}), tu meta "${perfilState.goalName}" tiene un plazo de solo 1 año. Para dinero que vas a utilizar en el corto plazo, se recomienda usar una estrategia Conservadora / Renta Fija para evitar que una caída temporal del mercado afecte tu meta justo cuando necesitas retirar el dinero.`;
             } else if (perfilState.horizonPoints === 2 && totalScore >= 46) {
                 horizonWarningBox.classList.remove('hidden');
                 horizonWarningText.innerHTML = `Obtuviste <strong>${totalScore} puntos (${matchedCategory.name})</strong>, pero el plazo para tu meta <strong>"${perfilState.goalName}"</strong> es de <strong>2 a 5 años</strong>. En horizontes menores a 5 años, conviene moderar la proporción de Renta Variable para no depender de cómo esté la bolsa el año en que uses tu dinero.`;
+                horizonWarningPlain = `Obtuviste ${totalScore} puntos (${matchedCategory.name}), pero el plazo para tu meta "${perfilState.goalName}" es de 2 a 5 años. En horizontes menores a 5 años, conviene moderar la proporción de Renta Variable para no depender de cómo esté la bolsa el año en que uses tu dinero.`;
             } else {
                 horizonWarningBox.classList.add('hidden');
             }
@@ -3310,6 +3357,21 @@
             document.getElementById('perfil-step-quiz').classList.add('hidden');
             document.getElementById('perfil-step-results').classList.remove('hidden');
 
+            perfilState.lastResult = {
+                totalScore,
+                matchedCategory,
+                portfolioCfg,
+                horizonLabel,
+                horizonWarningPlain,
+                generatedAt: new Date()
+            };
+
+            const pdfStatus = document.getElementById('perfil-pdf-status');
+            if (pdfStatus) {
+                pdfStatus.textContent = '';
+                pdfStatus.classList.add('hidden');
+            }
+
             renderPerfilPortfolioChart(portfolioCfg.rf, portfolioCfg.rv);
 
             const resTitle = document.getElementById('res-perfil-title');
@@ -3335,6 +3397,712 @@
             document.getElementById('perfil-step-intro').classList.add('hidden');
             document.getElementById('perfil-step-quiz').classList.remove('hidden');
             renderPerfilQuestion(0, true);
+        }
+
+        function sanitizePdfText(text) {
+            return String(text || '')
+                .replace(/[\u2018\u2019]/g, "'")
+                .replace(/[\u201C\u201D]/g, '"')
+                .replace(/[\u2013\u2014]/g, '-')
+                .replace(/\u2026/g, '...')
+                .replace(/\u2022/g, '\u00B7')
+                .replace(/[^\x0A\x20-\x7E\xA0-\xFF]/g, '')
+                .replace(/[ \t]{2,}/g, ' ')
+                .trim();
+        }
+
+        function buildPerfilPdfFilename(goalName) {
+            const slug = String(goalName || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 40);
+            return `perfil-inversionista-${slug || 'gabs'}.pdf`;
+        }
+
+        async function loadBrandLogoDataUrl() {
+            try {
+                const resp = await fetch('assets/logo.png');
+                if (resp.ok) {
+                    const blob = await resp.blob();
+                    const dataUrl = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = () => reject(new Error('FileReader error'));
+                        reader.readAsDataURL(blob);
+                    });
+                    if (typeof dataUrl === 'string' && dataUrl.startsWith('data:image/')) {
+                        return dataUrl;
+                    }
+                }
+            } catch (_) {}
+
+            try {
+                const imgEl = document.querySelector('header img[src*="logo.png"]');
+                if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = imgEl.naturalWidth;
+                    canvas.height = imgEl.naturalHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(imgEl, 0, 0);
+                    return canvas.toDataURL('image/png');
+                }
+            } catch (_) {}
+
+            return null;
+        }
+
+        function renderPdfPortfolioPieDataUrl(rfPct, rvPct) {
+            const size = 520;
+            const cx = size / 2;
+            const cy = size / 2;
+            const radius = 232;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            const slices = [
+                { pct: rfPct, color: '#00C2D9', label: 'Renta fija' },
+                { pct: rvPct, color: '#FA9C0F', label: 'Renta variable' }
+            ];
+
+            let startAngle = -Math.PI / 2;
+            slices.forEach(slice => {
+                if (slice.pct <= 0) return;
+                const sweep = (slice.pct / 100) * Math.PI * 2;
+                const endAngle = startAngle + sweep;
+
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = slice.color;
+                ctx.fill();
+                ctx.lineWidth = 8;
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.stroke();
+
+                const midAngle = startAngle + sweep / 2;
+                ctx.fillStyle = '#FFFFFF';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                if (slice.pct >= 20) {
+                    const labelRadius = slice.pct >= 30 ? radius * 0.56 : radius * 0.62;
+                    const lx = cx + Math.cos(midAngle) * labelRadius;
+                    const ly = cy + Math.sin(midAngle) * labelRadius;
+                    ctx.font = slice.pct >= 30 ? '800 28px Nunito, Arial, sans-serif' : '800 22px Nunito, Arial, sans-serif';
+                    ctx.fillText(slice.label, lx, ly - 15);
+                    ctx.fillText(`${slice.pct}%`, lx, ly + 17);
+                } else {
+                    const labelRadius = radius * 0.68;
+                    const lx = cx + Math.cos(midAngle) * labelRadius;
+                    const ly = cy + Math.sin(midAngle) * labelRadius;
+                    ctx.font = '800 24px Nunito, Arial, sans-serif';
+                    ctx.fillText(`${slice.pct}%`, lx, ly);
+                }
+
+                startAngle = endAngle;
+            });
+
+            return canvas.toDataURL('image/png');
+        }
+
+        function setPerfilPdfLoading(isLoading) {
+            document.querySelectorAll('[data-perfil-pdf-btn]').forEach(btn => {
+                btn.disabled = isLoading;
+            });
+            document.querySelectorAll('[data-perfil-pdf-label]').forEach(label => {
+                if (!label.dataset.originalLabel) {
+                    label.dataset.originalLabel = label.textContent;
+                }
+                label.textContent = isLoading ? 'Generando PDF...' : label.dataset.originalLabel;
+            });
+        }
+
+        function showPerfilPdfStatus(message) {
+            const statusEl = document.getElementById('perfil-pdf-status');
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.classList.remove('hidden');
+        }
+
+        async function downloadPerfilPDF() {
+            const result = perfilState.lastResult;
+            if (!result) return;
+
+            setPerfilPdfLoading(true);
+            try {
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    showPerfilPdfStatus('Abriendo diálogo de impresión para guardar como PDF...');
+                    window.print();
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+
+                const pageWidth = 215.9;
+                const marginX = 16;
+                const contentW = pageWidth - marginX * 2; // 183.9 mm
+                const bottomLimit = 256;
+
+                const DARK = [5, 55, 58];
+                const CYAN = [0, 194, 217];
+                const TEAL = [18, 158, 156];
+                const HERO_BG = [18, 143, 164];
+                const HERO_PILL = [11, 105, 122];
+                const ORANGE = [250, 156, 15];
+                const LIGHT_CYAN = [230, 247, 249];
+                const LIGHT_ORANGE = [255, 245, 230];
+                const CREAM = [252, 234, 200];
+                const YELLOW_PILL = [255, 241, 118];
+                const SLATE = [75, 85, 99];
+                const MUTED = [107, 114, 128];
+                const BORDER = [229, 231, 235];
+                const WHITE = [255, 255, 255];
+
+                const drawTopAccentBar = () => {
+                    doc.setFillColor(...CYAN);
+                    doc.rect(0, 0, pageWidth * 0.67, 3, 'F');
+                    doc.setFillColor(...ORANGE);
+                    doc.rect(pageWidth * 0.67, 0, pageWidth * 0.33, 3, 'F');
+                };
+
+                let cursorY = 16;
+                const ensureSpace = (neededMm) => {
+                    if (cursorY + neededMm > bottomLimit) {
+                        doc.addPage();
+                        drawTopAccentBar();
+                        cursorY = 16;
+                    }
+                };
+
+                const runAutoTable = (cfg) => {
+                    if (typeof doc.autoTable === 'function') {
+                        doc.autoTable(cfg);
+                    } else if (typeof window.autoTable === 'function') {
+                        window.autoTable(doc, cfg);
+                    } else if (window.jspdf && typeof window.jspdf.autoTable === 'function') {
+                        window.jspdf.autoTable(doc, cfg);
+                    } else {
+                        throw new Error('jspdf-autotable unavailable');
+                    }
+                };
+
+                const { totalScore, matchedCategory, portfolioCfg, horizonLabel, horizonWarningPlain, generatedAt } = result;
+                const cleanGoal = sanitizePdfText(perfilState.goalName || 'Mi meta');
+                const cleanHorizon = sanitizePdfText(horizonLabel);
+                const cleanProfileName = sanitizePdfText(matchedCategory.name);
+                const cleanSummary = sanitizePdfText(matchedCategory.summary);
+                const dateFormatted = sanitizePdfText(
+                    (generatedAt || new Date()).toLocaleDateString('es-MX', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })
+                );
+
+                // Page 1 Header
+                drawTopAccentBar();
+                const logoDataUrl = await loadBrandLogoDataUrl();
+                if (logoDataUrl) {
+                    doc.addImage(logoDataUrl, 'PNG', marginX, 9.5, 26.7, 14, undefined, 'FAST');
+                } else {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(18);
+                    doc.setTextColor(...CYAN);
+                    doc.text('GAB$', marginX, 17);
+                    doc.setFontSize(10);
+                    doc.setTextColor(...DARK);
+                    doc.text('Coach Financiera', marginX, 22.5);
+                }
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(14);
+                doc.setTextColor(...DARK);
+                doc.text('Reporte de Perfil Inversionista', pageWidth - marginX, 14.5, { align: 'right' });
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.5);
+                doc.setTextColor(...MUTED);
+                doc.text(sanitizePdfText(`Generado el ${dateFormatted}  |  gabscoachfinanciera.net`), pageWidth - marginX, 20.5, { align: 'right' });
+
+                doc.setDrawColor(...ORANGE);
+                doc.setLineWidth(0.6);
+                doc.line(marginX, 27.5, pageWidth - marginX, 27.5);
+                cursorY = 33;
+
+                // Hero Result Card
+                const pillText = sanitizePdfText(`META: ${cleanGoal.toUpperCase()}  \u00B7  PLAZO: ${cleanHorizon.toUpperCase()}`);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                const pillLines = doc.splitTextToSize(pillText, contentW - 24);
+                const pillH = Math.max(7, pillLines.length * 4 + 3);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9.8);
+                const summaryLines = doc.splitTextToSize(cleanSummary, 162);
+                const summaryLineH = 4.6;
+
+                const heroH = 6 + pillH + 6 + 6 + 10 + 9 + 5 + summaryLines.length * summaryLineH + 6;
+
+                doc.setFillColor(...HERO_BG);
+                doc.roundedRect(marginX, cursorY, contentW, heroH, 4, 4, 'F');
+
+                const centerX = marginX + contentW / 2;
+                let innerY = cursorY + 6;
+
+                // Goal & Horizon Pill
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                const pillW = Math.min(contentW - 16, Math.max(82, Math.max(...pillLines.map(l => doc.getTextWidth(l))) + 14));
+                doc.setFillColor(...HERO_PILL);
+                doc.roundedRect(centerX - pillW / 2, innerY, pillW, pillH, 3.5, 3.5, 'F');
+                doc.setTextColor(...CREAM);
+                pillLines.forEach((line, idx) => {
+                    doc.text(line, centerX, innerY + 4.8 + idx * 4, { align: 'center' });
+                });
+
+                innerY += pillH + 6.5;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(...LIGHT_CYAN);
+                doc.text('TU PERFIL INVERSIONISTA ES', centerX, innerY, { align: 'center' });
+
+                innerY += 9;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(24);
+                doc.setTextColor(...CREAM);
+                doc.text(cleanProfileName, centerX, innerY, { align: 'center' });
+
+                innerY += 4.5;
+                const scoreLabel = `Puntaje total: ${totalScore} / 65 pts`;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9.2);
+                const scoreW = doc.getTextWidth(scoreLabel) + 14;
+                doc.setFillColor(...DARK);
+                doc.roundedRect(centerX - scoreW / 2, innerY, scoreW, 7.2, 3.6, 3.6, 'F');
+                doc.setTextColor(...CREAM);
+                doc.text(scoreLabel, centerX, innerY + 4.9, { align: 'center' });
+
+                innerY += 12.5;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9.8);
+                doc.setTextColor(...WHITE);
+                summaryLines.forEach((line, idx) => {
+                    doc.text(line, centerX, innerY + idx * summaryLineH, { align: 'center' });
+                });
+
+                cursorY += heroH + 6;
+
+                // Optional Horizon Warning Card
+                if (horizonWarningPlain) {
+                    const cleanWarning = sanitizePdfText(horizonWarningPlain);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(8.8);
+                    const warnLines = doc.splitTextToSize(cleanWarning, contentW - 14);
+                    const warnH = 10.5 + warnLines.length * 4.2 + 4;
+                    ensureSpace(warnH + 4);
+
+                    doc.setFillColor(...LIGHT_ORANGE);
+                    doc.setDrawColor(...ORANGE);
+                    doc.setLineWidth(0.4);
+                    doc.roundedRect(marginX, cursorY, contentW, warnH, 3, 3, 'FD');
+
+                    doc.setFillColor(...ORANGE);
+                    doc.rect(marginX + 0.3, cursorY + 1.5, 2, warnH - 3, 'F');
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(...ORANGE);
+                    doc.text('NOTA CLAVE SOBRE EL PLAZO DE TU META', marginX + 6, cursorY + 6.5);
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(8.8);
+                    doc.setTextColor(...DARK);
+                    warnLines.forEach((line, idx) => {
+                        doc.text(line, marginX + 6, cursorY + 11.5 + idx * 4.2);
+                    });
+
+                    cursorY += warnH + 6;
+                }
+
+                // Suggested Portfolio Section
+                ensureSpace(78);
+                const portfolioTag = sanitizePdfText(`${portfolioCfg.ageLabel} & ${portfolioCfg.groupLabel}`);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12.5);
+                doc.setTextColor(...DARK);
+                doc.text('Portafolio Sugerido según tu Perfil y Edad', marginX, cursorY + 4.5);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(7.5);
+                const tagW = doc.getTextWidth(portfolioTag) + 9;
+                doc.setFillColor(...CREAM);
+                doc.roundedRect(pageWidth - marginX - tagW, cursorY - 0.5, tagW, 6.5, 3.2, 3.2, 'F');
+                doc.setTextColor(...DARK);
+                doc.text(portfolioTag, pageWidth - marginX - tagW / 2, cursorY + 3.9, { align: 'center' });
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.8);
+                doc.setTextColor(...SLATE);
+                doc.text('De acuerdo con tu perfil de riesgo y tu etapa de vida, esta es la configuración sugerida:', marginX, cursorY + 10);
+
+                cursorY += 13;
+
+                const boxH = 62;
+                doc.setFillColor(249, 250, 251);
+                doc.setDrawColor(...BORDER);
+                doc.setLineWidth(0.35);
+                doc.roundedRect(marginX, cursorY, contentW, boxH, 3.5, 3.5, 'FD');
+
+                // Left column: Pie Chart + Yellow Pill
+                const pieDataUrl = renderPdfPortfolioPieDataUrl(portfolioCfg.rf, portfolioCfg.rv);
+                doc.addImage(pieDataUrl, 'PNG', marginX + 10, cursorY + 4, 44, 44, undefined, 'FAST');
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(7.5);
+                const yellowW = 48;
+                doc.setFillColor(...YELLOW_PILL);
+                doc.roundedRect(marginX + 8, cursorY + 51, yellowW, 7, 2, 2, 'F');
+                doc.setTextColor(...DARK);
+                doc.text(portfolioTag, marginX + 8 + yellowW / 2, cursorY + 55.6, { align: 'center' });
+
+                // Right column: Renta Fija + Renta Variable cards
+                const cardsX = marginX + 62;
+                const cardsW = contentW - 67;
+                const cardH = 25.5;
+
+                const drawAllocationCard = (cardY, title, pct, desc, fillRgb, accentRgb) => {
+                    doc.setFillColor(...fillRgb);
+                    doc.setDrawColor(...accentRgb);
+                    doc.setLineWidth(0.35);
+                    doc.roundedRect(cardsX, cardY, cardsW, cardH, 3, 3, 'FD');
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(10);
+                    doc.setTextColor(...DARK);
+                    doc.text(title, cardsX + 4.5, cardY + 6.5);
+
+                    const pctText = `${pct}%`;
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(9.5);
+                    const pctBadgeW = Math.max(15, doc.getTextWidth(pctText) + 7);
+                    doc.setFillColor(...WHITE);
+                    doc.setDrawColor(...accentRgb);
+                    doc.roundedRect(cardsX + cardsW - pctBadgeW - 4, cardY + 2.4, pctBadgeW, 6, 3, 3, 'FD');
+                    doc.setTextColor(...accentRgb);
+                    doc.text(pctText, cardsX + cardsW - pctBadgeW / 2 - 4, cardY + 6.5, { align: 'center' });
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(7.6);
+                    doc.setTextColor(...SLATE);
+                    const descLines = doc.splitTextToSize(desc, cardsW - 9);
+                    descLines.slice(0, 2).forEach((line, idx) => {
+                        doc.text(line, cardsX + 4.5, cardY + 12 + idx * 3.6);
+                    });
+
+                    const barX = cardsX + 4.5;
+                    const barY = cardY + cardH - 5.2;
+                    const barW = cardsW - 9;
+                    const barH = 2.6;
+                    doc.setFillColor(...WHITE);
+                    doc.roundedRect(barX, barY, barW, barH, 1.3, 1.3, 'F');
+                    if (pct > 0) {
+                        doc.setFillColor(...accentRgb);
+                        doc.roundedRect(barX, barY, Math.max(2.6, (barW * pct) / 100), barH, 1.3, 1.3, 'F');
+                    }
+                };
+
+                drawAllocationCard(
+                    cursorY + 4,
+                    'Renta Fija',
+                    portfolioCfg.rf,
+                    'Categoría donde ya tienes pactada una tasa de retorno y fecha para recibir tu dinero (ej. CETES, bonos).',
+                    LIGHT_CYAN,
+                    CYAN
+                );
+
+                drawAllocationCard(
+                    cursorY + 32.5,
+                    'Renta Variable',
+                    portfolioCfg.rv,
+                    'Categoría sin tasa pactada; obtienes tu ganancia al vender a largo plazo (ej. ETFs, acciones).',
+                    LIGHT_ORANGE,
+                    ORANGE
+                );
+
+                cursorY += boxH + 6;
+
+                // Optional Retirement Wish Card
+                const cleanWish = isRetirementGoal(perfilState.goalName) ? sanitizePdfText(perfilState.futureWish) : '';
+                if (cleanWish) {
+                    doc.setFont('helvetica', 'bolditalic');
+                    doc.setFontSize(9.5);
+                    const wishLines = doc.splitTextToSize(`"${cleanWish}"`, contentW - 14);
+                    const wishH = 11 + wishLines.length * 4.5 + 4;
+                    ensureSpace(wishH + 4);
+
+                    doc.setFillColor(...LIGHT_CYAN);
+                    doc.setDrawColor(...CYAN);
+                    doc.setLineWidth(0.4);
+                    doc.roundedRect(marginX, cursorY, contentW, wishH, 3, 3, 'FD');
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(8);
+                    doc.setTextColor(...TEAL);
+                    doc.text('QUERIDO YO RETIRADO TE DESEO...', marginX + 6, cursorY + 6.5);
+
+                    doc.setFont('helvetica', 'bolditalic');
+                    doc.setFontSize(9.5);
+                    doc.setTextColor(...DARK);
+                    wishLines.forEach((line, idx) => {
+                        doc.text(line, marginX + 6, cursorY + 12 + idx * 4.5);
+                    });
+
+                    cursorY += wishH + 5;
+                }
+
+                // Multi-goal Reminder Helper (placed on Page 1 if it fits, else Page 2)
+                const drawMultiGoalReminder = () => {
+                    const reminderBody = 'Tu perfil depende directamente de la meta y el plazo de tiempo para el que estás invirtiendo. Puedes ser conservador para una meta a 1-2 años y agresivo para tu retiro a largo plazo.';
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(8.2);
+                    const remLines = doc.splitTextToSize(reminderBody, contentW - 14);
+                    const remH = 10.5 + remLines.length * 4 + 3.5;
+
+                    doc.setFillColor(...LIGHT_ORANGE);
+                    doc.setDrawColor(...ORANGE);
+                    doc.setLineWidth(0.35);
+                    doc.roundedRect(marginX, cursorY, contentW, remH, 3, 3, 'FD');
+
+                    doc.setFillColor(...ORANGE);
+                    doc.rect(marginX + 0.3, cursorY + 1.5, 2, remH - 3, 'F');
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(8.8);
+                    doc.setTextColor(...DARK);
+                    doc.text('Importante: No tienes un solo perfil inversionista único', marginX + 6, cursorY + 6.5);
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(8.2);
+                    doc.setTextColor(...SLATE);
+                    remLines.forEach((line, idx) => {
+                        doc.text(line, marginX + 6, cursorY + 11.5 + idx * 4);
+                    });
+
+                    cursorY += remH + 6;
+                };
+
+                let drewReminderOnPage1 = false;
+                if (cursorY + 23 <= bottomLimit) {
+                    drawMultiGoalReminder();
+                    drewReminderOnPage1 = true;
+                }
+
+                // Page 2: Detailed Answers & Reference Scale
+                doc.addPage();
+                drawTopAccentBar();
+                cursorY = 16;
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(13);
+                doc.setTextColor(...DARK);
+                doc.text('Resumen de tus preguntas y respuestas', marginX, cursorY + 4);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.5);
+                doc.setTextColor(...MUTED);
+                doc.text(sanitizePdfText(`Meta evaluada: ${cleanGoal}  \u00B7  Plazo: ${cleanHorizon}`), marginX, cursorY + 9.5);
+
+                cursorY += 13;
+
+                const answersRows = [
+                    [
+                        {
+                            content: sanitizePdfText(`Plazo de tu meta (${cleanGoal})`),
+                            styles: { fontStyle: 'bold', fillColor: LIGHT_CYAN, textColor: DARK }
+                        },
+                        {
+                            content: cleanHorizon,
+                            styles: { fontStyle: 'bold', fillColor: LIGHT_CYAN, textColor: DARK }
+                        },
+                        {
+                            content: `${perfilState.horizonPoints} ${perfilState.horizonPoints === 1 ? 'pt' : 'pts'}`,
+                            styles: { fontStyle: 'bold', fillColor: LIGHT_CYAN, textColor: TEAL, halign: 'center' }
+                        }
+                    ]
+                ];
+
+                PERFIL_QUESTIONS.forEach(q => {
+                    const pts = perfilState.answers[q.id] || 1;
+                    const chosenOpt = q.options.find(o => o.points === pts);
+                    answersRows.push([
+                        { content: sanitizePdfText(q.title), styles: { fontStyle: 'bold', textColor: DARK } },
+                        { content: sanitizePdfText(chosenOpt ? chosenOpt.text : ''), styles: { textColor: SLATE } },
+                        { content: `${pts} ${pts === 1 ? 'pt' : 'pts'}`, styles: { fontStyle: 'bold', textColor: TEAL, halign: 'center' } }
+                    ]);
+                });
+
+                runAutoTable({
+                    startY: cursorY,
+                    margin: { left: marginX, right: marginX, top: 16, bottom: 24 },
+                    head: [['Pregunta', 'Tu Respuesta', 'Puntos']],
+                    body: answersRows,
+                    foot: [[
+                        { content: 'Puntaje Total:', colSpan: 2, styles: { halign: 'right', fontStyle: 'bold', textColor: DARK } },
+                        { content: `${totalScore} / 65 pts`, styles: { halign: 'center', fontStyle: 'bold', textColor: TEAL } }
+                    ]],
+                    theme: 'grid',
+                    styles: {
+                        font: 'helvetica',
+                        fontSize: 8.1,
+                        cellPadding: { top: 2.2, right: 3, bottom: 2.2, left: 3 },
+                        lineColor: BORDER,
+                        lineWidth: 0.25,
+                        overflow: 'linebreak',
+                        valign: 'middle'
+                    },
+                    headStyles: {
+                        fillColor: DARK,
+                        textColor: WHITE,
+                        fontStyle: 'bold',
+                        fontSize: 8.2
+                    },
+                    footStyles: {
+                        fillColor: LIGHT_CYAN,
+                        textColor: DARK,
+                        fontStyle: 'bold',
+                        fontSize: 8.6
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 64 },
+                        1: { cellWidth: 94.9 },
+                        2: { cellWidth: 25, halign: 'center' }
+                    },
+                    didDrawPage: () => {
+                        drawTopAccentBar();
+                    }
+                });
+
+                cursorY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : cursorY + 120) + 8;
+
+                // Reference Score Scale
+                ensureSpace(48);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(...DARK);
+                doc.text('Escala de Puntajes de Referencia', marginX, cursorY + 4);
+
+                const scaleSymbols = {
+                    'muy-conservador': ['++', '--'],
+                    'conservador': ['+', '-'],
+                    'moderado': ['=', '='],
+                    'agresivo': ['-', '+'],
+                    'muy-agresivo': ['--', '++']
+                };
+
+                const scaleRows = PERFIL_CATEGORIES.map(cat => {
+                    const isMatch = cat.key === matchedCategory.key;
+                    const [rfSym, rvSym] = scaleSymbols[cat.key] || ['=', '='];
+                    const rowStyle = isMatch ? { fillColor: LIGHT_CYAN, fontStyle: 'bold', textColor: DARK } : { textColor: SLATE };
+                    return [
+                        { content: `${cat.min} - ${cat.max}`, styles: { ...rowStyle, halign: 'center', fontStyle: isMatch ? 'bold' : 'normal' } },
+                        { content: sanitizePdfText(isMatch ? `${cat.name} (Tu perfil)` : cat.name), styles: { ...rowStyle, fontStyle: 'bold', textColor: DARK } },
+                        { content: rfSym, styles: { ...rowStyle, halign: 'center', fontStyle: 'bold', textColor: TEAL } },
+                        { content: rvSym, styles: { ...rowStyle, halign: 'center', fontStyle: 'bold', textColor: ORANGE } }
+                    ];
+                });
+
+                runAutoTable({
+                    startY: cursorY + 7,
+                    margin: { left: marginX, right: marginX, top: 16, bottom: 24 },
+                    head: [['Puntaje', 'Perfil', 'Renta Fija', 'Renta Variable']],
+                    body: scaleRows,
+                    theme: 'grid',
+                    styles: {
+                        font: 'helvetica',
+                        fontSize: 8.1,
+                        cellPadding: { top: 2, right: 3, bottom: 2, left: 3 },
+                        lineColor: BORDER,
+                        lineWidth: 0.25,
+                        valign: 'middle'
+                    },
+                    headStyles: {
+                        fillColor: DARK,
+                        textColor: WHITE,
+                        fontStyle: 'bold',
+                        fontSize: 8.2,
+                        halign: 'center'
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 30, halign: 'center' },
+                        1: { cellWidth: 56 },
+                        2: { cellWidth: 48.95, halign: 'center' },
+                        3: { cellWidth: 48.95, halign: 'center' }
+                    },
+                    didDrawPage: () => {
+                        drawTopAccentBar();
+                    }
+                });
+
+                cursorY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : cursorY + 38) + 6;
+
+                if (!drewReminderOnPage1) {
+                    ensureSpace(24);
+                    drawMultiGoalReminder();
+                }
+
+                // Next-step banner
+                ensureSpace(16);
+                doc.setFillColor(...LIGHT_CYAN);
+                doc.setDrawColor(...CYAN);
+                doc.setLineWidth(0.35);
+                doc.roundedRect(marginX, cursorY, contentW, 13, 3, 3, 'FD');
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(...DARK);
+                doc.text('¿Quieres armar tu portafolio paso a paso según este perfil?', marginX + 5, cursorY + 5.2);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.2);
+                doc.setTextColor(...TEAL);
+                doc.text('Conoce la Asesoría de Inversión en gabscoachfinanciera.net/asesoria-inversion.html', marginX + 5, cursorY + 10);
+
+                // Page Footers
+                const totalPages = doc.getNumberOfPages();
+                for (let p = 1; p <= totalPages; p++) {
+                    doc.setPage(p);
+                    doc.setDrawColor(...BORDER);
+                    doc.setLineWidth(0.3);
+                    doc.line(marginX, 264, pageWidth - marginX, 264);
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(7.5);
+                    doc.setTextColor(...MUTED);
+                    doc.text(
+                        sanitizePdfText('GAB$ Coach Financiera \u00B7 gabscoachfinanciera.net \u00B7 Herramienta educativa; no constituye asesoría financiera profesional.'),
+                        marginX,
+                        269
+                    );
+                    doc.text(`Página ${p} de ${totalPages}`, pageWidth - marginX, 269, { align: 'right' });
+                }
+
+                doc.save(buildPerfilPdfFilename(perfilState.goalName));
+                showPerfilPdfStatus('Tu perfil se descargó en PDF.');
+            } catch (err) {
+                console.error('Error generando el PDF del perfil inversionista:', err);
+                showPerfilPdfStatus('No se pudo generar el PDF directo; abriendo diálogo de impresión...');
+                window.print();
+            } finally {
+                setPerfilPdfLoading(false);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
